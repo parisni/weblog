@@ -16,6 +16,8 @@ incoming email are received.  The few steps are generating a mailbox tree,
 mooving mails manually, mooving them automatically, and finally mooving the
 history in batch. 
 
+.. END_TEASER
+
 Generating a mailbox tree
 -------------------------
 Mailboxes consists of folder{cur, new, old} where *folder* represents its name.

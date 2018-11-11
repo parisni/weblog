@@ -12,6 +12,8 @@
 My new gigabyte aero 14 does ship a nvidia GTX1050. I had several problem to
 make it working correctly.
 
+.. END_TEASER
+
 
 Installation from scratch
 -------------------------

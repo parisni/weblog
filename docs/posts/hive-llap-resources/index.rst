@@ -15,6 +15,8 @@ Resource consumption
 
 Hive llap is quite complicated to tune. 
 
+.. END_TEASER
+
 .. code-block:: bash
 
         hive.llap.daemon.task.scheduler.enable.preemption=true

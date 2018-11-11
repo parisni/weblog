@@ -11,6 +11,7 @@
 
 :darkest theme: simply go throught install menu from this `link <https://www.eclipse.org/community/eclipse_newsletter/2017/february/article5.php>`_ 
 
+.. END_TEASER
 
 :emacs mode: select it as a key binding in the preferences. The good point is
                emacs shortcuts are also used in most linux terminals. The bad

@@ -7,7 +7,9 @@
 .. description:
 .. category: email
 
+Cacert.org offers validated certificates with a network of trusted people. That's fun !
 
+.. END_TEASER
 
 Get a certificate (eg: CAcert.org)
 ----------------------------------
@@ -21,6 +23,7 @@ possible to transform it to rsa format:
 .. code:: bash
 
         openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/$USER/.ssh/id_rsa_cacert
+
 
 Installing neomutt from source on Ubuntu 18.04
 ----------------------------------------------

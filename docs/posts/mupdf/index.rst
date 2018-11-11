@@ -13,6 +13,8 @@ I have for long time being disapointed with **evince** pdf reader with it's
 lack of capacity to zoom in and out. The same happened with **foxit reader**
 and its lack of history management in its linux version.
 
+.. END_TEASER
+
 Finally I discovered **mupdf**. It has a vi key biding, has a great zooming
 window, allows back in the history. The only missing feature is beeing able to
 follow links with keyboard as **luakit** does.

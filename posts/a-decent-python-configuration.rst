@@ -12,6 +12,8 @@ Use Anaconda
 
 Anaconda allows to have multiple python versions. This is much easier than using *virtualenv*
 
+.. END_TEASER
+
 .. code-block:: bash
 
    conda env list # lists all envs

@@ -10,6 +10,8 @@
 
 Spark is a Swiss Army Knife of a hadoop stack. It makes glue between tools and is a de-facto interface for them.
 
+.. END_TEASER
+
 Spark has a lot of advantages:
 
 - it's a wonderfull connector: if you look at a way to connect to a tool, spark

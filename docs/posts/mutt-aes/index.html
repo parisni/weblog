@@ -17,14 +17,15 @@
 <meta property="og:site_name" content="Software Lobotomy">
 <meta property="og:title" content="Encrypt &amp; Sign Mails">
 <meta property="og:url" content="https://parisni.github.io/weblog/posts/mutt-aes/">
-<meta property="og:description" content="Get a certificate (eg: CAcert.org)
+<meta property="og:description" content="Cacert.org offers validated certificates with a network of trusted people. That's fun !
+
+
+Get a certificate (eg: CAcert.org)
 
 Client Certificate &gt; new
 add it to Firefox
 
-The key pair can then be extracted in p12 format from Firefox and it is
-possible to transform it to rsa format:
-openssl ">
+The key pair can then be extra">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-08-25T00:00:00+02:00">
 <meta property="article:tag" content="mutt">
@@ -62,6 +63,8 @@ openssl ">
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
+<p>Cacert.org offers validated certificates with a network of trusted people. That's fun !</p>
+<!-- END_TEASER -->
 <div class="section" id="get-a-certificate-eg-cacert-org">
 <h2>Get a certificate (eg: CAcert.org)</h2>
 <ul class="simple">
@@ -70,32 +73,32 @@ openssl ">
 </ul>
 <p>The key pair can then be extracted in p12 format from Firefox and it is
 possible to transform it to rsa format:</p>
-<pre class="code bash"><a name="rest_code_94baa6a364c54251b73c374d0c4522bf-1"></a>openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/<span class="nv">$USER</span>/.ssh/id_rsa_cacert
+<pre class="code bash"><a name="rest_code_3a8f74fdd4da4e46a494ebe478e78da8-1"></a>openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/<span class="nv">$USER</span>/.ssh/id_rsa_cacert
 </pre>
 </div>
 <div class="section" id="installing-neomutt-from-source-on-ubuntu-18-04">
 <h2>Installing neomutt from source on Ubuntu 18.04</h2>
-<pre class="code bash"><a name="rest_code_7e85f5c5b2de4b3598206768438210fc-1"></a>sudo apt install libncursesw5-dev
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-2"></a>sudo apt install libidn11-dev
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-3"></a>git clone https://github.com/neomutt/neomutt
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-4"></a><span class="nb">cd</span> neomutt
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-5"></a>./configure
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-6"></a>make
-<a name="rest_code_7e85f5c5b2de4b3598206768438210fc-7"></a>sudo make install
+<pre class="code bash"><a name="rest_code_519765d8eee94d408b017582bbf8a4d5-1"></a>sudo apt install libncursesw5-dev
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-2"></a>sudo apt install libidn11-dev
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-3"></a>git clone https://github.com/neomutt/neomutt
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-4"></a><span class="nb">cd</span> neomutt
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-5"></a>./configure
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-6"></a>make
+<a name="rest_code_519765d8eee94d408b017582bbf8a4d5-7"></a>sudo make install
 </pre>
 </div>
 <div class="section" id="loading-the-key-into-mutt">
 <h2>Loading the key into mutt</h2>
 <p>It is necessary to setup and use smime_key command to manage keys. It will
 generate a KeyID for the certificate (something like xxxxxx.0)</p>
-<pre class="code bash"><a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-1"></a>cp /home/<span class="nv">$USER</span>/git/neomutt/contrib/smime.rc ~/.smime.rc
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-2"></a>/usr/libexec/neomutt/smime_keys init
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-3"></a>mkdir -p ~/.smime/certificates
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-4"></a>touch ~/.smime/certificates/.index
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-5"></a>mkdir -p ~/.smime/keys
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-6"></a>touch ~/.smime/keys/.index
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-7"></a>/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
-<a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-8"></a>/usr/libexec/neomutt/smime_keys refresh
+<pre class="code bash"><a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-1"></a>cp /home/<span class="nv">$USER</span>/git/neomutt/contrib/smime.rc ~/.smime.rc
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-2"></a>/usr/libexec/neomutt/smime_keys init
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-3"></a>mkdir -p ~/.smime/certificates
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-4"></a>touch ~/.smime/certificates/.index
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-5"></a>mkdir -p ~/.smime/keys
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-6"></a>touch ~/.smime/keys/.index
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-7"></a>/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
+<a name="rest_code_8a14ab5bb27748adac35155b6fd80ec7-8"></a>/usr/libexec/neomutt/smime_keys refresh
 </pre>
 <ul class="simple">
 <li>Add to <cite>source /home/$USER/.smime.rc</cite> to .muttrc</li>

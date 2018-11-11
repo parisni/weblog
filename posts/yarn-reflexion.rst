@@ -7,7 +7,9 @@
 .. description:
 .. category: big-data
 
+Here are some Apache Yarn consideratoins.
 
+.. END_TEASER
 
 Yarn is so great
 -----------------

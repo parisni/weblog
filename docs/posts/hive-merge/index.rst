@@ -12,6 +12,7 @@ Hive introduced ACID statement: INSERT, UPDATE, DELETE & MERGE. It turns-out
 HIVE 1.2.x is not optimised enough to support MERGE efficiently. An in depth
 documentation can be found `there <https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions#HiveTransactions-Limitations>`_
 
+.. END_TEASER
 
 The code below :
 

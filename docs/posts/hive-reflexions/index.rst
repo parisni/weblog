@@ -11,6 +11,8 @@
 
 Hive has several advantages over other Datawarehouse solutions.
 
+.. END_TEASER
+
 1. it is java based. This allows it to take advantage of UDF. The best and the
    moste complicate way to write them as generic UDFs. The other important
    aspect is to make them `blessed UDF` by mean they are global and accessible

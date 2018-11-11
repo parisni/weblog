@@ -18,8 +18,9 @@
 <meta property="og:title" content="Postgresql 11 on Archlinux">
 <meta property="og:url" content="https://parisni.github.io/weblog/posts/archlinux-pgsql-11/">
 <meta property="og:description" content="I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.
+
 # get the lattest postgres in the repos
-# avoid checking for sha fingerprint, because not the">
+# avoid checking for sha fingerprint, because not th">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-10-27T00:00:00+02:00">
 <meta property="article:tag" content="archlinux">
@@ -59,17 +60,18 @@
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
 <p>I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.</p>
-<pre class="code bash"><a name="rest_code_bef494250fca4101a1c58b66e9f838bd-1"></a><span class="c1"># get the lattest postgres in the repos</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-2"></a><span class="c1"># avoid checking for sha fingerprint, because not the same version</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-3"></a>yaourt --m-arg <span class="s2">"--skipchecksums --skippgpcheck"</span> -Sb postgresql
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-4"></a><span class="c1"># 1. edit the PKGBUILD file, change to 11.0 version</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-5"></a><span class="c1"># 2. comment the check() part</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-6"></a><span class="c1"># 3. after building and installing, change to 11 the PGMAJORVERSION within:</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-7"></a>sudo vim /usr/bin/postgresql-check-db-dir
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-8"></a><span class="c1"># make the link for psql command working</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-9"></a>sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-10"></a><span class="c1"># install that old version to make posgres command work</span>
-<a name="rest_code_bef494250fca4101a1c58b66e9f838bd-11"></a>yaourt -S icu54
+<!-- END_TEASER -->
+<pre class="code bash"><a name="rest_code_795e9072de70477dbe157ac0efef5bc7-1"></a><span class="c1"># get the lattest postgres in the repos</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-2"></a><span class="c1"># avoid checking for sha fingerprint, because not the same version</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-3"></a>yaourt --m-arg <span class="s2">"--skipchecksums --skippgpcheck"</span> -Sb postgresql
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-4"></a><span class="c1"># 1. edit the PKGBUILD file, change to 11.0 version</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-5"></a><span class="c1"># 2. comment the check() part</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-6"></a><span class="c1"># 3. after building and installing, change to 11 the PGMAJORVERSION within:</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-7"></a>sudo vim /usr/bin/postgresql-check-db-dir
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-8"></a><span class="c1"># make the link for psql command working</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-9"></a>sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-10"></a><span class="c1"># install that old version to make posgres command work</span>
+<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-11"></a>yaourt -S icu54
 </pre>
 <p>That's all. By the way, I do not have any idea right now on how to upgrade minor versions in the future, but I will employ myself to update this post.</p>
 </div>

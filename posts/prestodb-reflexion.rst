@@ -12,6 +12,8 @@ Prestodb is a cool distributed engine over hadoop. It can be compared to hive
 LLAP, impala or apache DRILL for fast in-memory OLAP analysis and data
 discovery.
 
+.. END_TEASER
+
 The main disadvantages it has right now are:
 
 - it is not ACID compliant and far from being: this means tables in presto

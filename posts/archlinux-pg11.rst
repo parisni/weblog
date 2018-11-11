@@ -12,6 +12,7 @@
 
 I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.
 
+.. END_TEASER
 
 
 .. code-block:: bash

@@ -12,6 +12,7 @@ hbase looks a powerfull tool in complement of hive. While hive suits well
 for ETL and data historisation, it cannot offer sub-second access to thousand
 of concurrent users.
 
+.. END_TEASER
 
 Hbase comes with a powerful compagnion aka Phoenix that provides many features,
 while keeping the hbase features intact. Phoenix provides a jdbc driver to

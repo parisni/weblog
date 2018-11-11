@@ -8,16 +8,11 @@
 .. category: java
 
 
-==============================
-
-.. post:: Jun 02, 2018
-   :tags:
-   :category: java
-
-
 Maven has for me a non user friendly documentation, with 80% of xml content.
 For long time I have been stuck in how easily manage both dependency from maven
 central and from local jars.
+
+.. END_TEASER
 
 I finally got something quite general and functional. Here is how to make this
 working fine:

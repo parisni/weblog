@@ -17,15 +17,11 @@
 <meta property="og:site_name" content="Software Lobotomy">
 <meta property="og:title" content="Managing local jars with maven">
 <meta property="og:url" content="https://parisni.github.io/weblog/posts/maven-local/">
-<meta property="og:description" content='System Message: ERROR/3 (&lt;string&gt;, line 2)
-Document or section may not begin with a transition.
+<meta property="og:description" content="Maven has for me a non user friendly documentation, with 80% of xml content.
+For long time I have been stuck in how easily manage both dependency from maven
+central and from local jars.
 
-
-System Message: ERROR/3 (&lt;string&gt;, line 4)
-Unknown directive type "post".
-
-.. post:: Jun 02, 2018
-   :'>
+I finally got">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-06-02T00:00:00+02:00">
 <meta property="article:tag" content="maven">
@@ -63,85 +59,71 @@ Unknown directive type "post".
         
     </header><div class="e-content entry-content" itemprop="articleBody text">
     <div>
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 2)</p>
-Document or section may not begin with a transition.</div>
-<hr class="docutils">
-<div class="system-message">
-<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 4)</p>
-<p>Unknown directive type "post".</p>
-<pre class="literal-block">
-.. post:: Jun 02, 2018
-   :tags:
-   :category: java
-
-
-</pre>
-</div>
 <p>Maven has for me a non user friendly documentation, with 80% of xml content.
 For long time I have been stuck in how easily manage both dependency from maven
 central and from local jars.</p>
+<!-- END_TEASER -->
 <p>I finally got something quite general and functional. Here is how to make this
 working fine:</p>
 <p>The pom.xml file:</p>
-<pre class="code xml"><a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-1"></a><span class="c">&lt;!-- Add the manifest --&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-2"></a><span class="nt">&lt;plugin&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-5"></a>  <span class="nt">&lt;version&gt;</span>2.4<span class="nt">&lt;/version&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-6"></a>  <span class="nt">&lt;configuration&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-7"></a>    <span class="nt">&lt;archive&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-8"></a>      <span class="nt">&lt;manifest&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-9"></a>        <span class="nt">&lt;mainClass&gt;</span>your.class.Main<span class="nt">&lt;/mainClass&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-10"></a>      <span class="nt">&lt;/manifest&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-11"></a>    <span class="nt">&lt;/archive&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-12"></a>  <span class="nt">&lt;/configuration&gt;</span>
-<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-13"></a><span class="nt">&lt;/plugin&gt;</span>
+<pre class="code xml"><a name="rest_code_92757d0f34144cdda437af924c3437f4-1"></a><span class="c">&lt;!-- Add the manifest --&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-2"></a><span class="nt">&lt;plugin&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-5"></a>  <span class="nt">&lt;version&gt;</span>2.4<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-6"></a>  <span class="nt">&lt;configuration&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-7"></a>    <span class="nt">&lt;archive&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-8"></a>      <span class="nt">&lt;manifest&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-9"></a>        <span class="nt">&lt;mainClass&gt;</span>your.class.Main<span class="nt">&lt;/mainClass&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-10"></a>      <span class="nt">&lt;/manifest&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-11"></a>    <span class="nt">&lt;/archive&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-12"></a>  <span class="nt">&lt;/configuration&gt;</span>
+<a name="rest_code_92757d0f34144cdda437af924c3437f4-13"></a><span class="nt">&lt;/plugin&gt;</span>
 </pre>
-<pre class="code xml"><a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-1"></a><span class="c">&lt;!-- Make a standalone build --&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-2"></a><span class="nt">&lt;plugin&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-shade-plugin<span class="nt">&lt;/artifactId&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-5"></a>  <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-6"></a>  <span class="nt">&lt;executions&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-7"></a>    <span class="nt">&lt;execution&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-8"></a>      <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-9"></a>      <span class="nt">&lt;goals&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-10"></a>        <span class="nt">&lt;goal&gt;</span>shade<span class="nt">&lt;/goal&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-11"></a>      <span class="nt">&lt;/goals&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-12"></a>      <span class="nt">&lt;configuration&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-13"></a>        <span class="nt">&lt;outputFile&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-14"></a>        ${project.build.directory}/${artifactId}-${version}-standalone.jar
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-15"></a>        <span class="nt">&lt;/outputFile&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-16"></a>      <span class="nt">&lt;/configuration&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-17"></a>    <span class="nt">&lt;/execution&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-18"></a>  <span class="nt">&lt;/executions&gt;</span>
-<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-19"></a><span class="nt">&lt;/plugin&gt;</span>
+<pre class="code xml"><a name="rest_code_3270a71dda324a0f88e632dbc5547b52-1"></a><span class="c">&lt;!-- Make a standalone build --&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-2"></a><span class="nt">&lt;plugin&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-shade-plugin<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-5"></a>  <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-6"></a>  <span class="nt">&lt;executions&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-7"></a>    <span class="nt">&lt;execution&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-8"></a>      <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-9"></a>      <span class="nt">&lt;goals&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-10"></a>        <span class="nt">&lt;goal&gt;</span>shade<span class="nt">&lt;/goal&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-11"></a>      <span class="nt">&lt;/goals&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-12"></a>      <span class="nt">&lt;configuration&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-13"></a>        <span class="nt">&lt;outputFile&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-14"></a>        ${project.build.directory}/${artifactId}-${version}-standalone.jar
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-15"></a>        <span class="nt">&lt;/outputFile&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-16"></a>      <span class="nt">&lt;/configuration&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-17"></a>    <span class="nt">&lt;/execution&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-18"></a>  <span class="nt">&lt;/executions&gt;</span>
+<a name="rest_code_3270a71dda324a0f88e632dbc5547b52-19"></a><span class="nt">&lt;/plugin&gt;</span>
 </pre>
-<pre class="code xml"><a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-1"></a><span class="c">&lt;!--  import your local jar--&gt;</span>
-<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-2"></a><span class="nt">&lt;dependency&gt;</span>
-<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.hsqldb<span class="nt">&lt;/groupId&gt;</span>
-<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-4"></a>  <span class="nt">&lt;artifactId&gt;</span>jdbcDriver<span class="nt">&lt;/artifactId&gt;</span>
-<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-5"></a>  <span class="nt">&lt;version&gt;</span>2.4.1<span class="nt">&lt;/version&gt;</span>
-<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-6"></a><span class="nt">&lt;/dependency&gt;</span>
+<pre class="code xml"><a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-1"></a><span class="c">&lt;!--  import your local jar--&gt;</span>
+<a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.hsqldb<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-4"></a>  <span class="nt">&lt;artifactId&gt;</span>jdbcDriver<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-5"></a>  <span class="nt">&lt;version&gt;</span>2.4.1<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_9a2160df9b994a63b6ac5f7b9d085b9b-6"></a><span class="nt">&lt;/dependency&gt;</span>
 </pre>
-<pre class="code xml"><a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-1"></a><span class="c">&lt;!-- create a local respository  --&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-2"></a><span class="nt">&lt;repositories&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-3"></a>  <span class="nt">&lt;repository&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-4"></a>    <span class="nt">&lt;id&gt;</span>my-local-repo<span class="nt">&lt;/id&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-5"></a>    <span class="nt">&lt;url&gt;</span>file://${basedir}/repos<span class="nt">&lt;/url&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-6"></a>  <span class="nt">&lt;/repository&gt;</span>
-<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-7"></a><span class="nt">&lt;/repositories&gt;</span>
+<pre class="code xml"><a name="rest_code_013924967b354ee5b9dbd6dcdd036743-1"></a><span class="c">&lt;!-- create a local respository  --&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-2"></a><span class="nt">&lt;repositories&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-3"></a>  <span class="nt">&lt;repository&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-4"></a>    <span class="nt">&lt;id&gt;</span>my-local-repo<span class="nt">&lt;/id&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-5"></a>    <span class="nt">&lt;url&gt;</span>file://${basedir}/repos<span class="nt">&lt;/url&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-6"></a>  <span class="nt">&lt;/repository&gt;</span>
+<a name="rest_code_013924967b354ee5b9dbd6dcdd036743-7"></a><span class="nt">&lt;/repositories&gt;</span>
 </pre>
 <p>By the way one can add dependency jars by such command line. This will populate the <em>repos</em> folder:</p>
-<pre class="code bash"><a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-1"></a>mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-2"></a>-Dfile<span class="o">=</span>lib/hsqldb.jar
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-3"></a>-DgroupId<span class="o">=</span><span class="s1">'org.hsqldb'</span>
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-4"></a>-DartifactId<span class="o">=</span><span class="s1">'jdbcDriver'</span>
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-5"></a>-DgeneratePom<span class="o">=</span><span class="nb">true</span>
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-6"></a>-Dpackaging<span class="o">=</span>jar
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-7"></a>-Dversion<span class="o">=</span><span class="m">2</span>.4.1
-<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-8"></a>-DlocalRepositoryPath<span class="o">=</span>repos
+<pre class="code bash"><a name="rest_code_697ef741954941468b3749a3ac342702-1"></a>mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file
+<a name="rest_code_697ef741954941468b3749a3ac342702-2"></a>-Dfile<span class="o">=</span>lib/hsqldb.jar
+<a name="rest_code_697ef741954941468b3749a3ac342702-3"></a>-DgroupId<span class="o">=</span><span class="s1">'org.hsqldb'</span>
+<a name="rest_code_697ef741954941468b3749a3ac342702-4"></a>-DartifactId<span class="o">=</span><span class="s1">'jdbcDriver'</span>
+<a name="rest_code_697ef741954941468b3749a3ac342702-5"></a>-DgeneratePom<span class="o">=</span><span class="nb">true</span>
+<a name="rest_code_697ef741954941468b3749a3ac342702-6"></a>-Dpackaging<span class="o">=</span>jar
+<a name="rest_code_697ef741954941468b3749a3ac342702-7"></a>-Dversion<span class="o">=</span><span class="m">2</span>.4.1
+<a name="rest_code_697ef741954941468b3749a3ac342702-8"></a>-DlocalRepositoryPath<span class="o">=</span>repos
 </pre>
 <p>As a result, the compilation will result as a standalone jar, containing both
 local and central dependencies.</p>

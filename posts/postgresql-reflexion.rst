@@ -12,6 +12,8 @@
 
 After 4 years of postgresql management, I d'like to relate my experience.
 
+.. END_TEASER
+
 Postgreql is incredible:
 
 - its community is wonderful, the mailing list is very active and structured

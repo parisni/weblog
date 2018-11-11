@@ -11,6 +11,8 @@
 I will post here all best practices about writing emails. A lot of useful
 information can be found `there <https://www.ietf.org/rfc/rfc3676.txt>`_
 
+.. END_TEASER
+
 Writing email
 -------------
 #. Choose an email object
@@ -25,6 +27,8 @@ Writing email
    The email should not size more than 72 character width. This improve
    readability specially on small screen. In vim, the width can be setup, and
    the shorkey **g+q** on a visual selection makes things easy.
+
+.. TEASER_END
 
 Reply to email
 --------------

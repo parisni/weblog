@@ -15,6 +15,8 @@ comparable to the **WHERE** part of a SQL statement and allow combining **AND**
 operators. In particular the **~b** predicate allow to search within the email's
 body and the `~X` lets filter attachments.
 
+.. END_TEASER
+
 However that feature acts as a **grep** command and parse all the mails one by
 one. Searching in multiple dozen of thousand emails can last dozen of minutes.
 Here comes the **notmuch** program, that improves greatly the limit feature with
