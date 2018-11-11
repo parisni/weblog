@@ -11,7 +11,11 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/authors/parisni.xml</loc>
+<<<<<<< HEAD
   <lastmod>2018-11-11T17:45:00Z</lastmod>
+=======
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
+>>>>>>> c4fc5368694982bbd5ab0400100999037fda16de
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/archlinux.xml</loc>
@@ -43,7 +47,11 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_python.xml</loc>
+<<<<<<< HEAD
   <lastmod>2018-11-11T17:45:00Z</lastmod>
+=======
+  <lastmod>2018-11-11T16:59:00Z</lastmod>
+>>>>>>> c4fc5368694982bbd5ab0400100999037fda16de
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_tools.xml</loc>
@@ -123,10 +131,18 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/rss.xml</loc>
+<<<<<<< HEAD
   <lastmod>2018-11-11T17:46:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
   <lastmod>2018-11-11T17:46:00Z</lastmod>
+=======
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
+>>>>>>> c4fc5368694982bbd5ab0400100999037fda16de
  </sitemap>
 </sitemapindex>
