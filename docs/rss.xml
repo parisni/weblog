@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:59:06 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>A decent python configuration</title><link>https://parisni.github.io/weblog/posts/a-decent-python-configuration/</link><dc:creator>Parisni</dc:creator><description>&lt;div&gt;&lt;div class="section" id="use-anaconda"&gt;
+<?xml-stylesheet type="text/xsl" href="assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/rss.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 17:23:41 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Deploying Nikola with Githup Pages</title><link>https://parisni.github.io/weblog/posts/deploying-with-githup-pages/</link><dc:creator>Parisni</dc:creator><description>&lt;div&gt;&lt;div class="section" id="the-simple-way"&gt;
+&lt;h2&gt;The simple way&lt;/h2&gt;
+&lt;p&gt;Its about using the &lt;em&gt;docs&lt;/em&gt; github pages method.&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;create a new github repository&lt;/li&gt;
+&lt;li&gt;create a &lt;em&gt;/docs/&lt;/em&gt; folder with the website in it&lt;/li&gt;
+&lt;li&gt;enable github pages and specify the &lt;em&gt;docs&lt;/em&gt; folder as html source&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="why-the-simple-way"&gt;
+&lt;h2&gt;Why the simple way&lt;/h2&gt;
+&lt;p&gt;The alternate way is to use a &lt;em&gt;gh-pages&lt;/em&gt; branch to store the website. The main problem is the method leads to highly complex deployment method with &lt;a class="reference external" href="http://www.damian.oquanta.info/posts/one-line-deployment-of-your-site-to-gh-pages.html"&gt;git subtree&lt;/a&gt; or &lt;a class="reference external" href="https://www.asmeurer.com/blog/posts/moving-to-github-pages-with-nikola/"&gt;other way&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;A second problem is this method make either duplicate website source code, or makes building the website for each post.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><guid>https://parisni.github.io/weblog/posts/deploying-with-githup-pages/</guid><pubDate>Sun, 11 Nov 2018 17:07:33 GMT</pubDate></item><item><title>A decent python configuration</title><link>https://parisni.github.io/weblog/posts/a-decent-python-configuration/</link><dc:creator>Parisni</dc:creator><description>&lt;div&gt;&lt;div class="section" id="use-anaconda"&gt;
 &lt;h2&gt;Use Anaconda&lt;/h2&gt;
 &lt;p&gt;Anaconda allows to have multiple python versions. This is much easier than using &lt;em&gt;virtualenv&lt;/em&gt;&lt;/p&gt;
 &lt;pre class="code bash"&gt;&lt;a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-1"&gt;&lt;/a&gt;conda env list &lt;span class="c1"&gt;# lists all envs&lt;/span&gt;
@@ -260,17 +273,4 @@ installed the &lt;em&gt;tlp&lt;/em&gt; tool I ended up using 5W.&lt;/p&gt;
 &lt;p&gt;Note that I tried
 &lt;a class="reference external" href="https://bugs.launchpad.net/ubuntu/+source/nvidia-prime/+bug/1765363"&gt;that other solution&lt;/a&gt; but this
 resulted in system freeze at reboot.&lt;/p&gt;
-&lt;/div&gt;&lt;/div&gt;</description><category>nvidia</category><category>ubuntu</category><guid>https://parisni.github.io/weblog/posts/ubuntu-nvidia/</guid><pubDate>Sat, 18 Aug 2018 22:00:00 GMT</pubDate></item><item><title>Eclipse Tips</title><link>https://parisni.github.io/weblog/posts/eclipse-tips/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;table class="docinfo" frame="void" rules="none"&gt;
-&lt;col class="docinfo-name"&gt;
-&lt;col class="docinfo-content"&gt;
-&lt;tbody valign="top"&gt;
-&lt;tr class="darkest-theme field"&gt;&lt;th class="docinfo-name"&gt;darkest theme:&lt;/th&gt;&lt;td class="field-body"&gt;simply go throught install menu from this &lt;a class="reference external" href="https://www.eclipse.org/community/eclipse_newsletter/2017/february/article5.php"&gt;link&lt;/a&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr class="emacs-mode field"&gt;&lt;th class="docinfo-name"&gt;emacs mode:&lt;/th&gt;&lt;td class="field-body"&gt;select it as a key binding in the preferences. The good point is
-emacs shortcuts are also used in most linux terminals. The bad
-point is when managing &lt;em&gt;emacs&lt;/em&gt; and &lt;em&gt;vi&lt;/em&gt; is a kind of challenge
-in term of reflexes. The next step would be managing both
-&lt;em&gt;azerty&lt;/em&gt; and &lt;em&gt;qwerty&lt;/em&gt; keyboards.&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;</description><category>eclipse</category><guid>https://parisni.github.io/weblog/posts/eclipse-tips/</guid><pubDate>Sat, 02 Jun 2018 22:00:00 GMT</pubDate></item></channel></rss>
+&lt;/div&gt;&lt;/div&gt;</description><category>nvidia</category><category>ubuntu</category><guid>https://parisni.github.io/weblog/posts/ubuntu-nvidia/</guid><pubDate>Sat, 18 Aug 2018 22:00:00 GMT</pubDate></item></channel></rss>

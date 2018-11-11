@@ -7,7 +7,7 @@
                         http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
  <url>
   <loc>https://parisni.github.io/weblog/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/2018/</loc>
@@ -15,7 +15,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/archive.html</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/authors/</loc>
@@ -143,7 +143,11 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/index-1.html</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/index-2.html</loc>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/listings/</loc>
@@ -216,6 +220,10 @@
  <url>
   <loc>https://parisni.github.io/weblog/posts/archlinux-pgsql-11/</loc>
   <lastmod>2018-11-11T16:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/posts/deploying-with-githup-pages/</loc>
+  <lastmod>2018-11-11T17:22:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/eclipse-tips/</loc>
