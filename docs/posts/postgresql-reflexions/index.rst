@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: postgresql
-.. category: data ingineering
+.. category: data engineering
 
 
 

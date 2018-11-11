@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: eclipse
-.. category: software ingineering
+.. category: software engineering
 
 
 

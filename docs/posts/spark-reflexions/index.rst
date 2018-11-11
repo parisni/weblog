@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: spark, big-data
-.. category: data ingineering
+.. category: data engineering
 
 
 Spark is a Swiss Army Knife of a hadoop stack. It makes glue between tools and is a de-facto interface for them.

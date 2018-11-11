@@ -19,7 +19,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/big-data.xml</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_big-data.xml</loc>
@@ -27,7 +27,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_data-engineering.xml</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_data-ingeniering.xml</loc>
@@ -70,6 +70,10 @@
   <lastmod>2018-11-11T18:04:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://parisni.github.io/weblog/categories/cat_software-engineering.xml</loc>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_software-ingeniering.xml</loc>
   <lastmod>2018-11-11T18:43:00Z</lastmod>
  </sitemap>
@@ -95,7 +99,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/eclipse.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/email.xml</loc>
@@ -107,11 +111,11 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/hive.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/maven.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/mu.xml</loc>
@@ -135,15 +139,15 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/phoenix.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/postgresql.xml</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/prestodb.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/python.xml</loc>
@@ -151,11 +155,11 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/solr.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/spark.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/sqoop.xml</loc>
@@ -179,7 +183,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/yarn.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/galleries/demo/rss.xml</loc>
@@ -191,10 +195,10 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/rss.xml</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
 </sitemapindex>

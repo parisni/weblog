@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: hive, big-data
-.. category: data ingineering
+.. category: data engineering
 
 
 

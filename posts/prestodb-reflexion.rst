@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: prestoDB, big-data
-.. category: data ingineering
+.. category: data engineering
 
 
 Prestodb is a cool distributed engine over hadoop. It can be compared to hive

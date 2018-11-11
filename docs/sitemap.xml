@@ -31,7 +31,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/archlinux/</loc>
@@ -88,6 +88,10 @@
  <url>
   <loc>https://parisni.github.io/weblog/categories/cat_python/</loc>
   <lastmod>2018-11-11T16:53:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/categories/cat_software-engineering/</loc>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/cat_software-ingeniering/</loc>
@@ -211,11 +215,11 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/index-1.html</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/index-2.html</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/listings/</loc>
@@ -227,150 +231,150 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/about-nikola/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/bootstrap-demo/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/charts/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/creating-a-theme/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/dr-nikolas-vendetta/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/extending/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/handbook/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/internals/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/listings-demo/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/path-handlers/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/quickref/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/quickstart/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/social_buttons/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/pages/theming/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/a-decent-python-configuration/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/archlinux-pgsql-11/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/deploying-with-githup-pages/</loc>
-  <lastmod>2018-11-11T18:00:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/eclipse-tips/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/email-best-practice/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/hbase-reflexion/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/hive-llap-resources/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/hive-merge/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/hive-reflexions/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/loading-postgres-from-sqoop/</loc>
-  <lastmod>2018-11-11T21:09:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/maven-local/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/mupdf/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/mutt-aes/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/mutt-search/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/mutt-sidebar/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/mutt-vim/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/postgresql-reflexions/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/prestodb-reflexions/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/spark-reflexions/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/termite/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/ubuntu-nvidia/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/yarn-reflexions/</loc>
-  <lastmod>2018-11-11T18:02:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/stories/about/</loc>
-  <lastmod>2018-11-11T16:53:00Z</lastmod>
+  <lastmod>2018-11-11T21:11:00Z</lastmod>
  </url>
 </urlset>

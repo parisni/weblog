@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: phoenix, spark, hive, solr, big-data
-.. category: data ingineering
+.. category: data engineering
 
 
 hbase looks a powerfull tool in complement of hive. While hive suits well

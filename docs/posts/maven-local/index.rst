@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: maven
-.. category: software ingineering
+.. category: software engineering
 
 
 Maven has for me a non user friendly documentation, with 80% of xml content.

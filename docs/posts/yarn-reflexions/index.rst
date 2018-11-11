@@ -4,7 +4,7 @@
 .. link: 
 .. description:
 .. tags: yarn, big-data
-.. category: data ingineering
+.. category: data engineering
 
 Here are some Apache Yarn consideratoins.
 
