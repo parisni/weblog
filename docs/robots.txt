@@ -1,4 +1,0 @@
-Sitemap: https://parisni.github.io/weblog/sitemapindex.xml
-
-User-Agent: *
-Host: parisni.github.io
