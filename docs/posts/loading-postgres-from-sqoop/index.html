@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Loading Postgres from Sqoop | Software Lobotomy</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/posts/loading-postgres-from-sqoop/">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
+<link rel="prev" href="../deploying-with-githup-pages/" title="Deploying Nikola with Githup Pages" type="text/html">
+<meta property="og:site_name" content="Software Lobotomy">
+<meta property="og:title" content="Loading Postgres from Sqoop">
+<meta property="og:url" content="https://parisni.github.io/weblog/posts/loading-postgres-from-sqoop/">
+<meta property="og:description" content="PostgreSQL and Hadoop are complementary technologies. PostgreSQL outperforms
+Hadoop to retrieve small amount of information from multiple tables. Haddop
+outperforms PostgreSQL to transform multiple ta">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-11-11T21:19:55+01:00">
+<meta property="article:tag" content="big-data">
+<meta property="article:tag" content="hadoop">
+<meta property="article:tag" content="postgresql">
+<meta property="article:tag" content="sqoop">
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="../../categories/">Tags</a></li>
+                <li><a href="../../archive.html">Archive</a></li>
+                <li><a href="../../stories/about/">About</a></li>
+                <li><a href="../../rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Loading Postgres from Sqoop</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    Parisni
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2018-11-11T21:19:55+01:00" itemprop="datePublished" title="2018-11-11">2018-11-11</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>PostgreSQL and Hadoop are complementary technologies. PostgreSQL outperforms
+Hadoop to retrieve small amount of information from multiple tables. Haddop
+outperforms PostgreSQL to transform multiple tables into simplfied and
+aggregated tables. So, how to load PostgreSQL efficiently from Hadoop ?</p>
+<!-- END_TEASER -->
+<div class="section" id="sqoop-as-a-bridge">
+<h2>Sqoop as a bridge</h2>
+<p>Hadoop stores data on its distributed filesystem: HDFS. At the end of the day,
+the resulting procecced data is stored into a hdfs table and may need to be
+loaded into a PosgreSQL table.</p>
+<p>Copy is a efficient a robust PostgreSQL bulkloading function allowing to load
+among from others CSV files. It is way faster than a bunch of parallel prepared
+insert statements.</p>
+<p>ORC is a efficient and compressed Hadoop data format. It is both faster to
+build and to read compared to CSV files.</p>
+<p>As the bridge for Hadoop and relational databases, Sqoop manages all ORC, CSV,
+COPY and INSERT methodologies. When dealing with PostgreSQL, there is no
+perfect solution.</p>
+</div>
+<div class="section" id="sqoop-best-approach">
+<h2>Sqoop best approach</h2>
+<p>There is two different scenario to load PostgreSQL.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name">
+<col class="field-body">
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">structured columns:</th></tr>
+<tr class="field">
+<td> </td>
+<td class="field-body">Sqoop does not allow to use COPY together with ORC tables
+but only with CSV. It splits them and run multiple COPY
+statements from each part in parallel from HDFS. The CSV
+format needs to be defined in the sqoop parameters.</td>
+</tr>
+<tr class="field"><th class="field-name" colspan="2">unstructured columns:</th></tr>
+<tr class="field">
+<td> </td>
+<td class="field-body">Text information may contain new lines. In this
+situation, Sqoop is stuck when it splits the CSV into
+multiple parts. Yet it is not possible to use the sqoop
+direct mode, and the parallel inserts is the only way to
+succeed. By chance, it is not necessar to transform the
+result as CSV, and it is finally possible to exploit ORC
+tables as-is.</td>
+</tr>
+</tbody>
+</table>
+<p>Writing this post makes me thinking about a potential workaround to load
+textual CSV from COPY by using only one mapper in this situation. Since COPY is
+highly optimized it is possible that it won't degrade the performances while
+making the overall process totally robust.</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/big-data/" rel="tag">big-data</a></li>
+            <li><a class="tag p-category" href="../../categories/hadoop/" rel="tag">hadoop</a></li>
+            <li><a class="tag p-category" href="../../categories/postgresql/" rel="tag">postgresql</a></li>
+            <li><a class="tag p-category" href="../../categories/sqoop/" rel="tag">sqoop</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../deploying-with-githup-pages/" rel="prev" title="Deploying Nikola with Githup Pages">Previous post</a>
+            </li>
+        </ul></nav></aside></article></main>
+</div>
+                <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
