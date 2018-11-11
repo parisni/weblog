@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about ubuntu)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/ubuntu.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:53:25 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>nvidia &amp; ubuntu 18.04</title><link>https://parisni.github.io/weblog/posts/ubuntu-nvidia/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;My new gigabyte aero 14 does ship a nvidia GTX1050. I had several problem to
+make it working correctly.&lt;/p&gt;
+&lt;div class="section" id="installation-from-scratch"&gt;
+&lt;h2&gt;Installation from scratch&lt;/h2&gt;
+&lt;p&gt;When installing ubuntu from my usb key it simply froze after setup. I had to
+enter in maintenance mode, log as root and the resume to get a VGA screen.
+After that I was able to install the nvidia drivers by folowing the steps
+&lt;a class="reference external" href="https://www.linuxbabe.com/ubuntu/install-nvidia-driver-ubuntu-18-04"&gt;the folowing steps&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="turning-in-nvidia-mode"&gt;
+&lt;h2&gt;Turning in nvidia mode&lt;/h2&gt;
+&lt;p&gt;The command &lt;em&gt;sudo prime-select nvidia&lt;/em&gt; followed by a reboot makes use of the
+nvidia chipset. As a result, the powertop tool show a use of 15W.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="turning-intel-mode"&gt;
+&lt;h2&gt;Turning intel mode&lt;/h2&gt;
+&lt;p&gt;The command &lt;em&gt;sudo prime-select intel&lt;/em&gt; followed by a reboot makes use of the
+intel chipset. However a bug introduced with 18.04 makes both nvidia and intel
+running and it uses 20W and worst did not allow to
+shutdown/reboot/suspend/hibernate. I ended up by using that
+&lt;a class="reference external" href="https://www.linuxbabe.com/ubuntu/install-nvidia-driver-ubuntu-18-04"&gt;solution&lt;/a&gt;
+which reduce to 7W. Note that I had to make sure the grub was
+&lt;em&gt;nouveau.modeset=0 nouveau.runpm=0&lt;/em&gt; in the &lt;em&gt;/etc/default/grub&lt;/em&gt; file.  After
+installed the &lt;em&gt;tlp&lt;/em&gt; tool I ended up using 5W.&lt;/p&gt;
+&lt;p&gt;Note that I tried
+&lt;a class="reference external" href="https://bugs.launchpad.net/ubuntu/+source/nvidia-prime/+bug/1765363"&gt;that other solution&lt;/a&gt; but this
+resulted in system freeze at reboot.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>nvidia</category><category>ubuntu</category><guid>https://parisni.github.io/weblog/posts/ubuntu-nvidia/</guid><pubDate>Sat, 18 Aug 2018 22:00:00 GMT</pubDate></item></channel></rss>

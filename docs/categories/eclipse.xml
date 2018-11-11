@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about eclipse)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/eclipse.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:53:25 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Eclipse Tips</title><link>https://parisni.github.io/weblog/posts/eclipse-tips/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;table class="docinfo" frame="void" rules="none"&gt;
+&lt;col class="docinfo-name"&gt;
+&lt;col class="docinfo-content"&gt;
+&lt;tbody valign="top"&gt;
+&lt;tr class="darkest-theme field"&gt;&lt;th class="docinfo-name"&gt;darkest theme:&lt;/th&gt;&lt;td class="field-body"&gt;simply go throught install menu from this &lt;a class="reference external" href="https://www.eclipse.org/community/eclipse_newsletter/2017/february/article5.php"&gt;link&lt;/a&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr class="emacs-mode field"&gt;&lt;th class="docinfo-name"&gt;emacs mode:&lt;/th&gt;&lt;td class="field-body"&gt;select it as a key binding in the preferences. The good point is
+emacs shortcuts are also used in most linux terminals. The bad
+point is when managing &lt;em&gt;emacs&lt;/em&gt; and &lt;em&gt;vi&lt;/em&gt; is a kind of challenge
+in term of reflexes. The next step would be managing both
+&lt;em&gt;azerty&lt;/em&gt; and &lt;em&gt;qwerty&lt;/em&gt; keyboards.&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;</description><category>eclipse</category><guid>https://parisni.github.io/weblog/posts/eclipse-tips/</guid><pubDate>Sat, 02 Jun 2018 22:00:00 GMT</pubDate></item></channel></rss>

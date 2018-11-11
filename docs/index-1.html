@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Software Lobotomy (old posts, page 1) | Software Lobotomy</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/index-1.html">
+<link rel="prev" href="." type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]-->
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="categories/">Tags</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="stories/about/">About</a></li>
+                <li><a href="rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/maven-local/" class="u-url">Managing local jars with maven</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/maven-local/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-06-02T00:00:00+02:00" itemprop="datePublished" title="2018-06-02">2018-06-02</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="system-message">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 2)</p>
+Document or section may not begin with a transition.</div>
+<hr class="docutils">
+<div class="system-message">
+<p class="system-message-title">System Message: ERROR/3 (<tt class="docutils">&lt;string&gt;</tt>, line 4)</p>
+<p>Unknown directive type "post".</p>
+<pre class="literal-block">
+.. post:: Jun 02, 2018
+   :tags:
+   :category: java
+
+
+</pre>
+</div>
+<p>Maven has for me a non user friendly documentation, with 80% of xml content.
+For long time I have been stuck in how easily manage both dependency from maven
+central and from local jars.</p>
+<p>I finally got something quite general and functional. Here is how to make this
+working fine:</p>
+<p>The pom.xml file:</p>
+<pre class="code xml"><a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-1"></a><span class="c">&lt;!-- Add the manifest --&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-2"></a><span class="nt">&lt;plugin&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-5"></a>  <span class="nt">&lt;version&gt;</span>2.4<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-6"></a>  <span class="nt">&lt;configuration&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-7"></a>    <span class="nt">&lt;archive&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-8"></a>      <span class="nt">&lt;manifest&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-9"></a>        <span class="nt">&lt;mainClass&gt;</span>your.class.Main<span class="nt">&lt;/mainClass&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-10"></a>      <span class="nt">&lt;/manifest&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-11"></a>    <span class="nt">&lt;/archive&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-12"></a>  <span class="nt">&lt;/configuration&gt;</span>
+<a name="rest_code_be4a2fcfe00e429381c710b3cd761c31-13"></a><span class="nt">&lt;/plugin&gt;</span>
+</pre>
+<pre class="code xml"><a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-1"></a><span class="c">&lt;!-- Make a standalone build --&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-2"></a><span class="nt">&lt;plugin&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-4"></a>  <span class="nt">&lt;artifactId&gt;</span>maven-shade-plugin<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-5"></a>  <span class="nt">&lt;version&gt;</span>2.2<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-6"></a>  <span class="nt">&lt;executions&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-7"></a>    <span class="nt">&lt;execution&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-8"></a>      <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-9"></a>      <span class="nt">&lt;goals&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-10"></a>        <span class="nt">&lt;goal&gt;</span>shade<span class="nt">&lt;/goal&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-11"></a>      <span class="nt">&lt;/goals&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-12"></a>      <span class="nt">&lt;configuration&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-13"></a>        <span class="nt">&lt;outputFile&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-14"></a>        ${project.build.directory}/${artifactId}-${version}-standalone.jar
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-15"></a>        <span class="nt">&lt;/outputFile&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-16"></a>      <span class="nt">&lt;/configuration&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-17"></a>    <span class="nt">&lt;/execution&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-18"></a>  <span class="nt">&lt;/executions&gt;</span>
+<a name="rest_code_c340dc987d3742a7ada08d7cc10cf9b7-19"></a><span class="nt">&lt;/plugin&gt;</span>
+</pre>
+<pre class="code xml"><a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-1"></a><span class="c">&lt;!--  import your local jar--&gt;</span>
+<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-2"></a><span class="nt">&lt;dependency&gt;</span>
+<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-3"></a>  <span class="nt">&lt;groupId&gt;</span>org.hsqldb<span class="nt">&lt;/groupId&gt;</span>
+<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-4"></a>  <span class="nt">&lt;artifactId&gt;</span>jdbcDriver<span class="nt">&lt;/artifactId&gt;</span>
+<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-5"></a>  <span class="nt">&lt;version&gt;</span>2.4.1<span class="nt">&lt;/version&gt;</span>
+<a name="rest_code_76c5a235d4dc4ebf9e7ae6094b3e2cf9-6"></a><span class="nt">&lt;/dependency&gt;</span>
+</pre>
+<pre class="code xml"><a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-1"></a><span class="c">&lt;!-- create a local respository  --&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-2"></a><span class="nt">&lt;repositories&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-3"></a>  <span class="nt">&lt;repository&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-4"></a>    <span class="nt">&lt;id&gt;</span>my-local-repo<span class="nt">&lt;/id&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-5"></a>    <span class="nt">&lt;url&gt;</span>file://${basedir}/repos<span class="nt">&lt;/url&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-6"></a>  <span class="nt">&lt;/repository&gt;</span>
+<a name="rest_code_68b5292445b94039b1e9c0b3bb841bbb-7"></a><span class="nt">&lt;/repositories&gt;</span>
+</pre>
+<p>By the way one can add dependency jars by such command line. This will populate the <em>repos</em> folder:</p>
+<pre class="code bash"><a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-1"></a>mvn org.apache.maven.plugins:maven-install-plugin:2.3.1:install-file
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-2"></a>-Dfile<span class="o">=</span>lib/hsqldb.jar
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-3"></a>-DgroupId<span class="o">=</span><span class="s1">'org.hsqldb'</span>
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-4"></a>-DartifactId<span class="o">=</span><span class="s1">'jdbcDriver'</span>
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-5"></a>-DgeneratePom<span class="o">=</span><span class="nb">true</span>
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-6"></a>-Dpackaging<span class="o">=</span>jar
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-7"></a>-Dversion<span class="o">=</span><span class="m">2</span>.4.1
+<a name="rest_code_f12ff806a5af41baa7e3c305d55c5bba-8"></a>-DlocalRepositoryPath<span class="o">=</span>repos
+</pre>
+<p>As a result, the compilation will result as a standalone jar, containing both
+local and central dependencies.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mupdf/" class="u-url">best pdf viewer</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/mupdf/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-27T00:00:00+02:00" itemprop="datePublished" title="2018-05-27">2018-05-27</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I have for long time being disapointed with <strong>evince</strong> pdf reader with it's
+lack of capacity to zoom in and out. The same happened with <strong>foxit reader</strong>
+and its lack of history management in its linux version.</p>
+<p>Finally I discovered <strong>mupdf</strong>. It has a vi key biding, has a great zooming
+window, allows back in the history. The only missing feature is beeing able to
+follow links with keyboard as <strong>luakit</strong> does.</p>
+<div class="section" id="keybinding">
+<h2>keybinding</h2>
+<ul class="simple">
+<li>
+<em>i</em> : dark mode</li>
+<li>
+<em>/</em> : search</li>
+<li>
+<em>W</em> : fit to page</li>
+<li>
+<em>t</em> : go back to last jump</li>
+</ul>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/termite/" class="u-url">Best terminal Emulator</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/termite/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-27T00:00:00+02:00" itemprop="datePublished" title="2018-05-27">2018-05-27</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Termite is way better than my previous terminals. It's sensibly based on vim
+paradigm. It's able to look ahead in the history, copy from it and back to
+insert mode.</p>
+<p>An other great aspect is it notifies when something happens in it, such end of
+process, new mail an so on.</p>
+<div class="section" id="keybinding">
+<h2>keybinding</h2>
+<ul class="simple">
+<li>
+<em>ctrl+space</em> : insert mode</li>
+<li>
+<em>escape</em> : normal mode</li>
+</ul>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/yarn-reflexions/" class="u-url">Yarn Reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/yarn-reflexions/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-16T00:00:00+02:00" itemprop="datePublished" title="2018-05-16">2018-05-16</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="section" id="yarn-is-so-great">
+<h2>Yarn is so great</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name">
+<col class="field-body">
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Queue modifications:</th></tr>
+<tr class="field">
+<td> </td>
+<td class="field-body">Some application needs extra cores/memory and need to be
+boosted somehow? Yarns allows on the fly adjustement of
+queues. In our case, we have nightly ETL and online users
+the day. It's then easy to dispatch the resources where
+needed, and without turning off running application.</td>
+</tr>
+<tr class="field">
+<th class="field-name">GPU management:</th>
+<td class="field-body">Hadoop 3 will provide a new dimension in yarn responsibility.
+Yarn will be able to allocate GPU resources for users. This
+will be of incredible help for machine learning programs and
+users to share and optimize access to them.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="yarn-has-some-drawbacks">
+<h2>Yarn has some drawbacks</h2>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name">
+<col class="field-body">
+<tbody valign="top">
+<tr class="field"><th class="field-name" colspan="2">Applications logs:</th></tr>
+<tr class="field">
+<td> </td>
+<td class="field-body">They are stored locally. Same case for temporary files on
+the local filesystem such map results. And there is no
+trivial way to store point to hdfs. This is an essential
+point when configuring the cluster, because the disk
+allocated for storing yarn user files (hive, spark....) is
+a real bottleneck. Depending on the cluster workload, keep
+in mind having a minimum of 2TO for this stuff, per machine.</td>
+</tr>
+<tr class="field">
+<th class="field-name">Yarn superuser:</th>
+<td class="field-body">There is now way to kill a process if you are not the owner of
+the process. This makes things a bit more complex for an admin
+to supervise such platform.</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/hbase-reflexion/" class="u-url">Hbase Reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/hbase-reflexion/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>hbase looks a powerfull tool in complement of hive. While hive suits well
+for ETL and data historisation, it cannot offer sub-second access to thousand
+of concurrent users.</p>
+<p>Hbase comes with a powerful compagnion aka Phoenix that provides many features,
+while keeping the hbase features intact. Phoenix provides a jdbc driver to
+hbase. This distinction adds many improvements:</p>
+<ol class="arabic simple">
+<li>it offers sql, joins, secondary indexes, transactions, sequences on top of hbase.</li>
+<li>it simplifies hive, spark, solr, and general programming access to hbase
+data.</li>
+</ol>
+<div class="section" id="jdbc-overview">
+<h2>JDBC overview</h2>
+<p>jdbc access can be done with <a class="reference external" href="https://community.hortonworks.com/questions/47138/phoenix-query-server-connection-url-example.html">kerberos</a> on the form</p>
+<pre class="code java"><a name="rest_code_7c56e3310b794c078f407b3502eeed2d-1"></a><span class="s">"jdbc:phoenix:thin:url=&lt;scheme&gt;://&lt;server-hostname&gt;:&lt;port&gt;;authentication=SPNEGO;principal=my_user;keytab=/home/my_user/my_user.keytab"</span>
+</pre>
+<p>Phoenix connection thought JDBC needs :
+- a jdbc jar file
+- the hbase-site.conf
+- a kerberos ticket</p>
+<p>Phoenix does not provide a way for connection pooling. The costly part of the
+connection is the hbase link. However it is cached within the region servers
+and a new phoenix jdbc connection can be rebuild for every query since it is a
+lightweight object.</p>
+</div>
+<div class="section" id="hive-integration">
+<h2>Hive integration</h2>
+<p>Phoenix tables can be mounted into hive thanks to a <a class="reference external" href="https://phoenix.apache.org/hive_storage_handler.html">recent plugin</a>. In
+comparaison to hbase plugin, this allows fast join to hive table (to be
+tested). While this plugin needs phoenix 4.8.0+ HDP ships with phoenix 4.7.0.
+However HDP Phoenix is a fork of Phoenix, and it integrates this feature.</p>
+<p>Because phoenix allows to mount a hbase table, hive a phoenix or a hbase table,
+there is many ways to make hive querying hbase. Moreover hive can create a
+regular table stored as a hbase or phoenix table wich is slightly different.
+The best way is to mount phoenix as a hive external table. First advantage is
+<em>phoenix</em> allows salted tables by mean there is no need to manually handle the
+key to be well distributed. Second, is loading directly into <em>phoenix</em> allows
+it to manage its secondary indexes and also some other tools such <em>solr</em>.</p>
+<p>Finally, hive can access an external <em>phoenix</em> table and allow both upsert and
+select. The plugin also provides a way to delete/update from hive, however I
+haven't been able to reproduce yet since transactional tables are only
+compatible with orc based tables.</p>
+</div>
+<div class="section" id="spark-integration">
+<h2>Spark integration</h2>
+<p>Spark can read and write from phoenix <a class="reference external" href="https://stackoverflow.com/questions/40329968/apache-spark-ways-to-read-and-write-from-apache-phoenix-in-java">here on SOF</a> or <a class="reference external" href="https://phoenix.apache.org/phoenix_spark.html">here on official</a>. The good point is it can be done from scala or python.</p>
+</div>
+<div class="section" id="solr-integration">
+<h2>Solr integration</h2>
+<p>Solr integration with hbase is a good idea: hbase contains the truth and solr allows fast lookup to discover it. However, setting up solr on top of hbase is a pain. Phoenix simplifies drastically that :
+<a class="reference external" href="https://nicholasmaillard.wordpress.com/2014/12/27/phoenix-to-solr-in-20-minutes/">here</a></p>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/hive-merge/" class="u-url">Hive Merge</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/hive-merge/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Hive introduced ACID statement: INSERT, UPDATE, DELETE &amp; MERGE. It turns-out
+HIVE 1.2.x is not optimised enough to support MERGE efficiently. An in depth
+documentation can be found <a class="reference external" href="https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions#HiveTransactions-Limitations">there</a></p>
+<p>The code below :</p>
+<ul class="simple">
+<li>is idempotent in someway. Suppose for some reason, the <cite>merge insert</cite> statement
+fails. Then running again all statements won't be an issue since no update at
+all will append again. Same case if the <cite>update</cite> statement fails.</li>
+<li>Simple version: makes the assumption that any data both present in the
+<cite>staging</cite> table and the <cite>target</cite> table needs to be updated.</li>
+<li>SCD1 and SCD2 have slighly difference that are mentionned if existing.</li>
+<li>SCD2 has been tested (upsert version) on a large target table ( 1.3 Bilion
+rows * 100 columns) and a source table of 100 Milion rows. As a result, the
+total runtime was les than 3 hours. (50% resource on a 5 computer hadoop
+cluster).</li>
+</ul>
+<div class="section" id="staging-step">
+<h2>0) Staging step</h2>
+<p>Some data was put on hdfs in the &lt;stg_table&gt; to be merged with a target table.
+This might be done by scoop incrementally. Also, this might be the whole table.
+All the steps below will work the same in both case.</p>
+</div>
+<div class="section" id="preparation-step">
+<h2>1) Preparation step</h2>
+<p>The 3 table above are necessary for any of SCD1 or SCD2. They are
+respectively the <cite>transformation</cite>, <cite>insert</cite>, <cite>update</cite> candidate tables.</p>
+<pre class="code sql"><a name="rest_code_70d9f70874e448bc955d027d86dd8569-1"></a><span class="c1">-- create transformation table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-2"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-3"></a>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-4"></a><span class="c1">-- create insert table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-5"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-6"></a>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-7"></a><span class="c1">-- create update table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-8"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+</pre>
+</div>
+<div class="section" id="transformation-step">
+<h2>2) Transformation step</h2>
+<p>This step loads the trf table (<cite>transformed</cite>)  from the stg table (<cite>staging</cite>).
+It adds the hash column, and is the place to add other transformations/columns
+if needed.</p>
+<pre class="code sql"><a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-1"></a><span class="c1">-- example without transformations</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-2"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-3"></a><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">HASH</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">hash</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-4"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">stg_table</span><span class="o">&gt;</span><span class="p">;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-5"></a>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-6"></a><span class="c1">-- example with transformations</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-7"></a><span class="c1">-- t1 and t2 are new columns added</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-8"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-9"></a><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">HASH</span><span class="p">(</span><span class="n">stg</span><span class="p">.</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">hash</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-10"></a><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">t1</span><span class="p">(),</span> <span class="n">t2</span><span class="p">()</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-11"></a>      <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">stg_table</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stg</span><span class="p">;</span>
+</pre>
+</div>
+<div class="section" id="dispatching-step">
+<h2>3) Dispatching step</h2>
+<p>Simplified version:</p>
+<pre class="code sql"><a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-1"></a><span class="c1">-- variation when you already know that rows are all different</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-2"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-3"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">WHERE</span> <span class="o">&lt;</span><span class="n">maj_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-4"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">WHERE</span> <span class="o">&lt;</span><span class="n">maj_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+</pre>
+<p>Complete version:</p>
+<pre class="code sql"><a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-1"></a><span class="c1">-- feed both update &amp; insert table</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-2"></a><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-3"></a>      <span class="k">FROM</span>  <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span> <span class="n">trf</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-4"></a>      <span class="k">JOIN</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span> <span class="n">targ</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-5"></a>      <span class="k">ON</span> <span class="p">(</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-6"></a>      <span class="n">targ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-7"></a>      <span class="k">AND</span> <span class="n">trf</span><span class="p">.</span><span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">targ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-8"></a>      <span class="p">)</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-9"></a>      <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-10"></a>      <span class="k">AND</span> <span class="n">trf</span><span class="p">.</span><span class="n">hash</span> <span class="o">&lt;&gt;</span> <span class="n">targ</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="k">as</span> <span class="n">updateable</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-11"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="p">;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-12"></a>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-13"></a><span class="c1">-- feed the insert table with new rows</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-14"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-15"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-16"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-17"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-18"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-19"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-20"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-21"></a><span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="upsert-version">
+<h2>4.1) Upsert version</h2>
+<p>SCD 1:</p>
+<p>Notice the delete is used in place of an update. The reason is an update cannot
+join an other table and thus apply updates where needed.</p>
+<pre class="code sql"><a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-1"></a><span class="c1">-- first delete update rows</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-2"></a><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-3"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-4"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-5"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-6"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">);</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-7"></a>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-8"></a><span class="c1">-- second, insert all new rows</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-9"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-10"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-11"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-12"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-13"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-14"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">;</span>
+</pre>
+<p>SCD 2:</p>
+<pre class="code sql"><a name="rest_code_7f1160783d2a4321880a177bff5dc106-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-2"></a><span class="k">UPDATE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-3"></a><span class="k">SET</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">current_date</span><span class="p">()</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-4"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-5"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-6"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-7"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-8"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">);</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-9"></a>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-10"></a><span class="c1">-- second, insert all new rows</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-11"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-12"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-13"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-14"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-15"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-16"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">;</span>
+</pre>
+</div>
+<div class="section" id="merge-version">
+<h2>4.2) Merge version</h2>
+<p>SCD 1:</p>
+<pre class="code sql"><a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-2"></a><span class="n">MERGE</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-3"></a><span class="k">USING</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-4"></a><span class="p">(</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-5"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">upd</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-6"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-7"></a><span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-8"></a><span class="p">)</span> <span class="k">AS</span> <span class="n">sub</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-9"></a><span class="k">ON</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">join_key</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="n">join_key</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-10"></a>    <span class="k">AND</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-11"></a><span class="k">WHEN</span> <span class="n">MATCHED</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-12"></a>     <span class="k">THEN</span> <span class="k">UPDATE</span> <span class="k">SET</span> <span class="n">col1</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">hash</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">hash</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-13"></a><span class="k">WHEN</span> <span class="k">NOT</span> <span class="n">MATCHED</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-14"></a>     <span class="k">THEN</span> <span class="k">INSERT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">sub</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="p">;</span>
+</pre>
+<p>SCD 2:</p>
+<pre class="code sql"><a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-2"></a><span class="n">MERGE</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-3"></a><span class="k">USING</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-4"></a><span class="p">(</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-5"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">upd</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-6"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-7"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-8"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-9"></a><span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-10"></a><span class="p">)</span> <span class="k">AS</span> <span class="n">sub</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-11"></a><span class="k">ON</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">join_key</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="n">join_key</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-12"></a>    <span class="k">AND</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-13"></a><span class="k">WHEN</span> <span class="n">MATCHED</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-14"></a>     <span class="k">THEN</span> <span class="k">UPDATE</span> <span class="k">SET</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">current_date</span><span class="p">()</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-15"></a><span class="k">WHEN</span> <span class="k">NOT</span> <span class="n">MATCHED</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-16"></a>     <span class="k">THEN</span> <span class="k">INSERT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">sub</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="p">;</span>
+</pre>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/postgresql-reflexions/" class="u-url">Postgresql Reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/postgresql-reflexions/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>After 4 years of postgresql management, I d'like to relate my experience.</p>
+<p>Postgreql is incredible:</p>
+<ul class="simple">
+<li>its community is wonderful, the mailing list is very active and structured</li>
+<li>the recent years have been very productive for postgres, with many analytics
+improvements and perspectives</li>
+<li>it has one of the best support for transactions, and for example deal with
+DDL in transaction</li>
+<li>it's stable, we never had any crash in 4 years, or need to reboot the server</li>
+<li>it manage bot structured and unstructured data</li>
+<li>free text indexes and features are very advanced</li>
+</ul>
+<p>However, sadly postgresql has some drawnbacks:</p>
+<ul class="simple">
+<li>it does not deal great with large volumne when comes analytics</li>
+<li>because it may be used for all batch ingesting, batch exporting, OLTP, dumps,
+analytics, the overall performances might be affected</li>
+<li>it does not scale horizontaly</li>
+<li>it has no fail over, or this lead to complex setup</li>
+</ul>
+<p>Complementing postgresql with hadoop:</p>
+<p>For this reason, it has been decided to externalize some responsibilities such
+batch exporting and analytics to an other technology that scale horizontally:
+hadoop.</p>
+<p>The good point is synchronizing data from postgresql to hive daily is easy
+thanks to incremental sqoop import on hdfs, based on indexed timestamps in
+postgreql.  This allows pushing the data from postgresql to hive ready to
+analyse. The two tools interface well where hive does not handle sequence, or
+triggers, and postgresql does not manage huge data historisation, and columnar
+aggregation.</p>
+<dl class="docutils">
+<dt>While postgreqsl does not handle well aggregations on bilions rows, it's children greenplum is supposed to.</dt>
+<dd>Let's envisage a greenplum post soon.</dd>
+</dl>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/prestodb-reflexions/" class="u-url">PrestoDB reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/prestodb-reflexions/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Prestodb is a cool distributed engine over hadoop. It can be compared to hive
+LLAP, impala or apache DRILL for fast in-memory OLAP analysis and data
+discovery.</p>
+<p>The main disadvantages it has right now are:</p>
+<ul class="simple">
+<li>it is not ACID compliant and far from being: this means tables in presto
+shall be created from scratch for analytics. Because we are speaking about
+big data, this implies copying</li>
+<li>it does not and never will support hive views: this would have been an
+opportunity to create pseudo-acid workflows</li>
+<li>it does not integrate with hbase</li>
+<li>it does not integrate with YARN, or at least the attempt looks discontinued
+on github.</li>
+</ul>
+<p>The main advantage it has over hive LLAP are:</p>
+<ul class="simple">
+<li>many more build-in functions</li>
+<li>has been proven to scale well with tons of users</li>
+<li>integrates with RDBMS such postgres or NOSQL stores such mongodb</li>
+</ul>
+<p>Sor far, the best feet for our internal arhitecture is to go with hive llap in
+replacement to prestodb. This will brings us the ability to better integrate
+with hbase/phoenix/solr from one part, and also give us the ability to query
+ACID version of the DWH without data deduplication.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/spark-reflexions/" class="u-url">Spark Reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/spark-reflexions/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Spark is a Swiss Army Knife of a hadoop stack. It makes glue between tools and is a de-facto interface for them.</p>
+<p>Spark has a lot of advantages:</p>
+<ul class="simple">
+<li>it's a wonderfull connector: if you look at a way to connect to a tool, spark
+already has a connector for you. Special mention to csv: spark is also able
+to read multilined csv with quote, empty lines and special character in it.</li>
+<li>it can manipulate very huge dataset: in case the dataset does not feat in
+memory, the spark partitionning feature allows spliting the tasks in working
+pipelines</li>
+<li>its parallel feature can take advantage of a hadoop cluster, but is a great
+solution for a laptop too</li>
+<li>the scala spark-shell is really handy for development. It's auto-completion
+features are superior to any shell I've dealt with before</li>
+<li>it has SQL syntax, SPARKQL compliance, and also machine learning distributed
+implementation.</li>
+<li>it can be programmed in scala, python, R, java and julia.</li>
+</ul>
+<p>Spark as some disadvantages:</p>
+<ul class="simple">
+<li>time of writing, spark does not support hive ACID tables. The workaround is
+to do a major compaction of the table before reading it with spark. This
+means it cannot yet be integrated into a hive ETL process based on ACID
+tables.</li>
+<li>spark programming needs a lot of skills. It is then not a good choice for
+intermediate enterprise in comparison to hive programming. Again, hive ETL
+looks a better fit for a maintainability reason.</li>
+</ul>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/hive-reflexions/" class="u-url">hive Reflexions</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/hive-reflexions/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-10T00:00:00+02:00" itemprop="datePublished" title="2018-05-10">2018-05-10</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Hive has several advantages over other Datawarehouse solutions.</p>
+<ol class="arabic simple">
+<li>it is java based. This allows it to take advantage of UDF. The best and the
+moste complicate way to write them as generic UDFs. The other important
+aspect is to make them <cite>blessed UDF</cite> by mean they are global and accessible
+to any user. Generic UDF can produce any hive type from integer to complexe
+map structure.</li>
+<li>it can read/write into hbase and take advantage of a key-value store.</li>
+<li>it is ACID compliant, and provide both insert/update. However, this new
+feature is not well integrated with other tools such apache spark or
+facebook presto.</li>
+<li>it supports multiple level of performance tunning such partitionning,
+bucketting, bloom filters, predicate pushdown.</li>
+</ol>
+<p>Still hive has several disavantages:</p>
+<ol class="arabic simple">
+<li>lack or support for sequences. The workaround right now is to either use a
+UUID - this has several drawbacks such performances/storage issue. A second
+approach is to use the <cite>sequence_nb + (row_number() over())</cite>  function where
+<cite>sequence_nb</cite> is maintained into a table - the count of the inserted rows
+need to be added to the sequence. The last solution is a long, but it cannot
+be used concurrently. The solution cannot be used in production.</li>
+</ol>
+<div class="section" id="hive-configuration-tips">
+<h2>hive configuration tips</h2>
+<p>Hive can have OOM. Then this parameter might help
+- <cite>set hive.exec.orc.memory.pool = 1.0</cite></p>
+<p>Predicate Push Down is better when INSERT STMT use a SORT BY
+"orc.bloom.filter.columns"="col1,col2"</p>
+<p>It is also possible to update the bloom filter by running:
+<cite>ANALYZE TABLE Table1 COMPUTE STATISTICS FOR COLUMNS;</cite></p>
+<ul class="simple">
+<li><a class="reference external" href="https://medium.com/@anishekagarwal/apache-hive-beeline-progress-bar-fd57c29da65d">show progress bar in beeline</a></li>
+</ul>
+</div>
+</div>
+    </div>
+    </article>
+</div>
+        <nav class="postindexpager"><ul class="pager">
+<li class="previous">
+                <a href="." rel="prev">Newer posts</a>
+            </li>
+        </ul></nav></main>
+</div>
+                <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about email)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/cat_email.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:53:24 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Email Best Practices</title><link>https://parisni.github.io/weblog/posts/email-best-practice/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;I will post here all best practices about writing emails. A lot of useful
+information can be found &lt;a class="reference external" href="https://www.ietf.org/rfc/rfc3676.txt"&gt;there&lt;/a&gt;&lt;/p&gt;
+&lt;div class="section" id="writing-email"&gt;
+&lt;h2&gt;Writing email&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Choose an email object&lt;/p&gt;
+&lt;p&gt;For example this pattern is great: &lt;strong&gt;[Action] Topic&lt;/strong&gt;.
+&lt;strong&gt;Action&lt;/strong&gt; to help your recipient to understand what you want from him.
+&lt;strong&gt;topic&lt;/strong&gt; is a small synthesis of the topic in which the action is supposed to happen.
+This pattern has been advised by Michael Kahn.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Keep the body narrow&lt;/p&gt;
+&lt;p&gt;The email should not size more than 72 character width. This improve
+readability specially on small screen. In vim, the width can be setup, and
+the shorkey &lt;strong&gt;g+q&lt;/strong&gt; on a visual selection makes things easy.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="reply-to-email"&gt;
+&lt;h2&gt;Reply to email&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Reply below your recipient&lt;/p&gt;
+&lt;p&gt;Bottom Posting (BP) is answering bellow the previous email as opposite to
+Top Posting (TP) aka gmail way of doing. BP has many advantages over TP. BP
+allows to read the emails in the natural order ; specially for people who
+discover the thread. &lt;a class="reference external" href="http://www.idallen.com/topposting.html"&gt;more information here&lt;/a&gt;
+Keep an empty row between the previous answer and yours for readability.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Remove information&lt;/p&gt;
+&lt;p&gt;Remove the recipient signature, out of context content. In particular, do
+not keep the recipient email within the email body for security reasons.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Append your signature&lt;/p&gt;
+&lt;p&gt;A signature is generally on the bottom of the email, preceded by a row containing: &lt;em&gt;--&lt;/em&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Sign the email&lt;/p&gt;
+&lt;p&gt;Sign the email with your AES private key as a proof of your identity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Mask your mailing system&lt;/p&gt;
+&lt;p&gt;Email can store the &lt;strong&gt;User-agent&lt;/strong&gt; field. This can be found in the header of
+the email and may share precious information such your operating system and
+its version. eg: &lt;strong&gt;User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mailing-list"&gt;
+&lt;h2&gt;Mailing List&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Email the mailing list &lt;strong&gt;only&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Remove the previous writer. In any cases, he will receive the email since he
+subscribed to the list.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Use a dedicated alias&lt;/p&gt;
+&lt;p&gt;Mailing list are usually public and this you will probably end up with spam.
+A good trick is to use an alias combined with a rule such: "message directed
+to the alias goes into the trash". Riseup.net provides alias email.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>archlinux</category><category>postgresql</category><guid>https://parisni.github.io/weblog/posts/email-best-practice/</guid><pubDate>Sun, 02 Sep 2018 22:00:00 GMT</pubDate></item><item><title>Spelling, mutt &amp; vim</title><link>https://parisni.github.io/weblog/posts/mutt-vim/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Having a correct spelling is important in society. This is true specially when
+come time to write emails.&lt;/p&gt;
+&lt;p&gt;Here is a trick to activate vim spelling while editing email in &lt;strong&gt;mutt&lt;/strong&gt;. Add
+the following line into your .muttrc configuration file:&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_525c774f0feb4b4a9aef45c9e73a7dae-1"&gt;&lt;/a&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="nv"&gt;editor&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;"vim -c 'set textwidth=72' -c':set spell' -c':setlocal spell spelllang=en_us'"&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;This allows to check English spelling correctly.&lt;/p&gt;
+&lt;p&gt;Enjoy !&lt;/p&gt;&lt;/div&gt;</description><category>mutt</category><category>vim</category><guid>https://parisni.github.io/weblog/posts/mutt-vim/</guid><pubDate>Sun, 02 Sep 2018 22:00:00 GMT</pubDate></item><item><title>Mutt Search on Steroids</title><link>https://parisni.github.io/weblog/posts/mutt-search/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Mutt has a powerful feature to dig into the history: the &lt;strong&gt;limit&lt;/strong&gt; feature. By
+pressing &lt;cite&gt;l&lt;/cite&gt; it is then possible to write a query to filter the mails. It is
+comparable to the &lt;strong&gt;WHERE&lt;/strong&gt; part of a SQL statement and allow combining &lt;strong&gt;AND&lt;/strong&gt;
+operators. In particular the &lt;strong&gt;~b&lt;/strong&gt; predicate allow to search within the email's
+body and the &lt;cite&gt;~X&lt;/cite&gt; lets filter attachments.&lt;/p&gt;
+&lt;p&gt;However that feature acts as a &lt;strong&gt;grep&lt;/strong&gt; command and parse all the mails one by
+one. Searching in multiple dozen of thousand emails can last dozen of minutes.
+Here comes the &lt;strong&gt;notmuch&lt;/strong&gt; program, that improves greatly the limit feature with
+instant search and some other goodies (and also drawbacks). The secret of this
+speed is it scan emails and produces a full text index to be used later.&lt;/p&gt;
+&lt;p&gt;The installation is straightforward on ubuntu with &lt;cite&gt;sudo apt install notmuch&lt;/cite&gt;.
+The configuration is also piece of cake: &lt;cite&gt;notmuch config&lt;/cite&gt; will setup the
+maildir folder. Later the &lt;cite&gt;notmuch new&lt;/cite&gt; command allows to the mails and can be
+run again when new mails arrive. There is also a way to automatize the
+indexation by setup system notifications &lt;a class="reference external" href="https://github.com/noah/notmuch-new-inotify"&gt;right there&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The integration in mutt to replace the &lt;em&gt;limit&lt;/em&gt; feature only need the two rows
+below in the &lt;em&gt;.muttrc&lt;/em&gt; configuration file. Pressing &lt;cite&gt;L&lt;/cite&gt; will propose to write a
+query to filter the mails based on the index &lt;a class="reference external" href="http://log.or.cz/?p=228"&gt;more information here&lt;/a&gt;.
+To get the full details on how to search within notmuch: &lt;cite&gt;man
+notmuch-search-index&lt;/cite&gt; describes the syntax of the search.&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_df677744c7484d65a69eb051361b7f9c-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'L' performs a notmuch query, showing only the results&lt;/span&gt;
+&lt;a name="rest_code_df677744c7484d65a69eb051361b7f9c-2"&gt;&lt;/a&gt;macro index L &lt;span class="s2"&gt;"&amp;lt;enter-command&amp;gt;unset wait_key&amp;lt;enter&amp;gt;&amp;lt;shell-escape&amp;gt;read -p 'notmuch query: ' x; echo \$x &amp;gt;~/.cache/mutt_terms&amp;lt;enter&amp;gt;&amp;lt;limit&amp;gt;~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&amp;lt;&amp;gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;&lt;/span&gt;$&lt;span class="s2"&gt;,=\"|\";print@a'\`\"&amp;lt;enter&amp;gt;"&lt;/span&gt; &lt;span class="s2"&gt;"show only messages matching a notmuch pattern"&lt;/span&gt;
+&lt;a name="rest_code_df677744c7484d65a69eb051361b7f9c-3"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'a' shows all messages again (supersedes default &amp;lt;alias&amp;gt; binding)&lt;/span&gt;
+&lt;a name="rest_code_df677744c7484d65a69eb051361b7f9c-4"&gt;&lt;/a&gt;macro index a &lt;span class="s2"&gt;"&amp;lt;limit&amp;gt;all\n"&lt;/span&gt; &lt;span class="s2"&gt;"show all messages (undo limit)"&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;There is some caveats with notmuch however. Its search within attachment is not
+as powerfull as the built-in mutt. In particular, the later allows to specify
+the number of attachments. Last but not least, notmuch does only provide a
+stemmer for english. That's might be possible to extend it with an existing
+implementation of the french snowball parser.&lt;/p&gt;
+&lt;div class="section" id="edit"&gt;
+&lt;h2&gt;EDIT:&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;mu&lt;/strong&gt; is an alternative to &lt;strong&gt;notmuch&lt;/strong&gt; . It covers the features described above, and has a better syntax.&lt;/p&gt;
+&lt;p&gt;Here is the full documentation there &lt;a class="reference external" href="http://manpages.ubuntu.com/manpages/bionic/man1/mu-find.1.html"&gt;mu documentation&lt;/a&gt;&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Install&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-2"&gt;&lt;/a&gt;sudo apt install maildir-utils
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-3"&gt;&lt;/a&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-4"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Index Maildir&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-5"&gt;&lt;/a&gt;mu index -m my/maildir
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-6"&gt;&lt;/a&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-7"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# setup in crontab or use inotify service&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-8"&gt;&lt;/a&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-9"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# to add to .muttrc&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-10"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Mode 1.&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-11"&gt;&lt;/a&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-12"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# this allows to search into all mailbowes at once&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-13"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# however, it is a readonly mailbox because off symlinks&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-14"&gt;&lt;/a&gt;macro index &amp;lt;F8&amp;gt; &lt;span class="s2"&gt;"&amp;lt;shell-escape&amp;gt;mu find --clearlinks --format=links --linksdir=~/Maildir/search "&lt;/span&gt;   &lt;span class="s2"&gt;"mu find"&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-15"&gt;&lt;/a&gt;macro index &amp;lt;F9&amp;gt; &lt;span class="s2"&gt;"&amp;lt;change-folder-readonly&amp;gt;~/Maildir/search"&lt;/span&gt;      &lt;span class="s2"&gt;"mu find results"&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-16"&gt;&lt;/a&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-17"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Mode 2.&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-18"&gt;&lt;/a&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-19"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# this allows to show the 600 first emails&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-20"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# it is&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-21"&gt;&lt;/a&gt;macro index L &lt;span class="s2"&gt;"&amp;lt;enter-command&amp;gt;unset wait_key&amp;lt;enter&amp;gt;&amp;lt;shell-escape&amp;gt;read -p 'mu query: ' x; echo \$x &amp;gt;~/.cache/mutt_terms&amp;lt;enter&amp;gt;&amp;lt;limit&amp;gt;~i \"\`mu find --fields i --quiet 2&amp;gt; /dev/null \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&amp;lt;&amp;gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;&lt;/span&gt;$&lt;span class="s2"&gt;,=\"|\";print@a'\`\"&amp;lt;enter&amp;gt;"&lt;/span&gt; &lt;span class="s2"&gt;"show only messages matching a mu pattern"&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-22"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'a' shows all messages again (supersedes default &amp;lt;alias&amp;gt; binding)&lt;/span&gt;
+&lt;a name="rest_code_1dedd03c53c349f2b9a0cf183c44797e-23"&gt;&lt;/a&gt;macro index a &lt;span class="s2"&gt;"&amp;lt;limit&amp;gt;all\n"&lt;/span&gt; &lt;span class="s2"&gt;"show all messages"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</description><category>mu</category><category>mutt</category><guid>https://parisni.github.io/weblog/posts/mutt-search/</guid><pubDate>Wed, 29 Aug 2018 22:00:00 GMT</pubDate></item><item><title>Mutt &amp; Sidebar</title><link>https://parisni.github.io/weblog/posts/mutt-sidebar/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;When receiving many mails a day, having a single mail pool makes easy to loose
+important emails. Using mailboxes (ie: sub folders) with rules becomes a need.
+The good point is all the mailboxes are regularly updated to alert when
+incoming email are received.  The few steps are generating a mailbox tree,
+mooving mails manually, mooving them automatically, and finally mooving the
+history in batch.&lt;/p&gt;
+&lt;div class="section" id="generating-a-mailbox-tree"&gt;
+&lt;h2&gt;Generating a mailbox tree&lt;/h2&gt;
+&lt;p&gt;Mailboxes consists of folder{cur, new, old} where &lt;em&gt;folder&lt;/em&gt; represents its name.
+The easy way to build them is from the mutt interface, by pressing &lt;cite&gt;s&lt;/cite&gt; on an
+email and choosing the new mailboxe name. The root of the mailboxe is defined
+as the &lt;cite&gt;folder&lt;/cite&gt; variable.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mooving-mails-manually"&gt;
+&lt;h2&gt;Mooving mails manually&lt;/h2&gt;
+&lt;p&gt;It is possible to redirect an email into a mailboxe by pressing &lt;cite&gt;s&lt;/cite&gt; and then
+&lt;cite&gt;=myMailBoxeChoice&lt;/cite&gt;. In case you want to put it back to the general spool just
+type &lt;cite&gt;=&lt;/cite&gt; with an empty mailboxe.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mooving-mails-automatically"&gt;
+&lt;h2&gt;Mooving mails automatically&lt;/h2&gt;
+&lt;p&gt;I have been able to write rules based on email features such &lt;cite&gt;from&lt;/cite&gt; with the
+&lt;a class="reference external" href="https://userpages.umbc.edu/~ian/procmail.html#tutorial"&gt;helpful tutorial&lt;/a&gt;.
+In my setup, &lt;em&gt;getmail&lt;/em&gt; fetches the mails and invokes &lt;em&gt;procmail&lt;/em&gt; to redirect the
+mail somewhere. The idea is to parse the email address with a regex and
+depending on the result redirect it in the right &lt;cite&gt;new&lt;/cite&gt; mailboxe folder.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mooving-mails-history"&gt;
+&lt;h2&gt;Mooving mails history&lt;/h2&gt;
+&lt;p&gt;I haven't yet a solution for that.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>mutt</category><guid>https://parisni.github.io/weblog/posts/mutt-sidebar/</guid><pubDate>Sat, 25 Aug 2018 22:00:00 GMT</pubDate></item><item><title>Encrypt &amp; Sign Mails</title><link>https://parisni.github.io/weblog/posts/mutt-aes/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;div class="section" id="get-a-certificate-eg-cacert-org"&gt;
+&lt;h2&gt;Get a certificate (eg: CAcert.org)&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;Client Certificate &amp;gt; new&lt;/li&gt;
+&lt;li&gt;add it to Firefox&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The key pair can then be extracted in p12 format from Firefox and it is
+possible to transform it to rsa format:&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_94baa6a364c54251b73c374d0c4522bf-1"&gt;&lt;/a&gt;openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/&lt;span class="nv"&gt;$USER&lt;/span&gt;/.ssh/id_rsa_cacert
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="installing-neomutt-from-source-on-ubuntu-18-04"&gt;
+&lt;h2&gt;Installing neomutt from source on Ubuntu 18.04&lt;/h2&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-1"&gt;&lt;/a&gt;sudo apt install libncursesw5-dev
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-2"&gt;&lt;/a&gt;sudo apt install libidn11-dev
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-3"&gt;&lt;/a&gt;git clone https://github.com/neomutt/neomutt
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-4"&gt;&lt;/a&gt;&lt;span class="nb"&gt;cd&lt;/span&gt; neomutt
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-5"&gt;&lt;/a&gt;./configure
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-6"&gt;&lt;/a&gt;make
+&lt;a name="rest_code_7e85f5c5b2de4b3598206768438210fc-7"&gt;&lt;/a&gt;sudo make install
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="loading-the-key-into-mutt"&gt;
+&lt;h2&gt;Loading the key into mutt&lt;/h2&gt;
+&lt;p&gt;It is necessary to setup and use smime_key command to manage keys. It will
+generate a KeyID for the certificate (something like xxxxxx.0)&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-1"&gt;&lt;/a&gt;cp /home/&lt;span class="nv"&gt;$USER&lt;/span&gt;/git/neomutt/contrib/smime.rc ~/.smime.rc
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-2"&gt;&lt;/a&gt;/usr/libexec/neomutt/smime_keys init
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-3"&gt;&lt;/a&gt;mkdir -p ~/.smime/certificates
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-4"&gt;&lt;/a&gt;touch ~/.smime/certificates/.index
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-5"&gt;&lt;/a&gt;mkdir -p ~/.smime/keys
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-6"&gt;&lt;/a&gt;touch ~/.smime/keys/.index
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-7"&gt;&lt;/a&gt;/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
+&lt;a name="rest_code_7e02d05498ae4c01b2c1936985e6e9a1-8"&gt;&lt;/a&gt;/usr/libexec/neomutt/smime_keys refresh
+&lt;/pre&gt;&lt;ul class="simple"&gt;
+&lt;li&gt;Add to &lt;cite&gt;source /home/$USER/.smime.rc&lt;/cite&gt; to .muttrc&lt;/li&gt;
+&lt;li&gt;Setup the KeyID in the &lt;em&gt;.smime.rc&lt;/em&gt; file&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;
+&lt;div class="section" id="send-a-signed-mail"&gt;
+&lt;h2&gt;Send a signed mail&lt;/h2&gt;
+&lt;p&gt;After having written the mail in neomutt type &lt;cite&gt;shift-S&lt;/cite&gt; and choose the &lt;cite&gt;s&lt;/cite&gt; to
+sign the mail. It will choose the KeyID by default, and ask for the key
+password if exists.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="loading-a-public-key"&gt;
+&lt;h2&gt;Loading a public key&lt;/h2&gt;
+&lt;p&gt;Right now, I don't know&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="encrypt-a-mail"&gt;
+&lt;h2&gt;Encrypt a mail&lt;/h2&gt;
+&lt;p&gt;Choose &lt;cite&gt;e&lt;/cite&gt; for encryption, and then &lt;cite&gt;enter&lt;/cite&gt; to list the existing public keys.&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>mutt</category><guid>https://parisni.github.io/weblog/posts/mutt-aes/</guid><pubDate>Fri, 24 Aug 2018 22:00:00 GMT</pubDate></item></channel></rss>

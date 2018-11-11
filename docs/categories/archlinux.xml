@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about archlinux)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/archlinux.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:53:24 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Postgresql 11 on Archlinux</title><link>https://parisni.github.io/weblog/posts/archlinux-pgsql-11/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# get the lattest postgres in the repos&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-2"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# avoid checking for sha fingerprint, because not the same version&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-3"&gt;&lt;/a&gt;yaourt --m-arg &lt;span class="s2"&gt;"--skipchecksums --skippgpcheck"&lt;/span&gt; -Sb postgresql
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-4"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 1. edit the PKGBUILD file, change to 11.0 version&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-5"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 2. comment the check() part&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-6"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 3. after building and installing, change to 11 the PGMAJORVERSION within:&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-7"&gt;&lt;/a&gt;sudo vim /usr/bin/postgresql-check-db-dir
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-8"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# make the link for psql command working&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-9"&gt;&lt;/a&gt;sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-10"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# install that old version to make posgres command work&lt;/span&gt;
+&lt;a name="rest_code_bef494250fca4101a1c58b66e9f838bd-11"&gt;&lt;/a&gt;yaourt -S icu54
+&lt;/pre&gt;&lt;p&gt;That's all. By the way, I do not have any idea right now on how to upgrade minor versions in the future, but I will employ myself to update this post.&lt;/p&gt;&lt;/div&gt;</description><category>archlinux</category><category>postgresql</category><guid>https://parisni.github.io/weblog/posts/archlinux-pgsql-11/</guid><pubDate>Fri, 26 Oct 2018 22:00:00 GMT</pubDate></item><item><title>Email Best Practices</title><link>https://parisni.github.io/weblog/posts/email-best-practice/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;I will post here all best practices about writing emails. A lot of useful
+information can be found &lt;a class="reference external" href="https://www.ietf.org/rfc/rfc3676.txt"&gt;there&lt;/a&gt;&lt;/p&gt;
+&lt;div class="section" id="writing-email"&gt;
+&lt;h2&gt;Writing email&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Choose an email object&lt;/p&gt;
+&lt;p&gt;For example this pattern is great: &lt;strong&gt;[Action] Topic&lt;/strong&gt;.
+&lt;strong&gt;Action&lt;/strong&gt; to help your recipient to understand what you want from him.
+&lt;strong&gt;topic&lt;/strong&gt; is a small synthesis of the topic in which the action is supposed to happen.
+This pattern has been advised by Michael Kahn.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Keep the body narrow&lt;/p&gt;
+&lt;p&gt;The email should not size more than 72 character width. This improve
+readability specially on small screen. In vim, the width can be setup, and
+the shorkey &lt;strong&gt;g+q&lt;/strong&gt; on a visual selection makes things easy.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="reply-to-email"&gt;
+&lt;h2&gt;Reply to email&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Reply below your recipient&lt;/p&gt;
+&lt;p&gt;Bottom Posting (BP) is answering bellow the previous email as opposite to
+Top Posting (TP) aka gmail way of doing. BP has many advantages over TP. BP
+allows to read the emails in the natural order ; specially for people who
+discover the thread. &lt;a class="reference external" href="http://www.idallen.com/topposting.html"&gt;more information here&lt;/a&gt;
+Keep an empty row between the previous answer and yours for readability.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Remove information&lt;/p&gt;
+&lt;p&gt;Remove the recipient signature, out of context content. In particular, do
+not keep the recipient email within the email body for security reasons.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Append your signature&lt;/p&gt;
+&lt;p&gt;A signature is generally on the bottom of the email, preceded by a row containing: &lt;em&gt;--&lt;/em&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Sign the email&lt;/p&gt;
+&lt;p&gt;Sign the email with your AES private key as a proof of your identity.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Mask your mailing system&lt;/p&gt;
+&lt;p&gt;Email can store the &lt;strong&gt;User-agent&lt;/strong&gt; field. This can be found in the header of
+the email and may share precious information such your operating system and
+its version. eg: &lt;strong&gt;User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0&lt;/strong&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+&lt;div class="section" id="mailing-list"&gt;
+&lt;h2&gt;Mailing List&lt;/h2&gt;
+&lt;ol class="arabic"&gt;
+&lt;li&gt;&lt;p class="first"&gt;Email the mailing list &lt;strong&gt;only&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Remove the previous writer. In any cases, he will receive the email since he
+subscribed to the list.&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;&lt;p class="first"&gt;Use a dedicated alias&lt;/p&gt;
+&lt;p&gt;Mailing list are usually public and this you will probably end up with spam.
+A good trick is to use an alias combined with a rule such: "message directed
+to the alias goes into the trash". Riseup.net provides alias email.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>archlinux</category><category>postgresql</category><guid>https://parisni.github.io/weblog/posts/email-best-practice/</guid><pubDate>Sun, 02 Sep 2018 22:00:00 GMT</pubDate></item></channel></rss>

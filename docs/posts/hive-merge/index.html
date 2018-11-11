@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Hive Merge | Software Lobotomy</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/posts/hive-merge/">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Nicolas Paris">
+<link rel="prev" href="../postgresql-reflexions/" title="Postgresql Reflexions" type="text/html">
+<link rel="next" href="../hbase-reflexion/" title="Hbase Reflexions" type="text/html">
+<meta property="og:site_name" content="Software Lobotomy">
+<meta property="og:title" content="Hive Merge">
+<meta property="og:url" content="https://parisni.github.io/weblog/posts/hive-merge/">
+<meta property="og:description" content="Hive introduced ACID statement: INSERT, UPDATE, DELETE &amp; MERGE. It turns-out
+HIVE 1.2.x is not optimised enough to support MERGE efficiently. An in depth
+documentation can be found there
+The code belo">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-05-13T00:00:00+02:00">
+<meta property="article:tag" content="hive">
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="../../categories/">Tags</a></li>
+                <li><a href="../../archive.html">Archive</a></li>
+                <li><a href="../../stories/about/">About</a></li>
+                <li><a href="../../rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Hive Merge</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    <a href="../../authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>Hive introduced ACID statement: INSERT, UPDATE, DELETE &amp; MERGE. It turns-out
+HIVE 1.2.x is not optimised enough to support MERGE efficiently. An in depth
+documentation can be found <a class="reference external" href="https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions#HiveTransactions-Limitations">there</a></p>
+<p>The code below :</p>
+<ul class="simple">
+<li>is idempotent in someway. Suppose for some reason, the <cite>merge insert</cite> statement
+fails. Then running again all statements won't be an issue since no update at
+all will append again. Same case if the <cite>update</cite> statement fails.</li>
+<li>Simple version: makes the assumption that any data both present in the
+<cite>staging</cite> table and the <cite>target</cite> table needs to be updated.</li>
+<li>SCD1 and SCD2 have slighly difference that are mentionned if existing.</li>
+<li>SCD2 has been tested (upsert version) on a large target table ( 1.3 Bilion
+rows * 100 columns) and a source table of 100 Milion rows. As a result, the
+total runtime was les than 3 hours. (50% resource on a 5 computer hadoop
+cluster).</li>
+</ul>
+<div class="section" id="staging-step">
+<h2>0) Staging step</h2>
+<p>Some data was put on hdfs in the &lt;stg_table&gt; to be merged with a target table.
+This might be done by scoop incrementally. Also, this might be the whole table.
+All the steps below will work the same in both case.</p>
+</div>
+<div class="section" id="preparation-step">
+<h2>1) Preparation step</h2>
+<p>The 3 table above are necessary for any of SCD1 or SCD2. They are
+respectively the <cite>transformation</cite>, <cite>insert</cite>, <cite>update</cite> candidate tables.</p>
+<pre class="code sql"><a name="rest_code_70d9f70874e448bc955d027d86dd8569-1"></a><span class="c1">-- create transformation table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-2"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-3"></a>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-4"></a><span class="c1">-- create insert table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-5"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-6"></a>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-7"></a><span class="c1">-- create update table</span>
+<a name="rest_code_70d9f70874e448bc955d027d86dd8569-8"></a><span class="k">CREATE</span> <span class="k">TEMPORARY</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">LIKE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+</pre>
+</div>
+<div class="section" id="transformation-step">
+<h2>2) Transformation step</h2>
+<p>This step loads the trf table (<cite>transformed</cite>)  from the stg table (<cite>staging</cite>).
+It adds the hash column, and is the place to add other transformations/columns
+if needed.</p>
+<pre class="code sql"><a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-1"></a><span class="c1">-- example without transformations</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-2"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-3"></a><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">HASH</span><span class="p">(</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">hash</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-4"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">stg_table</span><span class="o">&gt;</span><span class="p">;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-5"></a>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-6"></a><span class="c1">-- example with transformations</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-7"></a><span class="c1">-- t1 and t2 are new columns added</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-8"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-9"></a><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">HASH</span><span class="p">(</span><span class="n">stg</span><span class="p">.</span><span class="o">*</span><span class="p">)</span> <span class="k">as</span> <span class="n">hash</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-10"></a><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="p">,</span> <span class="n">t1</span><span class="p">(),</span> <span class="n">t2</span><span class="p">()</span>
+<a name="rest_code_066d76a315fe4aef96c77d87a5dc3fe7-11"></a>      <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">stg_table</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">as</span> <span class="n">stg</span><span class="p">;</span>
+</pre>
+</div>
+<div class="section" id="dispatching-step">
+<h2>3) Dispatching step</h2>
+<p>Simplified version:</p>
+<pre class="code sql"><a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-1"></a><span class="c1">-- variation when you already know that rows are all different</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-2"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-3"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">WHERE</span> <span class="o">&lt;</span><span class="n">maj_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NOT</span> <span class="k">NULL</span>
+<a name="rest_code_7083d1fe8b4144d792f4ee20810ae405-4"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="k">WHERE</span> <span class="o">&lt;</span><span class="n">maj_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+</pre>
+<p>Complete version:</p>
+<pre class="code sql"><a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-1"></a><span class="c1">-- feed both update &amp; insert table</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-2"></a><span class="k">FROM</span> <span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-3"></a>      <span class="k">FROM</span>  <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span> <span class="n">trf</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-4"></a>      <span class="k">JOIN</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span> <span class="n">targ</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-5"></a>      <span class="k">ON</span> <span class="p">(</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-6"></a>      <span class="n">targ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-7"></a>      <span class="k">AND</span> <span class="n">trf</span><span class="p">.</span><span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="o">=</span> <span class="n">targ</span><span class="p">.</span><span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-8"></a>      <span class="p">)</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-9"></a>      <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-10"></a>      <span class="k">AND</span> <span class="n">trf</span><span class="p">.</span><span class="n">hash</span> <span class="o">&lt;&gt;</span> <span class="n">targ</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="k">as</span> <span class="n">updateable</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-11"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span> <span class="k">SELECT</span> <span class="o">*</span> <span class="p">;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-12"></a>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-13"></a><span class="c1">-- feed the insert table with new rows</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-14"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-15"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-16"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">trf_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-17"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-18"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">NOT</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-19"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-20"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_62d5eac5f97f45fb8db7170d81b5307d-21"></a><span class="p">);</span>
+</pre>
+</div>
+<div class="section" id="upsert-version">
+<h2>4.1) Upsert version</h2>
+<p>SCD 1:</p>
+<p>Notice the delete is used in place of an update. The reason is an update cannot
+join an other table and thus apply updates where needed.</p>
+<pre class="code sql"><a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-1"></a><span class="c1">-- first delete update rows</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-2"></a><span class="k">DELETE</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-3"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-4"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-5"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-6"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">);</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-7"></a>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-8"></a><span class="c1">-- second, insert all new rows</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-9"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-10"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-11"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-12"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-13"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_ce7c7af910dd4330b20ed2df83732c88-14"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">;</span>
+</pre>
+<p>SCD 2:</p>
+<pre class="code sql"><a name="rest_code_7f1160783d2a4321880a177bff5dc106-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-2"></a><span class="k">UPDATE</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-3"></a><span class="k">SET</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">current_date</span><span class="p">()</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-4"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-5"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-6"></a><span class="k">AND</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">IN</span> <span class="p">(</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-7"></a>     <span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-8"></a>     <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">);</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-9"></a>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-10"></a><span class="c1">-- second, insert all new rows</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-11"></a><span class="k">INSERT</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-12"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-13"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-14"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-15"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_7f1160783d2a4321880a177bff5dc106-16"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span><span class="p">;</span>
+</pre>
+</div>
+<div class="section" id="merge-version">
+<h2>4.2) Merge version</h2>
+<p>SCD 1:</p>
+<pre class="code sql"><a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-2"></a><span class="n">MERGE</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-3"></a><span class="k">USING</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-4"></a><span class="p">(</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-5"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">upd</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-6"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-7"></a><span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-8"></a><span class="p">)</span> <span class="k">AS</span> <span class="n">sub</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-9"></a><span class="k">ON</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">join_key</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="n">join_key</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-10"></a>    <span class="k">AND</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-11"></a><span class="k">WHEN</span> <span class="n">MATCHED</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-12"></a>     <span class="k">THEN</span> <span class="k">UPDATE</span> <span class="k">SET</span> <span class="n">col1</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">hash</span><span class="o">=</span><span class="n">sub</span><span class="p">.</span><span class="n">hash</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-13"></a><span class="k">WHEN</span> <span class="k">NOT</span> <span class="n">MATCHED</span>
+<a name="rest_code_4b3251ecf8c147c3a687f94c35b1fd2e-14"></a>     <span class="k">THEN</span> <span class="k">INSERT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">sub</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="p">;</span>
+</pre>
+<p>SCD 2:</p>
+<pre class="code sql"><a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-1"></a><span class="c1">-- first update old rows</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-2"></a><span class="n">MERGE</span> <span class="k">INTO</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-3"></a><span class="k">USING</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-4"></a><span class="p">(</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-5"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">upd</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-6"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-7"></a><span class="k">SELECT</span> <span class="k">null</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">ins_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-8"></a><span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-9"></a><span class="k">SELECT</span> <span class="o">&lt;</span><span class="n">primary_key</span><span class="o">&gt;</span> <span class="k">AS</span> <span class="n">join_key</span><span class="p">,</span> <span class="n">ins</span><span class="p">.</span><span class="o">*</span> <span class="k">FROM</span> <span class="o">&lt;</span><span class="n">upd_table</span><span class="o">&gt;</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-10"></a><span class="p">)</span> <span class="k">AS</span> <span class="n">sub</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-11"></a><span class="k">ON</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">join_key</span> <span class="o">=</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="n">join_key</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-12"></a>    <span class="k">AND</span> <span class="o">&lt;</span><span class="n">target_table</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="k">IS</span> <span class="k">NULL</span><span class="p">)</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-13"></a><span class="k">WHEN</span> <span class="n">MATCHED</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-14"></a>     <span class="k">THEN</span> <span class="k">UPDATE</span> <span class="k">SET</span> <span class="o">&lt;</span><span class="n">end_date</span><span class="o">&gt;</span> <span class="o">=</span> <span class="k">current_date</span><span class="p">()</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-15"></a><span class="k">WHEN</span> <span class="k">NOT</span> <span class="n">MATCHED</span>
+<a name="rest_code_bccf99054c1f444fa74a578f15f70d0d-16"></a>     <span class="k">THEN</span> <span class="k">INSERT</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">sub</span><span class="p">.</span><span class="n">col1</span><span class="p">,</span> <span class="p">...</span> <span class="p">,</span> <span class="n">sub</span><span class="p">.</span><span class="n">hash</span><span class="p">)</span> <span class="p">;</span>
+</pre>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/hive/" rel="tag">hive</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../postgresql-reflexions/" rel="prev" title="Postgresql Reflexions">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../hbase-reflexion/" rel="next" title="Hbase Reflexions">Next post</a>
+            </li>
+        </ul></nav></aside></article></main>
+</div>
+                <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>
