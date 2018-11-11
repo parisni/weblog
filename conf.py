@@ -20,11 +20,11 @@ BLOG_AUTHOR = "Parisni"  # (translatable)
 BLOG_TITLE = "Software Lobotomy"  # (translatable)
 # This is the main URL for your site. It will be used
 # in a prominent link. Don't forget the protocol (http/https)!
-SITE_URL = "https://parisni.github.io/weblog"
+SITE_URL = "https://parisni.github.io/weblog/"
 #SITE_URL = "http://parisni.github.io/"
 # This is the URL where Nikola's output will be deployed.
 # If not set, defaults to SITE_URL
-# BASE_URL = "https://parisni.github.io/"
+BASE_URL = "https://parisni.github.io/weblog/"
 BLOG_EMAIL = "nicolas.paris@riseup.net"
 BLOG_DESCRIPTION = ""  # (translatable)
 
@@ -631,7 +631,7 @@ REDIRECTIONS = []
 #     ]
 # }
 DEPLOY_COMMANDS = {
-     'default': [
+     "default": [
     "git add -A",
     "git commit -a -m 'Updating blog content'",
     "git push origin master",
@@ -1299,7 +1299,7 @@ SHOW_SOURCELINK = False
 # USE_BUNDLES = True
 
 # Plugins you don't want to use. Be careful :-)
-# DISABLED_PLUGINS = ["render_galleries"]
+DISABLED_PLUGINS = ["render_galleries","robots"]
 
 # Special settings to disable only parts of the indexes plugin.
 # Use with care.
