@@ -632,13 +632,14 @@ REDIRECTIONS = []
 # }
 DEPLOY_COMMANDS = {
      'default': [
-         "rsync -avh --delete output/* weblog/",
-         "git add -A",
-         "git commit -a -m 'Updating blog content'",
-         "git push origin master",
+    "git checkout gh-pages",
+    "rsync -rPv --delete-after --exclude .git --exclude .gitignore --exclude cache/ --exclude .doit.db.dat --exclude .doit.db.dir --exclude .doit.db.back output/ .",
+    "git add -A",
+    "git commit -a -m 'Updating blog content'",
+    "git push",
+    "git checkout master",
      ]
  }
-
 # github_deploy configuration
 # For more details, read the manual:
 # https://getnikola.com/handbook.html#deploying-to-github
