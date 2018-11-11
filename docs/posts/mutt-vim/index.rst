@@ -1,11 +1,10 @@
 .. title: Spelling, mutt & vim
 .. slug: mutt-vim
 .. date: Sep 03, 2018
-.. tags: mutt, vim
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: email
+.. tags: mutt, vim, email
+.. category: tools
 
 
 

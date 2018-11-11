@@ -1,11 +1,10 @@
 .. title: Managing local jars with maven
 .. slug: maven-local
 .. date: Jun 02, 2018
-.. tags: maven
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: java
+.. tags: maven
+.. category: software ingineering
 
 
 Maven has for me a non user friendly documentation, with 80% of xml content.

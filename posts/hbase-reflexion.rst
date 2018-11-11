@@ -1,11 +1,10 @@
 .. title: Hbase Reflexions
 .. slug: hbase-reflexion
 .. date: May 13, 2018
-.. tags: phoenix, spark, hive, solr
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: phoenix, spark, hive, solr, big-data
+.. category: data ingineering
 
 
 hbase looks a powerfull tool in complement of hive. While hive suits well

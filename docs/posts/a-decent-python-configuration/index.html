@@ -24,6 +24,7 @@ conda env list # lists all envs
 conda env create py3.5 pip setuptools python=3.5 # create a py">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-11-11T11:43:34+01:00">
+<meta property="article:tag" content="python">
 </head>
 <body>
     <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -47,7 +48,7 @@ conda env create py3.5 pip setuptools python=3.5 # create a py">
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                    <a href="../../authors/parisni/">Parisni</a>
+                    Parisni
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
@@ -62,26 +63,29 @@ conda env create py3.5 pip setuptools python=3.5 # create a py">
 <h2>Use Anaconda</h2>
 <p>Anaconda allows to have multiple python versions. This is much easier than using <em>virtualenv</em></p>
 <!-- END_TEASER -->
-<pre class="code bash"><a name="rest_code_5d6d5d8b821544609106b09d203d70d8-1"></a>conda env list <span class="c1"># lists all envs</span>
-<a name="rest_code_5d6d5d8b821544609106b09d203d70d8-2"></a>conda env create py3.5 pip setuptools <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 <span class="c1"># create a python env</span>
-<a name="rest_code_5d6d5d8b821544609106b09d203d70d8-3"></a>conda activate py3.5 <span class="c1"># activate the latter</span>
-<a name="rest_code_5d6d5d8b821544609106b09d203d70d8-4"></a>conda deactivate <span class="c1"># deactivate it</span>
-<a name="rest_code_5d6d5d8b821544609106b09d203d70d8-5"></a>conda env remove -n py3.5 <span class="c1"># remove it completely</span>
+<pre class="code bash"><a name="rest_code_18b5bf4d43044843a17164468e638611-1"></a>conda env list <span class="c1"># lists all envs</span>
+<a name="rest_code_18b5bf4d43044843a17164468e638611-2"></a>conda env create py3.5 pip setuptools <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 <span class="c1"># create a python env</span>
+<a name="rest_code_18b5bf4d43044843a17164468e638611-3"></a>conda activate py3.5 <span class="c1"># activate the latter</span>
+<a name="rest_code_18b5bf4d43044843a17164468e638611-4"></a>conda deactivate <span class="c1"># deactivate it</span>
+<a name="rest_code_18b5bf4d43044843a17164468e638611-5"></a>conda env remove -n py3.5 <span class="c1"># remove it completely</span>
 </pre>
 </div>
 <div class="section" id="use-pip-together-with-anaconda">
 <h2>Use pip together with anaconda</h2>
 <p>The package will be installed within the environement. pip has a much broader
 list of packages than the anaconda channel.</p>
-<pre class="code bash"><a name="rest_code_726770074c3342aeb3876129d162304a-1"></a>pip install &lt;my-package&gt; <span class="c1"># install a package</span>
-<a name="rest_code_726770074c3342aeb3876129d162304a-2"></a>pip install --index-url https://pypi.org/simple/ &lt;my-package&gt; <span class="c1"># specify the repository</span>
-<a name="rest_code_726770074c3342aeb3876129d162304a-3"></a>pip install . <span class="c1"># a local package</span>
-<a name="rest_code_726770074c3342aeb3876129d162304a-4"></a>pip remove &lt;my-package&gt;  <span class="c1"># remove it</span>
+<pre class="code bash"><a name="rest_code_ffa242beb44a436da06dbc996b840b65-1"></a>pip install &lt;my-package&gt; <span class="c1"># install a package</span>
+<a name="rest_code_ffa242beb44a436da06dbc996b840b65-2"></a>pip install --index-url https://pypi.org/simple/ &lt;my-package&gt; <span class="c1"># specify the repository</span>
+<a name="rest_code_ffa242beb44a436da06dbc996b840b65-3"></a>pip install . <span class="c1"># a local package</span>
+<a name="rest_code_ffa242beb44a436da06dbc996b840b65-4"></a>pip remove &lt;my-package&gt;  <span class="c1"># remove it</span>
 </pre>
 </div>
 </div>
     </div>
-    <aside class="postpromonav"><nav><ul class="pager hidden-print">
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/python/" rel="tag">python</a></li>
+        </ul>
+<ul class="pager hidden-print">
 <li class="previous">
                 <a href="../archlinux-pgsql-11/" rel="prev" title="Postgresql 11 on Archlinux">Previous post</a>
             </li>

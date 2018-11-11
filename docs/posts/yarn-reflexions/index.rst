@@ -1,11 +1,10 @@
 .. title: Yarn Reflexions
 .. slug: yarn-reflexions
 .. date: May 16, 2018
-.. tags: yarn
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: big-data
+.. tags: yarn, big-data
+.. category: data ingineering
 
 Here are some Apache Yarn consideratoins.
 

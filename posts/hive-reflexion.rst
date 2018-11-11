@@ -1,11 +1,10 @@
 .. title: hive Reflexions
 .. slug: hive-reflexions
 .. date: May 10, 2018
-.. tags: hive
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: hive, big-data
+.. category: data ingineering
 
 
 

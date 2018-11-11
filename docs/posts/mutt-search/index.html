@@ -11,7 +11,7 @@
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/posts/mutt-search/">
-<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Nicolas Paris">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
 <link rel="prev" href="../mutt-sidebar/" title="Mutt &amp; Sidebar" type="text/html">
 <link rel="next" href="../mutt-vim/" title="Spelling, mutt &amp; vim" type="text/html">
 <meta property="og:site_name" content="Software Lobotomy">
@@ -22,6 +22,7 @@ pressing l it is then possible to write a query to filter the mails. It is
 comparable to the WHERE part of a SQL statement an">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-08-30T00:00:00+02:00">
+<meta property="article:tag" content="email">
 <meta property="article:tag" content="mu">
 <meta property="article:tag" content="mutt">
 </head>
@@ -47,7 +48,7 @@ comparable to the WHERE part of a SQL statement an">
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                    <a href="../../authors/nicolas-paris/">Nicolas Paris</a>
+                    Parisni
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
@@ -79,10 +80,10 @@ below in the <em>.muttrc</em> configuration file. Pressing <cite>L</cite> will p
 query to filter the mails based on the index <a class="reference external" href="http://log.or.cz/?p=228">more information here</a>.
 To get the full details on how to search within notmuch: <cite>man
 notmuch-search-index</cite> describes the syntax of the search.</p>
-<pre class="code bash"><a name="rest_code_3ffab8e7cc3a4a41adfa0071e13cf83c-1"></a><span class="c1"># 'L' performs a notmuch query, showing only the results</span>
-<a name="rest_code_3ffab8e7cc3a4a41adfa0071e13cf83c-2"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'notmuch query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a notmuch pattern"</span>
-<a name="rest_code_3ffab8e7cc3a4a41adfa0071e13cf83c-3"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
-<a name="rest_code_3ffab8e7cc3a4a41adfa0071e13cf83c-4"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages (undo limit)"</span>
+<pre class="code bash"><a name="rest_code_bf9ae0ed50a748138f46319f42dbb242-1"></a><span class="c1"># 'L' performs a notmuch query, showing only the results</span>
+<a name="rest_code_bf9ae0ed50a748138f46319f42dbb242-2"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'notmuch query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a notmuch pattern"</span>
+<a name="rest_code_bf9ae0ed50a748138f46319f42dbb242-3"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
+<a name="rest_code_bf9ae0ed50a748138f46319f42dbb242-4"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages (undo limit)"</span>
 </pre>
 <p>There is some caveats with notmuch however. Its search within attachment is not
 as powerfull as the built-in mutt. In particular, the later allows to specify
@@ -93,35 +94,36 @@ implementation of the french snowball parser.</p>
 <h2>EDIT:</h2>
 <p><strong>mu</strong> is an alternative to <strong>notmuch</strong> . It covers the features described above, and has a better syntax.</p>
 <p>Here is the full documentation there <a class="reference external" href="http://manpages.ubuntu.com/manpages/bionic/man1/mu-find.1.html">mu documentation</a></p>
-<pre class="code bash"><a name="rest_code_6092001d15934c6089e7a9c48bb0bede-1"></a><span class="c1"># Install</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-2"></a>sudo apt install maildir-utils
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-3"></a>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-4"></a><span class="c1"># Index Maildir</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-5"></a>mu index -m my/maildir
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-6"></a>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-7"></a><span class="c1"># setup in crontab or use inotify service</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-8"></a>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-9"></a><span class="c1"># to add to .muttrc</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-10"></a><span class="c1"># Mode 1.</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-11"></a><span class="c1">#</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-12"></a><span class="c1"># this allows to search into all mailbowes at once</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-13"></a><span class="c1"># however, it is a readonly mailbox because off symlinks</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-14"></a>macro index &lt;F8&gt; <span class="s2">"&lt;shell-escape&gt;mu find --clearlinks --format=links --linksdir=~/Maildir/search "</span>   <span class="s2">"mu find"</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-15"></a>macro index &lt;F9&gt; <span class="s2">"&lt;change-folder-readonly&gt;~/Maildir/search"</span>      <span class="s2">"mu find results"</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-16"></a>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-17"></a><span class="c1"># Mode 2.</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-18"></a><span class="c1">#</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-19"></a><span class="c1"># this allows to show the 600 first emails</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-20"></a><span class="c1"># it is</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-21"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'mu query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`mu find --fields i --quiet 2&gt; /dev/null \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a mu pattern"</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-22"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
-<a name="rest_code_6092001d15934c6089e7a9c48bb0bede-23"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages"</span>
+<pre class="code bash"><a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-1"></a><span class="c1"># Install</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-2"></a>sudo apt install maildir-utils
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-3"></a>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-4"></a><span class="c1"># Index Maildir</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-5"></a>mu index -m my/maildir
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-6"></a>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-7"></a><span class="c1"># setup in crontab or use inotify service</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-8"></a>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-9"></a><span class="c1"># to add to .muttrc</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-10"></a><span class="c1"># Mode 1.</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-11"></a><span class="c1">#</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-12"></a><span class="c1"># this allows to search into all mailbowes at once</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-13"></a><span class="c1"># however, it is a readonly mailbox because off symlinks</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-14"></a>macro index &lt;F8&gt; <span class="s2">"&lt;shell-escape&gt;mu find --clearlinks --format=links --linksdir=~/Maildir/search "</span>   <span class="s2">"mu find"</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-15"></a>macro index &lt;F9&gt; <span class="s2">"&lt;change-folder-readonly&gt;~/Maildir/search"</span>      <span class="s2">"mu find results"</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-16"></a>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-17"></a><span class="c1"># Mode 2.</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-18"></a><span class="c1">#</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-19"></a><span class="c1"># this allows to show the 600 first emails</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-20"></a><span class="c1"># it is</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-21"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'mu query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`mu find --fields i --quiet 2&gt; /dev/null \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a mu pattern"</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-22"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
+<a name="rest_code_a6e7bf2de568478790ced7346ee3b5bc-23"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages"</span>
 </pre>
 </div>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
-<li><a class="tag p-category" href="../../categories/mu/" rel="tag">mu</a></li>
+<li><a class="tag p-category" href="../../categories/email/" rel="tag">email</a></li>
+            <li><a class="tag p-category" href="../../categories/mu/" rel="tag">mu</a></li>
             <li><a class="tag p-category" href="../../categories/mutt/" rel="tag">mutt</a></li>
         </ul>
 <ul class="pager hidden-print">

@@ -1,11 +1,10 @@
 .. title: Eclipse Tips
 .. slug: eclipse-tips
 .. date: Jun 03, 2018
-.. tags: eclipse
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: java
+.. tags: eclipse
+.. category: software ingineering
 
 
 

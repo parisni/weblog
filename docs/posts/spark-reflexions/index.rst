@@ -1,11 +1,10 @@
 .. title: Spark Reflexions
 .. slug: spark-reflexions
 .. date: May 13, 2018
-.. tags: spark
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: spark, big-data
+.. category: data ingineering
 
 
 Spark is a Swiss Army Knife of a hadoop stack. It makes glue between tools and is a de-facto interface for them.

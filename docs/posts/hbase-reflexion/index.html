@@ -11,7 +11,7 @@
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/posts/hbase-reflexion/">
-<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Nicolas Paris">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
 <link rel="prev" href="../hive-merge/" title="Hive Merge" type="text/html">
 <link rel="next" href="../yarn-reflexions/" title="Yarn Reflexions" type="text/html">
 <meta property="og:site_name" content="Software Lobotomy">
@@ -24,6 +24,7 @@ of concurrent users.
 Hbase comes with a powerfu">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2018-05-13T00:00:00+02:00">
+<meta property="article:tag" content="big-data">
 <meta property="article:tag" content="hive">
 <meta property="article:tag" content="phoenix">
 <meta property="article:tag" content="solr">
@@ -51,7 +52,7 @@ Hbase comes with a powerfu">
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                    <a href="../../authors/nicolas-paris/">Nicolas Paris</a>
+                    Parisni
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
@@ -77,7 +78,7 @@ data.</li>
 <div class="section" id="jdbc-overview">
 <h2>JDBC overview</h2>
 <p>jdbc access can be done with <a class="reference external" href="https://community.hortonworks.com/questions/47138/phoenix-query-server-connection-url-example.html">kerberos</a> on the form</p>
-<pre class="code java"><a name="rest_code_2de39bdc4bad4edb9c6e9f654f9dde99-1"></a><span class="s">"jdbc:phoenix:thin:url=&lt;scheme&gt;://&lt;server-hostname&gt;:&lt;port&gt;;authentication=SPNEGO;principal=my_user;keytab=/home/my_user/my_user.keytab"</span>
+<pre class="code java"><a name="rest_code_ed40e7af1a6c414cbad9d2fd26cc4771-1"></a><span class="s">"jdbc:phoenix:thin:url=&lt;scheme&gt;://&lt;server-hostname&gt;:&lt;port&gt;;authentication=SPNEGO;principal=my_user;keytab=/home/my_user/my_user.keytab"</span>
 </pre>
 <p>Phoenix connection thought JDBC needs :
 - a jdbc jar file
@@ -118,7 +119,8 @@ compatible with orc based tables.</p>
 </div>
     </div>
     <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
-<li><a class="tag p-category" href="../../categories/hive/" rel="tag">hive</a></li>
+<li><a class="tag p-category" href="../../categories/big-data/" rel="tag">big-data</a></li>
+            <li><a class="tag p-category" href="../../categories/hive/" rel="tag">hive</a></li>
             <li><a class="tag p-category" href="../../categories/phoenix/" rel="tag">phoenix</a></li>
             <li><a class="tag p-category" href="../../categories/solr/" rel="tag">solr</a></li>
             <li><a class="tag p-category" href="../../categories/spark/" rel="tag">spark</a></li>

@@ -1,11 +1,10 @@
 .. title: Encrypt & Sign Mails
 .. slug: mutt-aes
 .. date: Aug 25, 2018
-.. tags: mutt
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: email
+.. tags: mutt, email
+.. category: tools
 
 Cacert.org offers validated certificates with a network of trusted people. That's fun !
 

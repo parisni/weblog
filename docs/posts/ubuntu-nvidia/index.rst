@@ -1,11 +1,10 @@
 .. title: nvidia & ubuntu 18.04
 .. slug: ubuntu-nvidia
 .. date: Aug 19, 2018
-.. tags: nvidia, ubuntu
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: linux
+.. tags: nvidia, ubuntu
+.. category: data science
 
 
 

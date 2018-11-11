@@ -11,7 +11,7 @@
 <meta name="generator" content="Nikola (getnikola.com)">
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/posts/archlinux-pgsql-11/">
-<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Nicolas Paris">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
 <link rel="prev" href="../hive-llap-resources/" title="Hive llap resource consumption" type="text/html">
 <link rel="next" href="../a-decent-python-configuration/" title="A decent python configuration" type="text/html">
 <meta property="og:site_name" content="Software Lobotomy">
@@ -48,7 +48,7 @@
 
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                    <a href="../../authors/nicolas-paris/">Nicolas Paris</a>
+                    Parisni
             </span></p>
             <p class="dateline">
             <a href="." rel="bookmark">
@@ -61,17 +61,17 @@
     <div>
 <p>I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.</p>
 <!-- END_TEASER -->
-<pre class="code bash"><a name="rest_code_795e9072de70477dbe157ac0efef5bc7-1"></a><span class="c1"># get the lattest postgres in the repos</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-2"></a><span class="c1"># avoid checking for sha fingerprint, because not the same version</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-3"></a>yaourt --m-arg <span class="s2">"--skipchecksums --skippgpcheck"</span> -Sb postgresql
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-4"></a><span class="c1"># 1. edit the PKGBUILD file, change to 11.0 version</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-5"></a><span class="c1"># 2. comment the check() part</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-6"></a><span class="c1"># 3. after building and installing, change to 11 the PGMAJORVERSION within:</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-7"></a>sudo vim /usr/bin/postgresql-check-db-dir
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-8"></a><span class="c1"># make the link for psql command working</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-9"></a>sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-10"></a><span class="c1"># install that old version to make posgres command work</span>
-<a name="rest_code_795e9072de70477dbe157ac0efef5bc7-11"></a>yaourt -S icu54
+<pre class="code bash"><a name="rest_code_cb543c16456f4369a4c720d560878448-1"></a><span class="c1"># get the lattest postgres in the repos</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-2"></a><span class="c1"># avoid checking for sha fingerprint, because not the same version</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-3"></a>yaourt --m-arg <span class="s2">"--skipchecksums --skippgpcheck"</span> -Sb postgresql
+<a name="rest_code_cb543c16456f4369a4c720d560878448-4"></a><span class="c1"># 1. edit the PKGBUILD file, change to 11.0 version</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-5"></a><span class="c1"># 2. comment the check() part</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-6"></a><span class="c1"># 3. after building and installing, change to 11 the PGMAJORVERSION within:</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-7"></a>sudo vim /usr/bin/postgresql-check-db-dir
+<a name="rest_code_cb543c16456f4369a4c720d560878448-8"></a><span class="c1"># make the link for psql command working</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-9"></a>sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
+<a name="rest_code_cb543c16456f4369a4c720d560878448-10"></a><span class="c1"># install that old version to make posgres command work</span>
+<a name="rest_code_cb543c16456f4369a4c720d560878448-11"></a>yaourt -S icu54
 </pre>
 <p>That's all. By the way, I do not have any idea right now on how to upgrade minor versions in the future, but I will employ myself to update this post.</p>
 </div>

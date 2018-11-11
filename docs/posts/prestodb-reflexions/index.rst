@@ -1,11 +1,10 @@
 .. title: PrestoDB reflexions
 .. slug: prestodb-reflexions
 .. date: May 13, 2018
-.. tags: prestoDB
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: prestoDB, big-data
+.. category: data ingineering
 
 
 Prestodb is a cool distributed engine over hadoop. It can be compared to hive

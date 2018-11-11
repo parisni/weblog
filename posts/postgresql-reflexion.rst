@@ -1,11 +1,10 @@
 .. title: Postgresql Reflexions
 .. slug: postgresql-reflexions
 .. date: May 13, 2018
-.. tags: postgresql
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: postgresql
+.. category: data ingineering
 
 
 

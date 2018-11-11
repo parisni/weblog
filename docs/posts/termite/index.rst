@@ -1,11 +1,10 @@
 .. title: Best terminal Emulator
 .. slug: termite
 .. date: May 27, 2018
-.. tags: terminte
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: linux, tools
+.. tags: termite
+.. category: tools
 
 
 

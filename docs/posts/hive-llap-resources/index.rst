@@ -1,11 +1,10 @@
 .. title: Hive llap resource consumption
 .. slug: hive-llap-resources
 .. date: Sep 07, 2018
-.. tags: hive
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: hive, big-data
+.. category: data ingineering
 
 
 

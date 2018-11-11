@@ -1,11 +1,11 @@
 .. title: A decent python configuration
 .. slug: a-decent-python-configuration
 .. date: 2018-11-11 11:43:34 UTC+01:00
-.. tags: 
-.. category: python
 .. link: 
 .. description: 
 .. type: text
+.. tags: python
+.. category: data science
 
 Use Anaconda
 ============

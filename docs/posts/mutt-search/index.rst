@@ -1,11 +1,10 @@
 .. title: Mutt Search on Steroids
 .. slug: mutt-search
 .. date: Aug 30, 2018
-.. tags: mutt, mu
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: email
+.. tags: mutt, mu, email
+.. category: tools
 
 
 

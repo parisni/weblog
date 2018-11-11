@@ -1,10 +1,9 @@
 .. title: best pdf viewer
 .. slug: mupdf
 .. date: May 27, 2018
-.. tags: pdf
-.. author: Nicolas Paris
 .. link: 
 .. description:
+.. tags: pdf
 .. category: tools
 
 

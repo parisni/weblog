@@ -1,11 +1,10 @@
 .. title: Postgresql 11 on Archlinux
 .. slug: archlinux-pgsql-11
 .. date: Oct 27, 2018
-.. tags: postgresql, archlinux
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: linux
+.. tags: postgresql, archlinux
+.. category: system administration
 
 
 

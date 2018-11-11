@@ -1,11 +1,10 @@
 .. title: Hive Merge
 .. slug: hive-merge
 .. date: May 13, 2018
-.. tags: hive
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: databases
+.. tags: hive, big-data
+.. category: data ingineering
 
 
 Hive introduced ACID statement: INSERT, UPDATE, DELETE & MERGE. It turns-out

@@ -1,11 +1,11 @@
 .. title: Deploying Nikola with Githup Pages
 .. slug: deploying-with-githup-pages
 .. date: 2018-11-11 18:07:33 UTC+01:00
-.. tags: 
-.. category: 
 .. link: 
 .. description: 
 .. type: text
+.. tags:  nikola, python
+.. category: website development
 
 The simple way
 ==============

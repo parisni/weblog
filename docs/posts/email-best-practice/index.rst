@@ -1,11 +1,10 @@
 .. title: Email Best Practices
 .. slug: email-best-practice
 .. date: Sep 03, 2018
-.. tags: postgresql, archlinux
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: email
+.. tags: postgresql, archlinux
+.. category: system administration
 
 
 I will post here all best practices about writing emails. A lot of useful

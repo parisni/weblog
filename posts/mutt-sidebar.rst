@@ -1,11 +1,10 @@
 .. title: Mutt & Sidebar
 .. slug: mutt-sidebar
 .. date: Aug 26, 2018
-.. tags: mutt
-.. author: Nicolas Paris
 .. link: 
 .. description:
-.. category: email
+.. tags: mutt, email
+.. category: tools
 
 
 
