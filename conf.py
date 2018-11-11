@@ -632,14 +632,21 @@ REDIRECTIONS = []
 # }
 DEPLOY_COMMANDS = {
      'default': [
-    "git checkout gh-pages",
-    "rsync -rPv --delete-after --exclude .git --exclude .gitignore --exclude cache/ --exclude .doit.db.dat --exclude .doit.db.dir --exclude .doit.db.back output/ .",
     "git add -A",
     "git commit -a -m 'Updating blog content'",
-    "git push origin gh-pages",
-    "git checkout master",
+    "git push origin master",
      ]
  }
+#DEPLOY_COMMANDS = {
+#     'default': [
+#    "git checkout gh-pages",
+#    "rsync -rPv --delete-after --exclude .git --exclude .gitignore --exclude cache/ --exclude .doit.db.dat --exclude .doit.db.dir --exclude .doit.db.back output/ .",
+#    "git add -A",
+#    "git commit -a -m 'Updating blog content'",
+#    "git push origin gh-pages",
+#    "git checkout master",
+#     ]
+# }
 # github_deploy configuration
 # For more details, read the manual:
 # https://getnikola.com/handbook.html#deploying-to-github
