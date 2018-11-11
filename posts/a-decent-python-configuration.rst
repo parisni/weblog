@@ -30,7 +30,6 @@ list of packages than the anaconda channel.
 .. code-block:: bash
 
    pip install <my-package> # install a package
-   pip install
    pip install --index-url https://pypi.org/simple/ <my-package> # specify the repository
    pip install . # a local package
    pip remove <my-package>  # remove it

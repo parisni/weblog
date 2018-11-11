@@ -59,22 +59,21 @@ conda env create py3.5 pip setuptools python=3.5 # create a pyt">
 <div class="section" id="use-anaconda">
 <h2>Use Anaconda</h2>
 <p>Anaconda allows to have multiple python versions. This is much easier than using <em>virtualenv</em></p>
-<pre class="code bash"><a name="rest_code_ed8a94a63c0e4fafabf38d9f6c9eebf0-1"></a>conda env list <span class="c1"># lists all envs</span>
-<a name="rest_code_ed8a94a63c0e4fafabf38d9f6c9eebf0-2"></a>conda env create py3.5 pip setuptools <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 <span class="c1"># create a python env</span>
-<a name="rest_code_ed8a94a63c0e4fafabf38d9f6c9eebf0-3"></a>conda activate py3.5 <span class="c1"># activate the latter</span>
-<a name="rest_code_ed8a94a63c0e4fafabf38d9f6c9eebf0-4"></a>conda deactivate <span class="c1"># deactivate it</span>
-<a name="rest_code_ed8a94a63c0e4fafabf38d9f6c9eebf0-5"></a>conda env remove -n py3.5 <span class="c1"># remove it completely</span>
+<pre class="code bash"><a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-1"></a>conda env list <span class="c1"># lists all envs</span>
+<a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-2"></a>conda env create py3.5 pip setuptools <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 <span class="c1"># create a python env</span>
+<a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-3"></a>conda activate py3.5 <span class="c1"># activate the latter</span>
+<a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-4"></a>conda deactivate <span class="c1"># deactivate it</span>
+<a name="rest_code_51273fe1d57f414f9df2f7747bd52d23-5"></a>conda env remove -n py3.5 <span class="c1"># remove it completely</span>
 </pre>
 </div>
 <div class="section" id="use-pip-together-with-anaconda">
 <h2>Use pip together with anaconda</h2>
 <p>The package will be installed within the environement. pip has a much broader
 list of packages than the anaconda channel.</p>
-<pre class="code bash"><a name="rest_code_34e17b7b53384fe5974b61e8c23bfa9a-1"></a>pip install &lt;my-package&gt; <span class="c1"># install a package</span>
-<a name="rest_code_34e17b7b53384fe5974b61e8c23bfa9a-2"></a>pip install
-<a name="rest_code_34e17b7b53384fe5974b61e8c23bfa9a-3"></a>pip install --index-url https://pypi.org/simple/ &lt;my-package&gt; <span class="c1"># specify the repository</span>
-<a name="rest_code_34e17b7b53384fe5974b61e8c23bfa9a-4"></a>pip install . <span class="c1"># a local package</span>
-<a name="rest_code_34e17b7b53384fe5974b61e8c23bfa9a-5"></a>pip remove &lt;my-package&gt;  <span class="c1"># remove it</span>
+<pre class="code bash"><a name="rest_code_b8de99a5daad4ae38ae232e8f6fb1a7f-1"></a>pip install &lt;my-package&gt; <span class="c1"># install a package</span>
+<a name="rest_code_b8de99a5daad4ae38ae232e8f6fb1a7f-2"></a>pip install --index-url https://pypi.org/simple/ &lt;my-package&gt; <span class="c1"># specify the repository</span>
+<a name="rest_code_b8de99a5daad4ae38ae232e8f6fb1a7f-3"></a>pip install . <span class="c1"># a local package</span>
+<a name="rest_code_b8de99a5daad4ae38ae232e8f6fb1a7f-4"></a>pip remove &lt;my-package&gt;  <span class="c1"># remove it</span>
 </pre>
 </div>
 </div>
