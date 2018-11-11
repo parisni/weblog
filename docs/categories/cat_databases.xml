@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about databases)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/cat_databases.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:40:13 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Hive llap resource consumption</title><link>https://parisni.github.io/weblog/posts/hive-llap-resources/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div class="section" id="resource-consumption"&gt;
+&lt;h2&gt;Resource consumption&lt;/h2&gt;
+&lt;p&gt;Hive llap is quite complicated to tune.&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_210b30557ad94143bf7eda4be3a532c4-1"&gt;&lt;/a&gt;hive.llap.daemon.task.scheduler.enable.preemption&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;&lt;a class="reference external" href="https://community.hortonworks.com/articles/149486/llap-sizing-and-setup.html"&gt;a great article&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;</description><category>hive</category><guid>https://parisni.github.io/weblog/posts/hive-llap-resources/</guid><pubDate>Thu, 06 Sep 2018 22:00:00 GMT</pubDate></item><item><title>Hbase Reflexions</title><link>https://parisni.github.io/weblog/posts/hbase-reflexion/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;hbase looks a powerfull tool in complement of hive. While hive suits well
+for ETL and data historisation, it cannot offer sub-second access to thousand
+of concurrent users.&lt;/p&gt;
+&lt;p&gt;Hbase comes with a powerful compagnion aka Phoenix that provides many features,
+while keeping the hbase features intact. Phoenix provides a jdbc driver to
+hbase. This distinction adds many improvements:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;it offers sql, joins, secondary indexes, transactions, sequences on top of hbase.&lt;/li&gt;
+&lt;li&gt;it simplifies hive, spark, solr, and general programming access to hbase
+data.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="section" id="jdbc-overview"&gt;
+&lt;h2&gt;JDBC overview&lt;/h2&gt;
+&lt;p&gt;jdbc access can be done with &lt;a class="reference external" href="https://community.hortonworks.com/questions/47138/phoenix-query-server-connection-url-example.html"&gt;kerberos&lt;/a&gt; on the form&lt;/p&gt;
+&lt;pre class="code java"&gt;&lt;a name="rest_code_e59c233bceea498da49d6380941960f2-1"&gt;&lt;/a&gt;&lt;span class="s"&gt;"jdbc:phoenix:thin:url=&amp;lt;scheme&amp;gt;://&amp;lt;server-hostname&amp;gt;:&amp;lt;port&amp;gt;;authentication=SPNEGO;principal=my_user;keytab=/home/my_user/my_user.keytab"&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;Phoenix connection thought JDBC needs :
+- a jdbc jar file
+- the hbase-site.conf
+- a kerberos ticket&lt;/p&gt;
+&lt;p&gt;Phoenix does not provide a way for connection pooling. The costly part of the
+connection is the hbase link. However it is cached within the region servers
+and a new phoenix jdbc connection can be rebuild for every query since it is a
+lightweight object.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="hive-integration"&gt;
+&lt;h2&gt;Hive integration&lt;/h2&gt;
+&lt;p&gt;Phoenix tables can be mounted into hive thanks to a &lt;a class="reference external" href="https://phoenix.apache.org/hive_storage_handler.html"&gt;recent plugin&lt;/a&gt;. In
+comparaison to hbase plugin, this allows fast join to hive table (to be
+tested). While this plugin needs phoenix 4.8.0+ HDP ships with phoenix 4.7.0.
+However HDP Phoenix is a fork of Phoenix, and it integrates this feature.&lt;/p&gt;
+&lt;p&gt;Because phoenix allows to mount a hbase table, hive a phoenix or a hbase table,
+there is many ways to make hive querying hbase. Moreover hive can create a
+regular table stored as a hbase or phoenix table wich is slightly different.
+The best way is to mount phoenix as a hive external table. First advantage is
+&lt;em&gt;phoenix&lt;/em&gt; allows salted tables by mean there is no need to manually handle the
+key to be well distributed. Second, is loading directly into &lt;em&gt;phoenix&lt;/em&gt; allows
+it to manage its secondary indexes and also some other tools such &lt;em&gt;solr&lt;/em&gt;.&lt;/p&gt;
+&lt;p&gt;Finally, hive can access an external &lt;em&gt;phoenix&lt;/em&gt; table and allow both upsert and
+select. The plugin also provides a way to delete/update from hive, however I
+haven't been able to reproduce yet since transactional tables are only
+compatible with orc based tables.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="spark-integration"&gt;
+&lt;h2&gt;Spark integration&lt;/h2&gt;
+&lt;p&gt;Spark can read and write from phoenix &lt;a class="reference external" href="https://stackoverflow.com/questions/40329968/apache-spark-ways-to-read-and-write-from-apache-phoenix-in-java"&gt;here on SOF&lt;/a&gt; or &lt;a class="reference external" href="https://phoenix.apache.org/phoenix_spark.html"&gt;here on official&lt;/a&gt;. The good point is it can be done from scala or python.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="solr-integration"&gt;
+&lt;h2&gt;Solr integration&lt;/h2&gt;
+&lt;p&gt;Solr integration with hbase is a good idea: hbase contains the truth and solr allows fast lookup to discover it. However, setting up solr on top of hbase is a pain. Phoenix simplifies drastically that :
+&lt;a class="reference external" href="https://nicholasmaillard.wordpress.com/2014/12/27/phoenix-to-solr-in-20-minutes/"&gt;here&lt;/a&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>hive</category><category>phoenix</category><category>solr</category><category>spark</category><guid>https://parisni.github.io/weblog/posts/hbase-reflexion/</guid><pubDate>Sat, 12 May 2018 22:00:00 GMT</pubDate></item><item><title>Hive Merge</title><link>https://parisni.github.io/weblog/posts/hive-merge/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Hive introduced ACID statement: INSERT, UPDATE, DELETE &amp;amp; MERGE. It turns-out
+HIVE 1.2.x is not optimised enough to support MERGE efficiently. An in depth
+documentation can be found &lt;a class="reference external" href="https://cwiki.apache.org/confluence/display/Hive/Hive+Transactions#HiveTransactions-Limitations"&gt;there&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;The code below :&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;is idempotent in someway. Suppose for some reason, the &lt;cite&gt;merge insert&lt;/cite&gt; statement
+fails. Then running again all statements won't be an issue since no update at
+all will append again. Same case if the &lt;cite&gt;update&lt;/cite&gt; statement fails.&lt;/li&gt;
+&lt;li&gt;Simple version: makes the assumption that any data both present in the
+&lt;cite&gt;staging&lt;/cite&gt; table and the &lt;cite&gt;target&lt;/cite&gt; table needs to be updated.&lt;/li&gt;
+&lt;li&gt;SCD1 and SCD2 have slighly difference that are mentionned if existing.&lt;/li&gt;
+&lt;li&gt;SCD2 has been tested (upsert version) on a large target table ( 1.3 Bilion
+rows * 100 columns) and a source table of 100 Milion rows. As a result, the
+total runtime was les than 3 hours. (50% resource on a 5 computer hadoop
+cluster).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="section" id="staging-step"&gt;
+&lt;h2&gt;0) Staging step&lt;/h2&gt;
+&lt;p&gt;Some data was put on hdfs in the &amp;lt;stg_table&amp;gt; to be merged with a target table.
+This might be done by scoop incrementally. Also, this might be the whole table.
+All the steps below will work the same in both case.&lt;/p&gt;
+&lt;/div&gt;
+&lt;div class="section" id="preparation-step"&gt;
+&lt;h2&gt;1) Preparation step&lt;/h2&gt;
+&lt;p&gt;The 3 table above are necessary for any of SCD1 or SCD2. They are
+respectively the &lt;cite&gt;transformation&lt;/cite&gt;, &lt;cite&gt;insert&lt;/cite&gt;, &lt;cite&gt;update&lt;/cite&gt; candidate tables.&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- create transformation table&lt;/span&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="k"&gt;TEMPORARY&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;LIKE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-3"&gt;&lt;/a&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-4"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- create insert table&lt;/span&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-5"&gt;&lt;/a&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="k"&gt;TEMPORARY&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;LIKE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-6"&gt;&lt;/a&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-7"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- create update table&lt;/span&gt;
+&lt;a name="rest_code_189dbf6acbd346aeb17e362bac5fa364-8"&gt;&lt;/a&gt;&lt;span class="k"&gt;CREATE&lt;/span&gt; &lt;span class="k"&gt;TEMPORARY&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;LIKE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="transformation-step"&gt;
+&lt;h2&gt;2) Transformation step&lt;/h2&gt;
+&lt;p&gt;This step loads the trf table (&lt;cite&gt;transformed&lt;/cite&gt;)  from the stg table (&lt;cite&gt;staging&lt;/cite&gt;).
+It adds the hash column, and is the place to add other transformations/columns
+if needed.&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- example without transformations&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;HASH&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;hash&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-4"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;stg_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-5"&gt;&lt;/a&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-6"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- example with transformations&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-7"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- t1 and t2 are new columns added&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-8"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-9"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;HASH&lt;/span&gt;&lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;stg&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;hash&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-10"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;t1&lt;/span&gt;&lt;span class="p"&gt;(),&lt;/span&gt; &lt;span class="n"&gt;t2&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;a name="rest_code_1d4f15b752314105a305c281b6b7c6c1-11"&gt;&lt;/a&gt;      &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;stg_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;stg&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="dispatching-step"&gt;
+&lt;h2&gt;3) Dispatching step&lt;/h2&gt;
+&lt;p&gt;Simplified version:&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_558cda50f5d0420293f5ec0acdf93a9d-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- variation when you already know that rows are all different&lt;/span&gt;
+&lt;a name="rest_code_558cda50f5d0420293f5ec0acdf93a9d-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_558cda50f5d0420293f5ec0acdf93a9d-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;maj_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;
+&lt;a name="rest_code_558cda50f5d0420293f5ec0acdf93a9d-4"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;maj_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;Complete version:&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- feed both update &amp;amp; insert table&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-3"&gt;&lt;/a&gt;      &lt;span class="k"&gt;FROM&lt;/span&gt;  &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;trf&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-4"&gt;&lt;/a&gt;      &lt;span class="k"&gt;JOIN&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;targ&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-5"&gt;&lt;/a&gt;      &lt;span class="k"&gt;ON&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-6"&gt;&lt;/a&gt;      &lt;span class="n"&gt;targ&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-7"&gt;&lt;/a&gt;      &lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="n"&gt;trf&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="n"&gt;targ&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-8"&gt;&lt;/a&gt;      &lt;span class="p"&gt;)&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-9"&gt;&lt;/a&gt;      &lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="k"&gt;TRUE&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-10"&gt;&lt;/a&gt;      &lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="n"&gt;trf&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hash&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&amp;gt;&lt;/span&gt; &lt;span class="n"&gt;targ&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hash&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;as&lt;/span&gt; &lt;span class="n"&gt;updateable&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-11"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="k"&gt;TABLE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-12"&gt;&lt;/a&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-13"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- feed the insert table with new rows&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-14"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-15"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-16"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;trf_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-17"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="k"&gt;TRUE&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-18"&gt;&lt;/a&gt;&lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="k"&gt;IN&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-19"&gt;&lt;/a&gt;     &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-20"&gt;&lt;/a&gt;     &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_82d30dcefd574f0cb10193912dd14f88-21"&gt;&lt;/a&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="upsert-version"&gt;
+&lt;h2&gt;4.1) Upsert version&lt;/h2&gt;
+&lt;p&gt;SCD 1:&lt;/p&gt;
+&lt;p&gt;Notice the delete is used in place of an update. The reason is an update cannot
+join an other table and thus apply updates where needed.&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_97f06056664c42d7b5344da793724102-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- first delete update rows&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;DELETE&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="k"&gt;TRUE&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-4"&gt;&lt;/a&gt;&lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IN&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-5"&gt;&lt;/a&gt;     &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-6"&gt;&lt;/a&gt;     &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-7"&gt;&lt;/a&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-8"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- second, insert all new rows&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-9"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-10"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-11"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-12"&gt;&lt;/a&gt;&lt;span class="k"&gt;UNION&lt;/span&gt; &lt;span class="k"&gt;ALL&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-13"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_97f06056664c42d7b5344da793724102-14"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;SCD 2:&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- first update old rows&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-2"&gt;&lt;/a&gt;&lt;span class="k"&gt;UPDATE&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;SET&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;current_date&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-4"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHERE&lt;/span&gt; &lt;span class="k"&gt;TRUE&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-5"&gt;&lt;/a&gt;&lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-6"&gt;&lt;/a&gt;&lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IN&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-7"&gt;&lt;/a&gt;     &lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-8"&gt;&lt;/a&gt;     &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;);&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-9"&gt;&lt;/a&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-10"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- second, insert all new rows&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-11"&gt;&lt;/a&gt;&lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-12"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-13"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-14"&gt;&lt;/a&gt;&lt;span class="k"&gt;UNION&lt;/span&gt; &lt;span class="k"&gt;ALL&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-15"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt;
+&lt;a name="rest_code_7ab39676d20e4224a2bb406a169a541f-16"&gt;&lt;/a&gt;&lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;
+&lt;div class="section" id="merge-version"&gt;
+&lt;h2&gt;4.2) Merge version&lt;/h2&gt;
+&lt;p&gt;SCD 1:&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- first update old rows&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-2"&gt;&lt;/a&gt;&lt;span class="n"&gt;MERGE&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;USING&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-4"&gt;&lt;/a&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-5"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="k"&gt;null&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;join_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upd&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-6"&gt;&lt;/a&gt;&lt;span class="k"&gt;UNION&lt;/span&gt; &lt;span class="k"&gt;ALL&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-7"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;join_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ins&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-8"&gt;&lt;/a&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;sub&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-9"&gt;&lt;/a&gt;&lt;span class="k"&gt;ON&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join_key&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-10"&gt;&lt;/a&gt;    &lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-11"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHEN&lt;/span&gt; &lt;span class="n"&gt;MATCHED&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-12"&gt;&lt;/a&gt;     &lt;span class="k"&gt;THEN&lt;/span&gt; &lt;span class="k"&gt;UPDATE&lt;/span&gt; &lt;span class="k"&gt;SET&lt;/span&gt; &lt;span class="n"&gt;col1&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;col1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;hash&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hash&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-13"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHEN&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="n"&gt;MATCHED&lt;/span&gt;
+&lt;a name="rest_code_c6b06abd0b9a4234a1af598eda7f7fe4-14"&gt;&lt;/a&gt;     &lt;span class="k"&gt;THEN&lt;/span&gt; &lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;VALUES&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;col1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hash&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;SCD 2:&lt;/p&gt;
+&lt;pre class="code sql"&gt;&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;-- first update old rows&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-2"&gt;&lt;/a&gt;&lt;span class="n"&gt;MERGE&lt;/span&gt; &lt;span class="k"&gt;INTO&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-3"&gt;&lt;/a&gt;&lt;span class="k"&gt;USING&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-4"&gt;&lt;/a&gt;&lt;span class="p"&gt;(&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-5"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="k"&gt;null&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;join_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;upd&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-6"&gt;&lt;/a&gt;&lt;span class="k"&gt;UNION&lt;/span&gt; &lt;span class="k"&gt;ALL&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-7"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="k"&gt;null&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;join_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ins&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;ins_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-8"&gt;&lt;/a&gt;&lt;span class="k"&gt;UNION&lt;/span&gt; &lt;span class="k"&gt;ALL&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-9"&gt;&lt;/a&gt;&lt;span class="k"&gt;SELECT&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;primary_key&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;join_key&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;ins&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="k"&gt;FROM&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;upd_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-10"&gt;&lt;/a&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="k"&gt;AS&lt;/span&gt; &lt;span class="n"&gt;sub&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-11"&gt;&lt;/a&gt;&lt;span class="k"&gt;ON&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join_key&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;join_key&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-12"&gt;&lt;/a&gt;    &lt;span class="k"&gt;AND&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;target_table&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="k"&gt;IS&lt;/span&gt; &lt;span class="k"&gt;NULL&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-13"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHEN&lt;/span&gt; &lt;span class="n"&gt;MATCHED&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-14"&gt;&lt;/a&gt;     &lt;span class="k"&gt;THEN&lt;/span&gt; &lt;span class="k"&gt;UPDATE&lt;/span&gt; &lt;span class="k"&gt;SET&lt;/span&gt; &lt;span class="o"&gt;&amp;lt;&lt;/span&gt;&lt;span class="n"&gt;end_date&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="k"&gt;current_date&lt;/span&gt;&lt;span class="p"&gt;()&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-15"&gt;&lt;/a&gt;&lt;span class="k"&gt;WHEN&lt;/span&gt; &lt;span class="k"&gt;NOT&lt;/span&gt; &lt;span class="n"&gt;MATCHED&lt;/span&gt;
+&lt;a name="rest_code_e74f4ea128934e91b50afccaf85c8203-16"&gt;&lt;/a&gt;     &lt;span class="k"&gt;THEN&lt;/span&gt; &lt;span class="k"&gt;INSERT&lt;/span&gt; &lt;span class="k"&gt;VALUES&lt;/span&gt; &lt;span class="p"&gt;(&lt;/span&gt;&lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;col1&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="p"&gt;...&lt;/span&gt; &lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="n"&gt;sub&lt;/span&gt;&lt;span class="p"&gt;.&lt;/span&gt;&lt;span class="n"&gt;hash&lt;/span&gt;&lt;span class="p"&gt;)&lt;/span&gt; &lt;span class="p"&gt;;&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</description><category>hive</category><guid>https://parisni.github.io/weblog/posts/hive-merge/</guid><pubDate>Sat, 12 May 2018 22:00:00 GMT</pubDate></item><item><title>Postgresql Reflexions</title><link>https://parisni.github.io/weblog/posts/postgresql-reflexions/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;After 4 years of postgresql management, I d'like to relate my experience.&lt;/p&gt;
+&lt;p&gt;Postgreql is incredible:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;its community is wonderful, the mailing list is very active and structured&lt;/li&gt;
+&lt;li&gt;the recent years have been very productive for postgres, with many analytics
+improvements and perspectives&lt;/li&gt;
+&lt;li&gt;it has one of the best support for transactions, and for example deal with
+DDL in transaction&lt;/li&gt;
+&lt;li&gt;it's stable, we never had any crash in 4 years, or need to reboot the server&lt;/li&gt;
+&lt;li&gt;it manage bot structured and unstructured data&lt;/li&gt;
+&lt;li&gt;free text indexes and features are very advanced&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;However, sadly postgresql has some drawnbacks:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;it does not deal great with large volumne when comes analytics&lt;/li&gt;
+&lt;li&gt;because it may be used for all batch ingesting, batch exporting, OLTP, dumps,
+analytics, the overall performances might be affected&lt;/li&gt;
+&lt;li&gt;it does not scale horizontaly&lt;/li&gt;
+&lt;li&gt;it has no fail over, or this lead to complex setup&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Complementing postgresql with hadoop:&lt;/p&gt;
+&lt;p&gt;For this reason, it has been decided to externalize some responsibilities such
+batch exporting and analytics to an other technology that scale horizontally:
+hadoop.&lt;/p&gt;
+&lt;p&gt;The good point is synchronizing data from postgresql to hive daily is easy
+thanks to incremental sqoop import on hdfs, based on indexed timestamps in
+postgreql.  This allows pushing the data from postgresql to hive ready to
+analyse. The two tools interface well where hive does not handle sequence, or
+triggers, and postgresql does not manage huge data historisation, and columnar
+aggregation.&lt;/p&gt;
+&lt;dl class="docutils"&gt;
+&lt;dt&gt;While postgreqsl does not handle well aggregations on bilions rows, it's children greenplum is supposed to.&lt;/dt&gt;
+&lt;dd&gt;Let's envisage a greenplum post soon.&lt;/dd&gt;
+&lt;/dl&gt;&lt;/div&gt;</description><category>postgresql</category><guid>https://parisni.github.io/weblog/posts/postgresql-reflexions/</guid><pubDate>Sat, 12 May 2018 22:00:00 GMT</pubDate></item><item><title>PrestoDB reflexions</title><link>https://parisni.github.io/weblog/posts/prestodb-reflexions/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Prestodb is a cool distributed engine over hadoop. It can be compared to hive
+LLAP, impala or apache DRILL for fast in-memory OLAP analysis and data
+discovery.&lt;/p&gt;
+&lt;p&gt;The main disadvantages it has right now are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;it is not ACID compliant and far from being: this means tables in presto
+shall be created from scratch for analytics. Because we are speaking about
+big data, this implies copying&lt;/li&gt;
+&lt;li&gt;it does not and never will support hive views: this would have been an
+opportunity to create pseudo-acid workflows&lt;/li&gt;
+&lt;li&gt;it does not integrate with hbase&lt;/li&gt;
+&lt;li&gt;it does not integrate with YARN, or at least the attempt looks discontinued
+on github.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The main advantage it has over hive LLAP are:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;many more build-in functions&lt;/li&gt;
+&lt;li&gt;has been proven to scale well with tons of users&lt;/li&gt;
+&lt;li&gt;integrates with RDBMS such postgres or NOSQL stores such mongodb&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Sor far, the best feet for our internal arhitecture is to go with hive llap in
+replacement to prestodb. This will brings us the ability to better integrate
+with hbase/phoenix/solr from one part, and also give us the ability to query
+ACID version of the DWH without data deduplication.&lt;/p&gt;&lt;/div&gt;</description><category>prestoDB</category><guid>https://parisni.github.io/weblog/posts/prestodb-reflexions/</guid><pubDate>Sat, 12 May 2018 22:00:00 GMT</pubDate></item><item><title>Spark Reflexions</title><link>https://parisni.github.io/weblog/posts/spark-reflexions/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Spark is a Swiss Army Knife of a hadoop stack. It makes glue between tools and is a de-facto interface for them.&lt;/p&gt;
+&lt;p&gt;Spark has a lot of advantages:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;it's a wonderfull connector: if you look at a way to connect to a tool, spark
+already has a connector for you. Special mention to csv: spark is also able
+to read multilined csv with quote, empty lines and special character in it.&lt;/li&gt;
+&lt;li&gt;it can manipulate very huge dataset: in case the dataset does not feat in
+memory, the spark partitionning feature allows spliting the tasks in working
+pipelines&lt;/li&gt;
+&lt;li&gt;its parallel feature can take advantage of a hadoop cluster, but is a great
+solution for a laptop too&lt;/li&gt;
+&lt;li&gt;the scala spark-shell is really handy for development. It's auto-completion
+features are superior to any shell I've dealt with before&lt;/li&gt;
+&lt;li&gt;it has SQL syntax, SPARKQL compliance, and also machine learning distributed
+implementation.&lt;/li&gt;
+&lt;li&gt;it can be programmed in scala, python, R, java and julia.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Spark as some disadvantages:&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;time of writing, spark does not support hive ACID tables. The workaround is
+to do a major compaction of the table before reading it with spark. This
+means it cannot yet be integrated into a hive ETL process based on ACID
+tables.&lt;/li&gt;
+&lt;li&gt;spark programming needs a lot of skills. It is then not a good choice for
+intermediate enterprise in comparison to hive programming. Again, hive ETL
+looks a better fit for a maintainability reason.&lt;/li&gt;
+&lt;/ul&gt;&lt;/div&gt;</description><category>spark</category><guid>https://parisni.github.io/weblog/posts/spark-reflexions/</guid><pubDate>Sat, 12 May 2018 22:00:00 GMT</pubDate></item><item><title>hive Reflexions</title><link>https://parisni.github.io/weblog/posts/hive-reflexions/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Hive has several advantages over other Datawarehouse solutions.&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;it is java based. This allows it to take advantage of UDF. The best and the
+moste complicate way to write them as generic UDFs. The other important
+aspect is to make them &lt;cite&gt;blessed UDF&lt;/cite&gt; by mean they are global and accessible
+to any user. Generic UDF can produce any hive type from integer to complexe
+map structure.&lt;/li&gt;
+&lt;li&gt;it can read/write into hbase and take advantage of a key-value store.&lt;/li&gt;
+&lt;li&gt;it is ACID compliant, and provide both insert/update. However, this new
+feature is not well integrated with other tools such apache spark or
+facebook presto.&lt;/li&gt;
+&lt;li&gt;it supports multiple level of performance tunning such partitionning,
+bucketting, bloom filters, predicate pushdown.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;Still hive has several disavantages:&lt;/p&gt;
+&lt;ol class="arabic simple"&gt;
+&lt;li&gt;lack or support for sequences. The workaround right now is to either use a
+UUID - this has several drawbacks such performances/storage issue. A second
+approach is to use the &lt;cite&gt;sequence_nb + (row_number() over())&lt;/cite&gt;  function where
+&lt;cite&gt;sequence_nb&lt;/cite&gt; is maintained into a table - the count of the inserted rows
+need to be added to the sequence. The last solution is a long, but it cannot
+be used concurrently. The solution cannot be used in production.&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class="section" id="hive-configuration-tips"&gt;
+&lt;h2&gt;hive configuration tips&lt;/h2&gt;
+&lt;p&gt;Hive can have OOM. Then this parameter might help
+- &lt;cite&gt;set hive.exec.orc.memory.pool = 1.0&lt;/cite&gt;&lt;/p&gt;
+&lt;p&gt;Predicate Push Down is better when INSERT STMT use a SORT BY
+"orc.bloom.filter.columns"="col1,col2"&lt;/p&gt;
+&lt;p&gt;It is also possible to update the bloom filter by running:
+&lt;cite&gt;ANALYZE TABLE Table1 COMPUTE STATISTICS FOR COLUMNS;&lt;/cite&gt;&lt;/p&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;a class="reference external" href="https://medium.com/@anishekagarwal/apache-hive-beeline-progress-bar-fd57c29da65d"&gt;show progress bar in beeline&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>hive</category><guid>https://parisni.github.io/weblog/posts/hive-reflexions/</guid><pubDate>Wed, 09 May 2018 22:00:00 GMT</pubDate></item></channel></rss>

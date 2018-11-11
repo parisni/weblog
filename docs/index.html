@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Software Lobotomy</title>
+<link href="assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/">
+<link rel="next" href="index-1.html" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/a-decent-python-configuration/" type="text/html">
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="categories/">Tags</a></li>
+                <li><a href="archive.html">Archive</a></li>
+                <li><a href="stories/about/">About</a></li>
+                <li><a href="rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><div class="postindex">
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/a-decent-python-configuration/" class="u-url">A decent python configuration</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/parisni/">Parisni</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/a-decent-python-configuration/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-11-11T11:43:34+01:00" itemprop="datePublished" title="2018-11-11">2018-11-11</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="section" id="use-anaconda">
+<h2>Use Anaconda</h2>
+<p>Anaconda allows to have multiple python versions. This is much easier than using <em>virtualenv</em></p>
+<pre class="code bash"><a name="rest_code_dfde667d44d9424e9bdfdf1eeb50c64f-1"></a>conda env list <span class="c1"># lists all envs</span>
+<a name="rest_code_dfde667d44d9424e9bdfdf1eeb50c64f-2"></a>conda env create py3.5 pip setuptools <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5 <span class="c1"># create a python env</span>
+<a name="rest_code_dfde667d44d9424e9bdfdf1eeb50c64f-3"></a>conda activate py3.5 <span class="c1"># activate the latter</span>
+<a name="rest_code_dfde667d44d9424e9bdfdf1eeb50c64f-4"></a>conda deactivate <span class="c1"># deactivate it</span>
+<a name="rest_code_dfde667d44d9424e9bdfdf1eeb50c64f-5"></a>conda env remove -n py3.5 <span class="c1"># remove it completely</span>
+</pre>
+</div>
+<div class="section" id="use-pip-together-with-anaconda">
+<h2>Use pip together with anaconda</h2>
+<p>The package will be installed within the environement. pip has a much broader
+list of packages than the anaconda channel.</p>
+<pre class="code bash"><a name="rest_code_2cb5390792e2402cabdddaad5817ea51-1"></a>pip install &lt;my-package&gt; <span class="c1"># install a package</span>
+<a name="rest_code_2cb5390792e2402cabdddaad5817ea51-2"></a>pip install
+<a name="rest_code_2cb5390792e2402cabdddaad5817ea51-3"></a>pip install --index-url https://pypi.org/simple/ &lt;my-package&gt; <span class="c1"># specify the repository</span>
+<a name="rest_code_2cb5390792e2402cabdddaad5817ea51-4"></a>pip install . <span class="c1"># a local package</span>
+<a name="rest_code_2cb5390792e2402cabdddaad5817ea51-5"></a>pip remove &lt;my-package&gt;  <span class="c1"># remove it</span>
+</pre>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/archlinux-pgsql-11/" class="u-url">Postgresql 11 on Archlinux</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/archlinux-pgsql-11/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-10-27T00:00:00+02:00" itemprop="datePublished" title="2018-10-27">2018-10-27</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I am fairly new to archlinux. Postgresql 11 is fairly new too. Here are the steps to install that version.</p>
+<pre class="code bash"><a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-1"></a><span class="c1"># get the lattest postgres in the repos</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-2"></a><span class="c1"># avoid checking for sha fingerprint, because not the same version</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-3"></a>yaourt --m-arg <span class="s2">"--skipchecksums --skippgpcheck"</span> -Sb postgresql
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-4"></a><span class="c1"># 1. edit the PKGBUILD file, change to 11.0 version</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-5"></a><span class="c1"># 2. comment the check() part</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-6"></a><span class="c1"># 3. after building and installing, change to 11 the PGMAJORVERSION within:</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-7"></a>sudo vim /usr/bin/postgresql-check-db-dir
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-8"></a><span class="c1"># make the link for psql command working</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-9"></a>sudo ln -s /usr/lib/libreadline.so.7 /usr/lib/libreadline.so.6
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-10"></a><span class="c1"># install that old version to make posgres command work</span>
+<a name="rest_code_40d0f86b86c64c37b3f633112a9a0e7d-11"></a>yaourt -S icu54
+</pre>
+<p>That's all. By the way, I do not have any idea right now on how to upgrade minor versions in the future, but I will employ myself to update this post.</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/hive-llap-resources/" class="u-url">Hive llap resource consumption</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/hive-llap-resources/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-09-07T00:00:00+02:00" itemprop="datePublished" title="2018-09-07">2018-09-07</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div class="section" id="resource-consumption">
+<h2>Resource consumption</h2>
+<p>Hive llap is quite complicated to tune.</p>
+<pre class="code bash"><a name="rest_code_210b30557ad94143bf7eda4be3a532c4-1"></a>hive.llap.daemon.task.scheduler.enable.preemption<span class="o">=</span><span class="nb">true</span>
+</pre>
+<p><a class="reference external" href="https://community.hortonworks.com/articles/149486/llap-sizing-and-setup.html">a great article</a></p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/email-best-practice/" class="u-url">Email Best Practices</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/email-best-practice/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-09-03T00:00:00+02:00" itemprop="datePublished" title="2018-09-03">2018-09-03</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>I will post here all best practices about writing emails. A lot of useful
+information can be found <a class="reference external" href="https://www.ietf.org/rfc/rfc3676.txt">there</a></p>
+<div class="section" id="writing-email">
+<h2>Writing email</h2>
+<ol class="arabic">
+<li>
+<p class="first">Choose an email object</p>
+<p>For example this pattern is great: <strong>[Action] Topic</strong>.
+<strong>Action</strong> to help your recipient to understand what you want from him.
+<strong>topic</strong> is a small synthesis of the topic in which the action is supposed to happen.
+This pattern has been advised by Michael Kahn.</p>
+</li>
+<li>
+<p class="first">Keep the body narrow</p>
+<p>The email should not size more than 72 character width. This improve
+readability specially on small screen. In vim, the width can be setup, and
+the shorkey <strong>g+q</strong> on a visual selection makes things easy.</p>
+</li>
+</ol>
+</div>
+<div class="section" id="reply-to-email">
+<h2>Reply to email</h2>
+<ol class="arabic">
+<li>
+<p class="first">Reply below your recipient</p>
+<p>Bottom Posting (BP) is answering bellow the previous email as opposite to
+Top Posting (TP) aka gmail way of doing. BP has many advantages over TP. BP
+allows to read the emails in the natural order ; specially for people who
+discover the thread. <a class="reference external" href="http://www.idallen.com/topposting.html">more information here</a>
+Keep an empty row between the previous answer and yours for readability.</p>
+</li>
+<li>
+<p class="first">Remove information</p>
+<p>Remove the recipient signature, out of context content. In particular, do
+not keep the recipient email within the email body for security reasons.</p>
+</li>
+<li>
+<p class="first">Append your signature</p>
+<p>A signature is generally on the bottom of the email, preceded by a row containing: <em>--</em></p>
+</li>
+<li>
+<p class="first">Sign the email</p>
+<p>Sign the email with your AES private key as a proof of your identity.</p>
+</li>
+<li>
+<p class="first">Mask your mailing system</p>
+<p>Email can store the <strong>User-agent</strong> field. This can be found in the header of
+the email and may share precious information such your operating system and
+its version. eg: <strong>User-Agent: Mozilla/5.0 (Windows NT 6.1; WOW64; rv:52.0) Gecko/20100101 Thunderbird/52.3.0</strong></p>
+</li>
+</ol>
+</div>
+<div class="section" id="mailing-list">
+<h2>Mailing List</h2>
+<ol class="arabic">
+<li>
+<p class="first">Email the mailing list <strong>only</strong></p>
+<p>Remove the previous writer. In any cases, he will receive the email since he
+subscribed to the list.</p>
+</li>
+<li>
+<p class="first">Use a dedicated alias</p>
+<p>Mailing list are usually public and this you will probably end up with spam.
+A good trick is to use an alias combined with a rule such: "message directed
+to the alias goes into the trash". Riseup.net provides alias email.</p>
+</li>
+</ol>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-vim/" class="u-url">Spelling, mutt &amp; vim</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/mutt-vim/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-09-03T00:00:00+02:00" itemprop="datePublished" title="2018-09-03">2018-09-03</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Having a correct spelling is important in society. This is true specially when
+come time to write emails.</p>
+<p>Here is a trick to activate vim spelling while editing email in <strong>mutt</strong>. Add
+the following line into your .muttrc configuration file:</p>
+<pre class="code bash"><a name="rest_code_9ce2855530804cef94c13ba4ded55ee9-1"></a><span class="nb">set</span> <span class="nv">editor</span><span class="o">=</span><span class="s2">"vim -c 'set textwidth=72' -c':set spell' -c':setlocal spell spelllang=en_us'"</span>
+</pre>
+<p>This allows to check English spelling correctly.</p>
+<p>Enjoy !</p>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-search/" class="u-url">Mutt Search on Steroids</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/mutt-search/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-08-30T00:00:00+02:00" itemprop="datePublished" title="2018-08-30">2018-08-30</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>Mutt has a powerful feature to dig into the history: the <strong>limit</strong> feature. By
+pressing <cite>l</cite> it is then possible to write a query to filter the mails. It is
+comparable to the <strong>WHERE</strong> part of a SQL statement and allow combining <strong>AND</strong>
+operators. In particular the <strong>~b</strong> predicate allow to search within the email's
+body and the <cite>~X</cite> lets filter attachments.</p>
+<p>However that feature acts as a <strong>grep</strong> command and parse all the mails one by
+one. Searching in multiple dozen of thousand emails can last dozen of minutes.
+Here comes the <strong>notmuch</strong> program, that improves greatly the limit feature with
+instant search and some other goodies (and also drawbacks). The secret of this
+speed is it scan emails and produces a full text index to be used later.</p>
+<p>The installation is straightforward on ubuntu with <cite>sudo apt install notmuch</cite>.
+The configuration is also piece of cake: <cite>notmuch config</cite> will setup the
+maildir folder. Later the <cite>notmuch new</cite> command allows to the mails and can be
+run again when new mails arrive. There is also a way to automatize the
+indexation by setup system notifications <a class="reference external" href="https://github.com/noah/notmuch-new-inotify">right there</a>.</p>
+<p>The integration in mutt to replace the <em>limit</em> feature only need the two rows
+below in the <em>.muttrc</em> configuration file. Pressing <cite>L</cite> will propose to write a
+query to filter the mails based on the index <a class="reference external" href="http://log.or.cz/?p=228">more information here</a>.
+To get the full details on how to search within notmuch: <cite>man
+notmuch-search-index</cite> describes the syntax of the search.</p>
+<pre class="code bash"><a name="rest_code_777f6076592b46488bd0a5e21064c1ec-1"></a><span class="c1"># 'L' performs a notmuch query, showing only the results</span>
+<a name="rest_code_777f6076592b46488bd0a5e21064c1ec-2"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'notmuch query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a notmuch pattern"</span>
+<a name="rest_code_777f6076592b46488bd0a5e21064c1ec-3"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
+<a name="rest_code_777f6076592b46488bd0a5e21064c1ec-4"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages (undo limit)"</span>
+</pre>
+<p>There is some caveats with notmuch however. Its search within attachment is not
+as powerfull as the built-in mutt. In particular, the later allows to specify
+the number of attachments. Last but not least, notmuch does only provide a
+stemmer for english. That's might be possible to extend it with an existing
+implementation of the french snowball parser.</p>
+<div class="section" id="edit">
+<h2>EDIT:</h2>
+<p><strong>mu</strong> is an alternative to <strong>notmuch</strong> . It covers the features described above, and has a better syntax.</p>
+<p>Here is the full documentation there <a class="reference external" href="http://manpages.ubuntu.com/manpages/bionic/man1/mu-find.1.html">mu documentation</a></p>
+<pre class="code bash"><a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-1"></a><span class="c1"># Install</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-2"></a>sudo apt install maildir-utils
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-3"></a>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-4"></a><span class="c1"># Index Maildir</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-5"></a>mu index -m my/maildir
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-6"></a>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-7"></a><span class="c1"># setup in crontab or use inotify service</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-8"></a>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-9"></a><span class="c1"># to add to .muttrc</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-10"></a><span class="c1"># Mode 1.</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-11"></a><span class="c1">#</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-12"></a><span class="c1"># this allows to search into all mailbowes at once</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-13"></a><span class="c1"># however, it is a readonly mailbox because off symlinks</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-14"></a>macro index &lt;F8&gt; <span class="s2">"&lt;shell-escape&gt;mu find --clearlinks --format=links --linksdir=~/Maildir/search "</span>   <span class="s2">"mu find"</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-15"></a>macro index &lt;F9&gt; <span class="s2">"&lt;change-folder-readonly&gt;~/Maildir/search"</span>      <span class="s2">"mu find results"</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-16"></a>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-17"></a><span class="c1"># Mode 2.</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-18"></a><span class="c1">#</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-19"></a><span class="c1"># this allows to show the 600 first emails</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-20"></a><span class="c1"># it is</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-21"></a>macro index L <span class="s2">"&lt;enter-command&gt;unset wait_key&lt;enter&gt;&lt;shell-escape&gt;read -p 'mu query: ' x; echo \$x &gt;~/.cache/mutt_terms&lt;enter&gt;&lt;limit&gt;~i \"\`mu find --fields i --quiet 2&gt; /dev/null \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&lt;&gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;</span>$<span class="s2">,=\"|\";print@a'\`\"&lt;enter&gt;"</span> <span class="s2">"show only messages matching a mu pattern"</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-22"></a><span class="c1"># 'a' shows all messages again (supersedes default &lt;alias&gt; binding)</span>
+<a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-23"></a>macro index a <span class="s2">"&lt;limit&gt;all\n"</span> <span class="s2">"show all messages"</span>
+</pre>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-sidebar/" class="u-url">Mutt &amp; Sidebar</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/mutt-sidebar/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-08-26T00:00:00+02:00" itemprop="datePublished" title="2018-08-26">2018-08-26</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>When receiving many mails a day, having a single mail pool makes easy to loose
+important emails. Using mailboxes (ie: sub folders) with rules becomes a need.
+The good point is all the mailboxes are regularly updated to alert when
+incoming email are received.  The few steps are generating a mailbox tree,
+mooving mails manually, mooving them automatically, and finally mooving the
+history in batch.</p>
+<div class="section" id="generating-a-mailbox-tree">
+<h2>Generating a mailbox tree</h2>
+<p>Mailboxes consists of folder{cur, new, old} where <em>folder</em> represents its name.
+The easy way to build them is from the mutt interface, by pressing <cite>s</cite> on an
+email and choosing the new mailboxe name. The root of the mailboxe is defined
+as the <cite>folder</cite> variable.</p>
+</div>
+<div class="section" id="mooving-mails-manually">
+<h2>Mooving mails manually</h2>
+<p>It is possible to redirect an email into a mailboxe by pressing <cite>s</cite> and then
+<cite>=myMailBoxeChoice</cite>. In case you want to put it back to the general spool just
+type <cite>=</cite> with an empty mailboxe.</p>
+</div>
+<div class="section" id="mooving-mails-automatically">
+<h2>Mooving mails automatically</h2>
+<p>I have been able to write rules based on email features such <cite>from</cite> with the
+<a class="reference external" href="https://userpages.umbc.edu/~ian/procmail.html#tutorial">helpful tutorial</a>.
+In my setup, <em>getmail</em> fetches the mails and invokes <em>procmail</em> to redirect the
+mail somewhere. The idea is to parse the email address with a regex and
+depending on the result redirect it in the right <cite>new</cite> mailboxe folder.</p>
+</div>
+<div class="section" id="mooving-mails-history">
+<h2>Mooving mails history</h2>
+<p>I haven't yet a solution for that.</p>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-aes/" class="u-url">Encrypt &amp; Sign Mails</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/mutt-aes/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-08-25T00:00:00+02:00" itemprop="datePublished" title="2018-08-25">2018-08-25</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<div class="section" id="get-a-certificate-eg-cacert-org">
+<h2>Get a certificate (eg: CAcert.org)</h2>
+<ul class="simple">
+<li>Client Certificate &gt; new</li>
+<li>add it to Firefox</li>
+</ul>
+<p>The key pair can then be extracted in p12 format from Firefox and it is
+possible to transform it to rsa format:</p>
+<pre class="code bash"><a name="rest_code_26a0b7c374d34be68bd0c997ba1ccf87-1"></a>openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/<span class="nv">$USER</span>/.ssh/id_rsa_cacert
+</pre>
+</div>
+<div class="section" id="installing-neomutt-from-source-on-ubuntu-18-04">
+<h2>Installing neomutt from source on Ubuntu 18.04</h2>
+<pre class="code bash"><a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-1"></a>sudo apt install libncursesw5-dev
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-2"></a>sudo apt install libidn11-dev
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-3"></a>git clone https://github.com/neomutt/neomutt
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-4"></a><span class="nb">cd</span> neomutt
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-5"></a>./configure
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-6"></a>make
+<a name="rest_code_43cc74c0317f46dda5af2061c4f7eb90-7"></a>sudo make install
+</pre>
+</div>
+<div class="section" id="loading-the-key-into-mutt">
+<h2>Loading the key into mutt</h2>
+<p>It is necessary to setup and use smime_key command to manage keys. It will
+generate a KeyID for the certificate (something like xxxxxx.0)</p>
+<pre class="code bash"><a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-1"></a>cp /home/<span class="nv">$USER</span>/git/neomutt/contrib/smime.rc ~/.smime.rc
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-2"></a>/usr/libexec/neomutt/smime_keys init
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-3"></a>mkdir -p ~/.smime/certificates
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-4"></a>touch ~/.smime/certificates/.index
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-5"></a>mkdir -p ~/.smime/keys
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-6"></a>touch ~/.smime/keys/.index
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-7"></a>/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
+<a name="rest_code_9a7b49ee51544695873ecf4b0e1004c8-8"></a>/usr/libexec/neomutt/smime_keys refresh
+</pre>
+<ul class="simple">
+<li>Add to <cite>source /home/$USER/.smime.rc</cite> to .muttrc</li>
+<li>Setup the KeyID in the <em>.smime.rc</em> file</li>
+</ul>
+</div>
+<div class="section" id="send-a-signed-mail">
+<h2>Send a signed mail</h2>
+<p>After having written the mail in neomutt type <cite>shift-S</cite> and choose the <cite>s</cite> to
+sign the mail. It will choose the KeyID by default, and ask for the key
+password if exists.</p>
+</div>
+<div class="section" id="loading-a-public-key">
+<h2>Loading a public key</h2>
+<p>Right now, I don't know</p>
+</div>
+<div class="section" id="encrypt-a-mail">
+<h2>Encrypt a mail</h2>
+<p>Choose <cite>e</cite> for encryption, and then <cite>enter</cite> to list the existing public keys.</p>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/ubuntu-nvidia/" class="u-url">nvidia &amp; ubuntu 18.04</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/ubuntu-nvidia/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-08-19T00:00:00+02:00" itemprop="datePublished" title="2018-08-19">2018-08-19</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <div>
+<p>My new gigabyte aero 14 does ship a nvidia GTX1050. I had several problem to
+make it working correctly.</p>
+<div class="section" id="installation-from-scratch">
+<h2>Installation from scratch</h2>
+<p>When installing ubuntu from my usb key it simply froze after setup. I had to
+enter in maintenance mode, log as root and the resume to get a VGA screen.
+After that I was able to install the nvidia drivers by folowing the steps
+<a class="reference external" href="https://www.linuxbabe.com/ubuntu/install-nvidia-driver-ubuntu-18-04">the folowing steps</a></p>
+</div>
+<div class="section" id="turning-in-nvidia-mode">
+<h2>Turning in nvidia mode</h2>
+<p>The command <em>sudo prime-select nvidia</em> followed by a reboot makes use of the
+nvidia chipset. As a result, the powertop tool show a use of 15W.</p>
+</div>
+<div class="section" id="turning-intel-mode">
+<h2>Turning intel mode</h2>
+<p>The command <em>sudo prime-select intel</em> followed by a reboot makes use of the
+intel chipset. However a bug introduced with 18.04 makes both nvidia and intel
+running and it uses 20W and worst did not allow to
+shutdown/reboot/suspend/hibernate. I ended up by using that
+<a class="reference external" href="https://www.linuxbabe.com/ubuntu/install-nvidia-driver-ubuntu-18-04">solution</a>
+which reduce to 7W. Note that I had to make sure the grub was
+<em>nouveau.modeset=0 nouveau.runpm=0</em> in the <em>/etc/default/grub</em> file.  After
+installed the <em>tlp</em> tool I ended up using 5W.</p>
+<p>Note that I tried
+<a class="reference external" href="https://bugs.launchpad.net/ubuntu/+source/nvidia-prime/+bug/1765363">that other solution</a> but this
+resulted in system freeze at reboot.</p>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/eclipse-tips/" class="u-url">Eclipse Tips</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                <a href="authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="posts/eclipse-tips/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-06-03T00:00:00+02:00" itemprop="datePublished" title="2018-06-03">2018-06-03</time></a>
+            </p>
+        </div>
+    </header><div class="e-content entry-content">
+    <table class="docinfo" frame="void" rules="none">
+<col class="docinfo-name">
+<col class="docinfo-content">
+<tbody valign="top">
+<tr class="darkest-theme field">
+<th class="docinfo-name">darkest theme:</th>
+<td class="field-body">simply go throught install menu from this <a class="reference external" href="https://www.eclipse.org/community/eclipse_newsletter/2017/february/article5.php">link</a>
+</td>
+</tr>
+<tr class="emacs-mode field">
+<th class="docinfo-name">emacs mode:</th>
+<td class="field-body">select it as a key binding in the preferences. The good point is
+emacs shortcuts are also used in most linux terminals. The bad
+point is when managing <em>emacs</em> and <em>vi</em> is a kind of challenge
+in term of reflexes. The next step would be managing both
+<em>azerty</em> and <em>qwerty</em> keyboards.</td>
+</tr>
+</tbody>
+</table>
+</div>
+    </article>
+</div>
+        <nav class="postindexpager"><ul class="pager">
+<li class="next">
+                <a href="index-1.html" rel="next">Older posts</a>
+            </li>
+        </ul></nav></main>
+</div>
+                <script src="assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

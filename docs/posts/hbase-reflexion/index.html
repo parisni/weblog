@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width">
+<title>Hbase Reflexions | Software Lobotomy</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/posts/hbase-reflexion/">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Nicolas Paris">
+<link rel="prev" href="../hive-merge/" title="Hive Merge" type="text/html">
+<link rel="next" href="../yarn-reflexions/" title="Yarn Reflexions" type="text/html">
+<meta property="og:site_name" content="Software Lobotomy">
+<meta property="og:title" content="Hbase Reflexions">
+<meta property="og:url" content="https://parisni.github.io/weblog/posts/hbase-reflexion/">
+<meta property="og:description" content="hbase looks a powerfull tool in complement of hive. While hive suits well
+for ETL and data historisation, it cannot offer sub-second access to thousand
+of concurrent users.
+Hbase comes with a powerful">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2018-05-13T00:00:00+02:00">
+<meta property="article:tag" content="hive">
+<meta property="article:tag" content="phoenix">
+<meta property="article:tag" content="solr">
+<meta property="article:tag" content="spark">
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="../../categories/">Tags</a></li>
+                <li><a href="../../archive.html">Archive</a></li>
+                <li><a href="../../stories/about/">About</a></li>
+                <li><a href="../../rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Hbase Reflexions</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    <a href="../../authors/nicolas-paris/">Nicolas Paris</a>
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2018-05-13T00:00:00+02:00" itemprop="datePublished" title="2018-05-13">2018-05-13</time></a>
+            </p>
+            
+        </div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<p>hbase looks a powerfull tool in complement of hive. While hive suits well
+for ETL and data historisation, it cannot offer sub-second access to thousand
+of concurrent users.</p>
+<p>Hbase comes with a powerful compagnion aka Phoenix that provides many features,
+while keeping the hbase features intact. Phoenix provides a jdbc driver to
+hbase. This distinction adds many improvements:</p>
+<ol class="arabic simple">
+<li>it offers sql, joins, secondary indexes, transactions, sequences on top of hbase.</li>
+<li>it simplifies hive, spark, solr, and general programming access to hbase
+data.</li>
+</ol>
+<div class="section" id="jdbc-overview">
+<h2>JDBC overview</h2>
+<p>jdbc access can be done with <a class="reference external" href="https://community.hortonworks.com/questions/47138/phoenix-query-server-connection-url-example.html">kerberos</a> on the form</p>
+<pre class="code java"><a name="rest_code_e59c233bceea498da49d6380941960f2-1"></a><span class="s">"jdbc:phoenix:thin:url=&lt;scheme&gt;://&lt;server-hostname&gt;:&lt;port&gt;;authentication=SPNEGO;principal=my_user;keytab=/home/my_user/my_user.keytab"</span>
+</pre>
+<p>Phoenix connection thought JDBC needs :
+- a jdbc jar file
+- the hbase-site.conf
+- a kerberos ticket</p>
+<p>Phoenix does not provide a way for connection pooling. The costly part of the
+connection is the hbase link. However it is cached within the region servers
+and a new phoenix jdbc connection can be rebuild for every query since it is a
+lightweight object.</p>
+</div>
+<div class="section" id="hive-integration">
+<h2>Hive integration</h2>
+<p>Phoenix tables can be mounted into hive thanks to a <a class="reference external" href="https://phoenix.apache.org/hive_storage_handler.html">recent plugin</a>. In
+comparaison to hbase plugin, this allows fast join to hive table (to be
+tested). While this plugin needs phoenix 4.8.0+ HDP ships with phoenix 4.7.0.
+However HDP Phoenix is a fork of Phoenix, and it integrates this feature.</p>
+<p>Because phoenix allows to mount a hbase table, hive a phoenix or a hbase table,
+there is many ways to make hive querying hbase. Moreover hive can create a
+regular table stored as a hbase or phoenix table wich is slightly different.
+The best way is to mount phoenix as a hive external table. First advantage is
+<em>phoenix</em> allows salted tables by mean there is no need to manually handle the
+key to be well distributed. Second, is loading directly into <em>phoenix</em> allows
+it to manage its secondary indexes and also some other tools such <em>solr</em>.</p>
+<p>Finally, hive can access an external <em>phoenix</em> table and allow both upsert and
+select. The plugin also provides a way to delete/update from hive, however I
+haven't been able to reproduce yet since transactional tables are only
+compatible with orc based tables.</p>
+</div>
+<div class="section" id="spark-integration">
+<h2>Spark integration</h2>
+<p>Spark can read and write from phoenix <a class="reference external" href="https://stackoverflow.com/questions/40329968/apache-spark-ways-to-read-and-write-from-apache-phoenix-in-java">here on SOF</a> or <a class="reference external" href="https://phoenix.apache.org/phoenix_spark.html">here on official</a>. The good point is it can be done from scala or python.</p>
+</div>
+<div class="section" id="solr-integration">
+<h2>Solr integration</h2>
+<p>Solr integration with hbase is a good idea: hbase contains the truth and solr allows fast lookup to discover it. However, setting up solr on top of hbase is a pain. Phoenix simplifies drastically that :
+<a class="reference external" href="https://nicholasmaillard.wordpress.com/2014/12/27/phoenix-to-solr-in-20-minutes/">here</a></p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/hive/" rel="tag">hive</a></li>
+            <li><a class="tag p-category" href="../../categories/phoenix/" rel="tag">phoenix</a></li>
+            <li><a class="tag p-category" href="../../categories/solr/" rel="tag">solr</a></li>
+            <li><a class="tag p-category" href="../../categories/spark/" rel="tag">spark</a></li>
+        </ul>
+<ul class="pager hidden-print">
+<li class="previous">
+                <a href="../hive-merge/" rel="prev" title="Hive Merge">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../yarn-reflexions/" rel="next" title="Yarn Reflexions">Next post</a>
+            </li>
+        </ul></nav></aside></article></main>
+</div>
+                <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

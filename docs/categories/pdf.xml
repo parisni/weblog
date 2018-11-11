@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about pdf)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/pdf.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:40:14 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>best pdf viewer</title><link>https://parisni.github.io/weblog/posts/mupdf/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;I have for long time being disapointed with &lt;strong&gt;evince&lt;/strong&gt; pdf reader with it's
+lack of capacity to zoom in and out. The same happened with &lt;strong&gt;foxit reader&lt;/strong&gt;
+and its lack of history management in its linux version.&lt;/p&gt;
+&lt;p&gt;Finally I discovered &lt;strong&gt;mupdf&lt;/strong&gt;. It has a vi key biding, has a great zooming
+window, allows back in the history. The only missing feature is beeing able to
+follow links with keyboard as &lt;strong&gt;luakit&lt;/strong&gt; does.&lt;/p&gt;
+&lt;div class="section" id="keybinding"&gt;
+&lt;h2&gt;keybinding&lt;/h2&gt;
+&lt;ul class="simple"&gt;
+&lt;li&gt;&lt;em&gt;i&lt;/em&gt; : dark mode&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;/&lt;/em&gt; : search&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;W&lt;/em&gt; : fit to page&lt;/li&gt;
+&lt;li&gt;&lt;em&gt;t&lt;/em&gt; : go back to last jump&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/div&gt;&lt;/div&gt;</description><category>pdf</category><guid>https://parisni.github.io/weblog/posts/mupdf/</guid><pubDate>Sat, 26 May 2018 22:00:00 GMT</pubDate></item></channel></rss>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<?xml-stylesheet type="text/xsl" href="../assets/xml/rss.xsl" media="all"?><rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Software Lobotomy (Posts about mu)</title><link>https://parisni.github.io/weblog</link><description></description><atom:link href="https://parisni.github.io/weblog/categories/mu.xml" rel="self" type="application/rss+xml"></atom:link><language>en</language><copyright>Contents © 2018 &lt;a href="mailto:nicolas.paris@riseup.net"&gt;Parisni&lt;/a&gt; </copyright><lastBuildDate>Sun, 11 Nov 2018 16:40:14 GMT</lastBuildDate><generator>Nikola (getnikola.com)</generator><docs>http://blogs.law.harvard.edu/tech/rss</docs><item><title>Mutt Search on Steroids</title><link>https://parisni.github.io/weblog/posts/mutt-search/</link><dc:creator>Nicolas Paris</dc:creator><description>&lt;div&gt;&lt;p&gt;Mutt has a powerful feature to dig into the history: the &lt;strong&gt;limit&lt;/strong&gt; feature. By
+pressing &lt;cite&gt;l&lt;/cite&gt; it is then possible to write a query to filter the mails. It is
+comparable to the &lt;strong&gt;WHERE&lt;/strong&gt; part of a SQL statement and allow combining &lt;strong&gt;AND&lt;/strong&gt;
+operators. In particular the &lt;strong&gt;~b&lt;/strong&gt; predicate allow to search within the email's
+body and the &lt;cite&gt;~X&lt;/cite&gt; lets filter attachments.&lt;/p&gt;
+&lt;p&gt;However that feature acts as a &lt;strong&gt;grep&lt;/strong&gt; command and parse all the mails one by
+one. Searching in multiple dozen of thousand emails can last dozen of minutes.
+Here comes the &lt;strong&gt;notmuch&lt;/strong&gt; program, that improves greatly the limit feature with
+instant search and some other goodies (and also drawbacks). The secret of this
+speed is it scan emails and produces a full text index to be used later.&lt;/p&gt;
+&lt;p&gt;The installation is straightforward on ubuntu with &lt;cite&gt;sudo apt install notmuch&lt;/cite&gt;.
+The configuration is also piece of cake: &lt;cite&gt;notmuch config&lt;/cite&gt; will setup the
+maildir folder. Later the &lt;cite&gt;notmuch new&lt;/cite&gt; command allows to the mails and can be
+run again when new mails arrive. There is also a way to automatize the
+indexation by setup system notifications &lt;a class="reference external" href="https://github.com/noah/notmuch-new-inotify"&gt;right there&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The integration in mutt to replace the &lt;em&gt;limit&lt;/em&gt; feature only need the two rows
+below in the &lt;em&gt;.muttrc&lt;/em&gt; configuration file. Pressing &lt;cite&gt;L&lt;/cite&gt; will propose to write a
+query to filter the mails based on the index &lt;a class="reference external" href="http://log.or.cz/?p=228"&gt;more information here&lt;/a&gt;.
+To get the full details on how to search within notmuch: &lt;cite&gt;man
+notmuch-search-index&lt;/cite&gt; describes the syntax of the search.&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_777f6076592b46488bd0a5e21064c1ec-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'L' performs a notmuch query, showing only the results&lt;/span&gt;
+&lt;a name="rest_code_777f6076592b46488bd0a5e21064c1ec-2"&gt;&lt;/a&gt;macro index L &lt;span class="s2"&gt;"&amp;lt;enter-command&amp;gt;unset wait_key&amp;lt;enter&amp;gt;&amp;lt;shell-escape&amp;gt;read -p 'notmuch query: ' x; echo \$x &amp;gt;~/.cache/mutt_terms&amp;lt;enter&amp;gt;&amp;lt;limit&amp;gt;~i \"\`notmuch search --output=messages \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&amp;lt;&amp;gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;&lt;/span&gt;$&lt;span class="s2"&gt;,=\"|\";print@a'\`\"&amp;lt;enter&amp;gt;"&lt;/span&gt; &lt;span class="s2"&gt;"show only messages matching a notmuch pattern"&lt;/span&gt;
+&lt;a name="rest_code_777f6076592b46488bd0a5e21064c1ec-3"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'a' shows all messages again (supersedes default &amp;lt;alias&amp;gt; binding)&lt;/span&gt;
+&lt;a name="rest_code_777f6076592b46488bd0a5e21064c1ec-4"&gt;&lt;/a&gt;macro index a &lt;span class="s2"&gt;"&amp;lt;limit&amp;gt;all\n"&lt;/span&gt; &lt;span class="s2"&gt;"show all messages (undo limit)"&lt;/span&gt;
+&lt;/pre&gt;&lt;p&gt;There is some caveats with notmuch however. Its search within attachment is not
+as powerfull as the built-in mutt. In particular, the later allows to specify
+the number of attachments. Last but not least, notmuch does only provide a
+stemmer for english. That's might be possible to extend it with an existing
+implementation of the french snowball parser.&lt;/p&gt;
+&lt;div class="section" id="edit"&gt;
+&lt;h2&gt;EDIT:&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;mu&lt;/strong&gt; is an alternative to &lt;strong&gt;notmuch&lt;/strong&gt; . It covers the features described above, and has a better syntax.&lt;/p&gt;
+&lt;p&gt;Here is the full documentation there &lt;a class="reference external" href="http://manpages.ubuntu.com/manpages/bionic/man1/mu-find.1.html"&gt;mu documentation&lt;/a&gt;&lt;/p&gt;
+&lt;pre class="code bash"&gt;&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-1"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Install&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-2"&gt;&lt;/a&gt;sudo apt install maildir-utils
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-3"&gt;&lt;/a&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-4"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Index Maildir&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-5"&gt;&lt;/a&gt;mu index -m my/maildir
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-6"&gt;&lt;/a&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-7"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# setup in crontab or use inotify service&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-8"&gt;&lt;/a&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-9"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# to add to .muttrc&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-10"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Mode 1.&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-11"&gt;&lt;/a&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-12"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# this allows to search into all mailbowes at once&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-13"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# however, it is a readonly mailbox because off symlinks&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-14"&gt;&lt;/a&gt;macro index &amp;lt;F8&amp;gt; &lt;span class="s2"&gt;"&amp;lt;shell-escape&amp;gt;mu find --clearlinks --format=links --linksdir=~/Maildir/search "&lt;/span&gt;   &lt;span class="s2"&gt;"mu find"&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-15"&gt;&lt;/a&gt;macro index &amp;lt;F9&amp;gt; &lt;span class="s2"&gt;"&amp;lt;change-folder-readonly&amp;gt;~/Maildir/search"&lt;/span&gt;      &lt;span class="s2"&gt;"mu find results"&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-16"&gt;&lt;/a&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-17"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# Mode 2.&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-18"&gt;&lt;/a&gt;&lt;span class="c1"&gt;#&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-19"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# this allows to show the 600 first emails&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-20"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# it is&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-21"&gt;&lt;/a&gt;macro index L &lt;span class="s2"&gt;"&amp;lt;enter-command&amp;gt;unset wait_key&amp;lt;enter&amp;gt;&amp;lt;shell-escape&amp;gt;read -p 'mu query: ' x; echo \$x &amp;gt;~/.cache/mutt_terms&amp;lt;enter&amp;gt;&amp;lt;limit&amp;gt;~i \"\`mu find --fields i --quiet 2&amp;gt; /dev/null \$(cat ~/.cache/mutt_terms) | head -n 600 | perl -le '@a=&amp;lt;&amp;gt;;chomp@a;s/\^id:// for@a;s/\\+/\\\\+/g for@a;s/=/\\\\=/g for@a;&lt;/span&gt;$&lt;span class="s2"&gt;,=\"|\";print@a'\`\"&amp;lt;enter&amp;gt;"&lt;/span&gt; &lt;span class="s2"&gt;"show only messages matching a mu pattern"&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-22"&gt;&lt;/a&gt;&lt;span class="c1"&gt;# 'a' shows all messages again (supersedes default &amp;lt;alias&amp;gt; binding)&lt;/span&gt;
+&lt;a name="rest_code_ffb602b4a72b4adba298a74c3a902e37-23"&gt;&lt;/a&gt;macro index a &lt;span class="s2"&gt;"&amp;lt;limit&amp;gt;all\n"&lt;/span&gt; &lt;span class="s2"&gt;"show all messages"&lt;/span&gt;
+&lt;/pre&gt;&lt;/div&gt;&lt;/div&gt;</description><category>mu</category><category>mutt</category><guid>https://parisni.github.io/weblog/posts/mutt-search/</guid><pubDate>Wed, 29 Aug 2018 22:00:00 GMT</pubDate></item></channel></rss>
