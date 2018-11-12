@@ -55,3 +55,29 @@ Writing this post makes me thinking about a potential workaround to load
 textual CSV from COPY by using only one mapper in this situation. Since COPY is
 highly optimized it is possible that it won't degrade the performances while
 making the overall process totally robust.
+
+
+EDIT:
+
+Indeed, using only one mapper allows to handle multiline CSV. Since COPY is
+very fast and has been optimized to import dataset into postgreSQL, in the
+general case, the method can be generalized to any kind of CSV to work in any
+situation. That's the ultimate way to load PostgreSQL from Hadoop:
+
+.. code-block bash
+
+   sqoop export\
+   --connect "jdbc:postgresql://<postgres_host>/<postgres_db>"\
+   --username <postgres_user>\
+   --password-file file:///home/$USER/.password\
+   --export-dir /apps/hive/warehouse/<my_db>/<my_table_path>\
+   --table <my_hive_table>\
+   --columns "id, text_column"\
+   -m 1\
+   --direct\
+   --lines-terminated-by '\n'\
+   --fields-terminated-by ','\
+   --input-null-string "\\\\N"\
+   --input-null-non-string "\\\\N"\
+   -- --schema <my_schema>
+
