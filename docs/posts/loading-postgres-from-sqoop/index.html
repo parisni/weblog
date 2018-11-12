@@ -115,22 +115,21 @@ making the overall process totally robust.</p>
 very fast and has been optimized to import dataset into postgreSQL, in the
 general case, the method can be generalized to any kind of CSV to work in any
 situation. That's the ultimate way to load PostgreSQL from Hadoop:</p>
-<!-- code-block bash
-
-sqoop export\
-- -connect "jdbc:postgresql://<postgres_host>/<postgres_db>"\
-- -username <postgres_user>\
-- -password-file file:///home/$USER/.password\
-- -export-dir /apps/hive/warehouse/<my_db>/<my_table_path>\
-- -table <my_hive_table>\
-- -columns "id, text_column"\
--m 1\
-- -direct\
-- -lines-terminated-by '\n'\
-- -fields-terminated-by ','\
-- -input-null-string "\\\\N"\
-- -input-null-non-string "\\\\N"\
-- - - -schema <my_schema> -->
+<pre class="code bash"><a name="rest_code_18d17a62e498466b957ff7743a0f56ed-1"></a>sqoop export<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-2"></a>--connect <span class="s2">"jdbc:postgresql://&lt;postgres_host&gt;/&lt;postgres_db&gt;"</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-3"></a>--username &lt;postgres_user&gt;<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-4"></a>--password-file file:///home/<span class="nv">$USER</span>/.password<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-5"></a>--export-dir /apps/hive/warehouse/&lt;my_db&gt;/&lt;my_table_path&gt;<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-6"></a>--table &lt;my_hive_table&gt;<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-7"></a>--columns <span class="s2">"id, text_column"</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-8"></a>-m <span class="m">1</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-9"></a>--direct<span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-10"></a>--lines-terminated-by <span class="s1">'\n'</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-11"></a>--fields-terminated-by <span class="s1">','</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-12"></a>--input-null-string <span class="s2">"\\\\N"</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-13"></a>--input-null-non-string <span class="s2">"\\\\N"</span><span class="se">\</span>
+<a name="rest_code_18d17a62e498466b957ff7743a0f56ed-14"></a>-- --schema &lt;my_schema&gt;
+</pre>
 </div>
 </div>
     </div>

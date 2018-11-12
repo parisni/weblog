@@ -64,7 +64,7 @@ very fast and has been optimized to import dataset into postgreSQL, in the
 general case, the method can be generalized to any kind of CSV to work in any
 situation. That's the ultimate way to load PostgreSQL from Hadoop:
 
-.. code-block bash
+.. code-block:: bash
 
    sqoop export\
    --connect "jdbc:postgresql://<postgres_host>/<postgres_db>"\
