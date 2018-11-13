@@ -8,7 +8,7 @@
 .. type: text
 
 PostgreSQL and Hadoop are complementary technologies. PostgreSQL outperforms
-Hadoop to retrieve small amount of information from multiple tables. Haddop
+Hadoop to retrieve small amount of information from multiple tables. Hadoop
 outperforms PostgreSQL to transform multiple tables into simplfied and
 aggregated tables. So, how to load PostgreSQL efficiently from Hadoop ?
 
