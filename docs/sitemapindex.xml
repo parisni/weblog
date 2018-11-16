@@ -43,7 +43,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_data-science.xml</loc>
-  <lastmod>2018-11-11T18:47:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_databases.xml</loc>
@@ -114,6 +114,10 @@
   <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://parisni.github.io/weblog/categories/jupyter.xml</loc>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://parisni.github.io/weblog/categories/maven.xml</loc>
   <lastmod>2018-11-11T21:11:00Z</lastmod>
  </sitemap>
@@ -151,7 +155,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/python.xml</loc>
-  <lastmod>2018-11-11T18:54:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/solr.xml</loc>
@@ -195,10 +199,10 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/rss.xml</loc>
-  <lastmod>2018-11-13T23:32:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
-  <lastmod>2018-11-14T20:35:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </sitemap>
 </sitemapindex>

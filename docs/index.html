@@ -12,7 +12,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/">
 <link rel="next" href="index-2.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/loading-postgres-from-sqoop/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/jupyter-notebooks-and-conda/" type="text/html">
 </head>
 <body>
     <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -33,7 +33,32 @@
     
     
     </ul></nav></header><main id="content"><div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/loading-postgres-from-sqoop/" class="u-url">Loading Postgres from Sqoop</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/jupyter-notebooks-and-conda/" class="u-url">Jupyter Notebooks and Conda</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Parisni
+            </span></p>
+            <p class="dateline">
+            <a href="posts/jupyter-notebooks-and-conda/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-11-16T19:11:17+01:00" itemprop="datePublished" title="2018-11-16">2018-11-16</time></a>
+            </p>
+                <p class="commentline">            <a href="posts/jupyter-notebooks-and-conda/#disqus_thread" data-disqus-identifier="cache/posts/jupyter-notenbooks-and-conda.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="p-summary entry-summary">
+    <div>
+<p>After creating a environment with conda and installing packages, the jupyter
+notebook environment may not see them. The method below adds a new kernel based
+on the later environment and allow to benefit from conda:</p>
+<pre class="code bash"><a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-1"></a>conda activate my-env
+<a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-2"></a>conda  create -n my-env pip setuptools ipykernel <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5
+<a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-3"></a>python -m ipykernel install --user --name my-env --display-name <span class="s2">"Python (my-env)"</span>
+</pre>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/loading-postgres-from-sqoop/" class="u-url">Loading Postgres from Sqoop</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 Parisni
@@ -239,26 +264,6 @@ incoming email are received.  The few steps are generating a mailbox tree,
 mooving mails manually, mooving them automatically, and finally mooving the
 history in batch.</p>
 <p class="more"><a href="posts/mutt-sidebar/">Read more…</a></p>
-</div>
-    </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-aes/" class="u-url">Encrypt &amp; Sign Mails</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                Parisni
-            </span></p>
-            <p class="dateline">
-            <a href="posts/mutt-aes/" rel="bookmark">
-            <time class="published dt-published" datetime="2018-08-25T00:00:00+02:00" itemprop="datePublished" title="2018-08-25">2018-08-25</time></a>
-            </p>
-                <p class="commentline">            <a href="posts/mutt-aes/#disqus_thread" data-disqus-identifier="cache/posts/mutt-aes.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="p-summary entry-summary">
-    <div>
-<p>Cacert.org offers validated certificates with a network of trusted people. That's fun !</p>
-<p class="more"><a href="posts/mutt-aes/">Read more…</a></p>
 </div>
     </div>
     </article>

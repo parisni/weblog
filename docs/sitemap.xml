@@ -15,7 +15,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/archive.html</loc>
-  <lastmod>2018-11-14T20:35:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/authors/</loc>
@@ -31,7 +31,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/</loc>
-  <lastmod>2018-11-11T21:11:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/archlinux/</loc>
@@ -134,6 +134,10 @@
   <lastmod>2018-11-11T16:53:00Z</lastmod>
  </url>
  <url>
+  <loc>https://parisni.github.io/weblog/categories/jupyter/</loc>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://parisni.github.io/weblog/categories/maven/</loc>
   <lastmod>2018-11-11T16:53:00Z</lastmod>
  </url>
@@ -219,7 +223,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/index-2.html</loc>
-  <lastmod>2018-11-14T20:35:00Z</lastmod>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/listings/</loc>
@@ -320,6 +324,10 @@
  <url>
   <loc>https://parisni.github.io/weblog/posts/hive-reflexions/</loc>
   <lastmod>2018-11-11T21:11:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/posts/jupyter-notebooks-and-conda/</loc>
+  <lastmod>2018-11-16T18:17:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/loading-postgres-from-sqoop/</loc>
