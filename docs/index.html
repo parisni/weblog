@@ -12,7 +12,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/">
 <link rel="next" href="index-2.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/jupyter-notebooks-and-conda/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/pyspark-considerations/" type="text/html">
 </head>
 <body>
     <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -33,7 +33,64 @@
     
     
     </ul></nav></header><main id="content"><div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/jupyter-notebooks-and-conda/" class="u-url">Jupyter Notebooks and Conda</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/pyspark-considerations/" class="u-url">PySpark Considerations</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Parisni
+            </span></p>
+            <p class="dateline">
+            <a href="posts/pyspark-considerations/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-11-22T23:05:23+01:00" itemprop="datePublished" title="2018-11-22">2018-11-22</time></a>
+            </p>
+                <p class="commentline">            <a href="posts/pyspark-considerations/#disqus_thread" data-disqus-identifier="cache/posts/pyspark-considerations.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="p-summary entry-summary">
+    <div class="section" id="extracting-raw-data-from-hdfs">
+<h2>Extracting raw data from hdfs</h2>
+<p>I have tested multiple ways to get data from hdfs. There is two situations:</p>
+<div class="section" id="the-data-fits-in-a-local-node-ram-memory">
+<h3>The data fits in a local node RAM memory:</h3>
+<div class="system-message">
+<p class="system-message-title">System Message: WARNING/2 (<tt class="docutils">&lt;string&gt;</tt>, line 9)</p>
+<p>Title underline too short.</p>
+<pre class="literal-block">
+The data fits in a local node RAM memory:
+========================================
+</pre>
+</div>
+<pre class="code python"><a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-1"></a><span class="c1"># will produce a local csv</span>
+<a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
+<a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-3"></a>    <span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+<a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-4"></a>    <span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"myLocalFile.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span><span class="p">)</span>
+<a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-5"></a><span class="c1"># otherwise spark shell keeps running</span>
+<a name="rest_code_6c8cfbd18e1e44abbb8fd070f779625a-6"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre>
+<pre class="code bash"><a name="rest_code_7a5804532f8f4db1b948e5a2cb33110b-1"></a><span class="c1"># run the python script:</span>
+<a name="rest_code_7a5804532f8f4db1b948e5a2cb33110b-2"></a><span class="nv">PYTHONPATH</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
+</pre>
+</div>
+<div class="section" id="the-dataset-does-not-fit-into-ram-memory">
+<h3>The dataset does not fit into RAM memory:</h3>
+<pre class="code python"><a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-1"></a><span class="c1"># will produce some csv on hdfs</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-3"></a>    <span class="o">.</span><span class="n">write</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-4"></a>    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"csv"</span><span class="p">)</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-5"></a>    <span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"/output/dir/on/hdfs/"</span><span class="p">)</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-6"></a><span class="c1"># otherwise spark shell keeps running</span>
+<a name="rest_code_5e9a4fa3fa4b4e7da19ff786ef721433-7"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</pre>
+<pre class="code bash"><a name="rest_code_9fe59337cee0431fb7df493be2ceff5c-1"></a><span class="c1"># run the python script:</span>
+<a name="rest_code_9fe59337cee0431fb7df493be2ceff5c-2"></a><span class="nv">PYTHONPATH</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
+<a name="rest_code_9fe59337cee0431fb7df493be2ceff5c-3"></a><span class="c1"># merge the files on the local filesystem</span>
+<a name="rest_code_9fe59337cee0431fb7df493be2ceff5c-4"></a>hadoop fs -getmerge /output/dir/on/hdfs/ /desired/local/output/file.csv
+</pre>
+</div>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/jupyter-notebooks-and-conda/" class="u-url">Jupyter Notebooks and Conda</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 Parisni
@@ -239,31 +296,6 @@ comparable to the <strong>WHERE</strong> part of a SQL statement and allow combi
 operators. In particular the <strong>~b</strong> predicate allow to search within the email's
 body and the <cite>~X</cite> lets filter attachments.</p>
 <p class="more"><a href="posts/mutt-search/">Read more…</a></p>
-</div>
-    </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-sidebar/" class="u-url">Mutt &amp; Sidebar</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                Parisni
-            </span></p>
-            <p class="dateline">
-            <a href="posts/mutt-sidebar/" rel="bookmark">
-            <time class="published dt-published" datetime="2018-08-26T00:00:00+02:00" itemprop="datePublished" title="2018-08-26">2018-08-26</time></a>
-            </p>
-                <p class="commentline">            <a href="posts/mutt-sidebar/#disqus_thread" data-disqus-identifier="cache/posts/mutt-sidebar.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="p-summary entry-summary">
-    <div>
-<p>When receiving many mails a day, having a single mail pool makes easy to loose
-important emails. Using mailboxes (ie: sub folders) with rules becomes a need.
-The good point is all the mailboxes are regularly updated to alert when
-incoming email are received.  The few steps are generating a mailbox tree,
-mooving mails manually, mooving them automatically, and finally mooving the
-history in batch.</p>
-<p class="more"><a href="posts/mutt-sidebar/">Read more…</a></p>
 </div>
     </div>
     </article>
