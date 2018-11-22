@@ -13,6 +13,8 @@ Extracting raw data from hdfs
 
 I have tested multiple ways to get data from hdfs. There is two situations:
 
+.. END_TEASER
+
 
 The data fits in a local node RAM memory:
 =========================================
