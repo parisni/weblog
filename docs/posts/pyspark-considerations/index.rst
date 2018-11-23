@@ -1,7 +1,7 @@
 .. title: PySpark Considerations
 .. slug: pyspark-considerations
 .. date: 2018-11-22 23:05:23 UTC+01:00
-.. tags: python apache-spark
+.. tags: python, apache-spark
 .. category: data engineering
 .. link: 
 .. description: 

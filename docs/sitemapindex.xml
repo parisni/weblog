@@ -14,6 +14,10 @@
   <lastmod>2018-11-11T18:43:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://parisni.github.io/weblog/categories/apache-spark.xml</loc>
+  <lastmod>2018-11-23T08:11:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://parisni.github.io/weblog/categories/archlinux.xml</loc>
   <lastmod>2018-11-11T18:47:00Z</lastmod>
  </sitemap>
@@ -27,7 +31,7 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_data-engineering.xml</loc>
-  <lastmod>2018-11-22T22:33:00Z</lastmod>
+  <lastmod>2018-11-23T08:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_data-ingeniering.xml</loc>
@@ -155,11 +159,11 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/python-apache-spark.xml</loc>
-  <lastmod>2018-11-22T22:33:00Z</lastmod>
+  <lastmod>2018-11-22T22:37:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/python.xml</loc>
-  <lastmod>2018-11-16T18:17:00Z</lastmod>
+  <lastmod>2018-11-23T08:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/solr.xml</loc>
@@ -203,10 +207,10 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/rss.xml</loc>
-  <lastmod>2018-11-22T22:33:00Z</lastmod>
+  <lastmod>2018-11-23T08:11:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
-  <lastmod>2018-11-22T22:33:00Z</lastmod>
+  <lastmod>2018-11-23T08:11:00Z</lastmod>
  </sitemap>
 </sitemapindex>
