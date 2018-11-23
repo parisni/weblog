@@ -31,7 +31,7 @@ The data fits in a local node RAM memory:
 .. code-block:: bash
    
     # run the python script:
-    PYTHONPATH=my/python/path/prog.py pyspark --master yarn [...]
+    PYTHONSTARTUP=my/python/path/prog.py pyspark --master yarn [...]
 
 
 The dataset does not fit into RAM memory:
@@ -42,7 +42,7 @@ The dataset does not fit into RAM memory:
 
    # will produce some csv on hdfs
    sql("select * from my_table where true")
-       .write
+       .write()
        .format("csv")
        .save("/output/dir/on/hdfs/")
    # otherwise spark shell keeps running
