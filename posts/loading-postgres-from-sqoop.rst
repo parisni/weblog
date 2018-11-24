@@ -70,8 +70,8 @@ situation. That's the ultimate way to load PostgreSQL from Hadoop:
    --connect "jdbc:postgresql://<postgres_host>/<postgres_db>"\
    --username <postgres_user>\
    --password-file file:///home/$USER/.password\
-   --export-dir /apps/hive/warehouse/<my_db>/<my_table_path>\
-   --table <my_hive_table>\
+   --export-dir /apps/hive/warehouse/<my_db>/<my_csv_table>\
+   --table <my_postgres_table>\
    --columns "id, text_column"\
    -m 1\
    --direct\
@@ -81,3 +81,17 @@ situation. That's the ultimate way to load PostgreSQL from Hadoop:
    --input-null-non-string "\\\\N"\
    -- --schema <my_schema>
 
+
+In order to prepare the table ready to be loaded by sqoop, it can be
+transformed with a hive sql query:
+
+.. code-block:: sql
+
+   CREATE TABLE <my_db>.<my_csv_table> 
+   STORED AS textfile  
+   ROW FORMAT DELIMITED
+   FIELDS TERMINATED BY ','
+   LINES TERMINATED BY '\n'
+   AS
+   SELECT *
+   FROM <my_hive_table>
