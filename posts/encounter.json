@@ -1,0 +1,18 @@
+[
+{
+	"id": 1,
+		"type_s": "patient",
+		"patient_id":100,
+		"_childDocuments_": [
+		{
+			"id": 2,
+			"patient_id":100,
+			"type_s": "encounter",
+			"example_txt":["more001 first example","more010 second example"],
+			"lab_txt":["delay0030 XX1 0002"],
+			"old.section_crh": ["mode de foirage"]
+		}
+		]
+
+}
+]

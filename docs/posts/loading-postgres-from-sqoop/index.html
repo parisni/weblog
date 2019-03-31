@@ -120,31 +120,31 @@ making the overall process totally robust.</p>
 very fast and has been optimized to import dataset into postgreSQL, in the
 general case, the method can be generalized to any kind of CSV to work in any
 situation. That's the ultimate way to load PostgreSQL from Hadoop:</p>
-<pre class="code bash"><a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-1"></a>sqoop export<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-2"></a>--connect <span class="s2">"jdbc:postgresql://&lt;postgres_host&gt;/&lt;postgres_db&gt;"</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-3"></a>--username &lt;postgres_user&gt;<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-4"></a>--password-file file:///home/<span class="nv">$USER</span>/.password<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-5"></a>--export-dir /apps/hive/warehouse/&lt;my_db&gt;/&lt;my_csv_table&gt;<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-6"></a>--table &lt;my_postgres_table&gt;<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-7"></a>--columns <span class="s2">"id, text_column"</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-8"></a>-m <span class="m">1</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-9"></a>--direct<span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-10"></a>--lines-terminated-by <span class="s1">'\n'</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-11"></a>--fields-terminated-by <span class="s1">','</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-12"></a>--input-null-string <span class="s2">"\\\\N"</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-13"></a>--input-null-non-string <span class="s2">"\\\\N"</span><span class="se">\</span>
-<a name="rest_code_c2aa23d7a23e4563aba853bb118f85c9-14"></a>-- --schema &lt;my_schema&gt;
+<pre class="code bash"><a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-1"></a>sqoop export<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-2"></a>--connect <span class="s2">"jdbc:postgresql://&lt;postgres_host&gt;/&lt;postgres_db&gt;"</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-3"></a>--username &lt;postgres_user&gt;<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-4"></a>--password-file file:///home/<span class="nv">$USER</span>/.password<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-5"></a>--export-dir /apps/hive/warehouse/&lt;my_db&gt;/&lt;my_csv_table&gt;<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-6"></a>--table &lt;my_postgres_table&gt;<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-7"></a>--columns <span class="s2">"id, text_column"</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-8"></a>-m <span class="m">1</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-9"></a>--direct<span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-10"></a>--lines-terminated-by <span class="s1">'\n'</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-11"></a>--fields-terminated-by <span class="s1">','</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-12"></a>--input-null-string <span class="s2">"\\\\N"</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-13"></a>--input-null-non-string <span class="s2">"\\\\N"</span><span class="se">\</span>
+<a name="rest_code_f4b2546a941d4342b4266dbca6ecdc5d-14"></a>-- --schema &lt;my_schema&gt;
 </pre>
 <p>In order to prepare the table ready to be loaded by sqoop, it can be
 transformed with a hive sql query:</p>
-<pre class="code sql"><a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-1"></a><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">my_db</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">my_csv_table</span><span class="o">&gt;</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-2"></a><span class="n">STORED</span> <span class="k">AS</span> <span class="n">textfile</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-3"></a><span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-4"></a><span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-5"></a><span class="n">LINES</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">'\n'</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-6"></a><span class="k">AS</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-7"></a><span class="k">SELECT</span> <span class="o">*</span>
-<a name="rest_code_65cd6a10409240b8bdedc4a781584cd8-8"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">my_hive_table</span><span class="o">&gt;</span>
+<pre class="code sql"><a name="rest_code_f350d9aad9f544b9b64e111397daca15-1"></a><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">&lt;</span><span class="n">my_db</span><span class="o">&gt;</span><span class="p">.</span><span class="o">&lt;</span><span class="n">my_csv_table</span><span class="o">&gt;</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-2"></a><span class="n">STORED</span> <span class="k">AS</span> <span class="n">textfile</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-3"></a><span class="k">ROW</span> <span class="n">FORMAT</span> <span class="n">DELIMITED</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-4"></a><span class="n">FIELDS</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">','</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-5"></a><span class="n">LINES</span> <span class="n">TERMINATED</span> <span class="k">BY</span> <span class="s1">'\n'</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-6"></a><span class="k">AS</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-7"></a><span class="k">SELECT</span> <span class="o">*</span>
+<a name="rest_code_f350d9aad9f544b9b64e111397daca15-8"></a><span class="k">FROM</span> <span class="o">&lt;</span><span class="n">my_hive_table</span><span class="o">&gt;</span>
 </pre>
 </div>
 </div>

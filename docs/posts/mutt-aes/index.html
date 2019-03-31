@@ -78,32 +78,32 @@ The key pair can then be extra">
 </ul>
 <p>The key pair can then be extracted in p12 format from Firefox and it is
 possible to transform it to rsa format:</p>
-<pre class="code bash"><a name="rest_code_e4430f31255d4b38a0a4b2a5a145ca20-1"></a>openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/<span class="nv">$USER</span>/.ssh/id_rsa_cacert
+<pre class="code bash"><a name="rest_code_e1f073f364ff493f8f55caa3743c9819-1"></a>openssl pkcs12 -in ~/Downloads/cacert.p12 -out /home/<span class="nv">$USER</span>/.ssh/id_rsa_cacert
 </pre>
 </div>
 <div class="section" id="installing-neomutt-from-source-on-ubuntu-18-04">
 <h2>Installing neomutt from source on Ubuntu 18.04</h2>
-<pre class="code bash"><a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-1"></a>sudo apt install libncursesw5-dev
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-2"></a>sudo apt install libidn11-dev
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-3"></a>git clone https://github.com/neomutt/neomutt
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-4"></a><span class="nb">cd</span> neomutt
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-5"></a>./configure
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-6"></a>make
-<a name="rest_code_6f34a0dd84d04f2387f3c15d0345073e-7"></a>sudo make install
+<pre class="code bash"><a name="rest_code_fea0f3a2f052494c9bf372300d52b797-1"></a>sudo apt install libncursesw5-dev
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-2"></a>sudo apt install libidn11-dev
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-3"></a>git clone https://github.com/neomutt/neomutt
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-4"></a><span class="nb">cd</span> neomutt
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-5"></a>./configure
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-6"></a>make
+<a name="rest_code_fea0f3a2f052494c9bf372300d52b797-7"></a>sudo make install
 </pre>
 </div>
 <div class="section" id="loading-the-key-into-mutt">
 <h2>Loading the key into mutt</h2>
 <p>It is necessary to setup and use smime_key command to manage keys. It will
 generate a KeyID for the certificate (something like xxxxxx.0)</p>
-<pre class="code bash"><a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-1"></a>cp /home/<span class="nv">$USER</span>/git/neomutt/contrib/smime.rc ~/.smime.rc
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-2"></a>/usr/libexec/neomutt/smime_keys init
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-3"></a>mkdir -p ~/.smime/certificates
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-4"></a>touch ~/.smime/certificates/.index
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-5"></a>mkdir -p ~/.smime/keys
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-6"></a>touch ~/.smime/keys/.index
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-7"></a>/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
-<a name="rest_code_9b0ec0f6d13a4d29928d152944c31793-8"></a>/usr/libexec/neomutt/smime_keys refresh
+<pre class="code bash"><a name="rest_code_5ec0f1ec722441acaf6469440673f510-1"></a>cp /home/<span class="nv">$USER</span>/git/neomutt/contrib/smime.rc ~/.smime.rc
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-2"></a>/usr/libexec/neomutt/smime_keys init
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-3"></a>mkdir -p ~/.smime/certificates
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-4"></a>touch ~/.smime/certificates/.index
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-5"></a>mkdir -p ~/.smime/keys
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-6"></a>touch ~/.smime/keys/.index
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-7"></a>/usr/libexec/neomutt/smime_keys add_p12 ~/Download/cacert.p12
+<a name="rest_code_5ec0f1ec722441acaf6469440673f510-8"></a>/usr/libexec/neomutt/smime_keys refresh
 </pre>
 <ul class="simple">
 <li>Add to <cite>source /home/$USER/.smime.rc</cite> to .muttrc</li>

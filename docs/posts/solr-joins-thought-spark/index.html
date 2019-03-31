@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html prefix="
+        og: http://ogp.me/ns# article: http://ogp.me/ns/article#
+    " vocab="http://ogp.me/ns" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="description" content="Explore the benefit from bridging solr and spark">
+<meta name="viewport" content="width=device-width">
+<title>Solr joins thought Spark | Software Lobotomy</title>
+<link href="../../assets/css/all-nocdn.css" rel="stylesheet" type="text/css">
+<meta name="theme-color" content="#5670d4">
+<meta name="generator" content="Nikola (getnikola.com)">
+<link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="../../rss.xml">
+<link rel="canonical" href="https://parisni.github.io/weblog/posts/solr-joins-thought-spark/">
+<!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
+<meta property="og:site_name" content="Software Lobotomy">
+<meta property="og:title" content="Solr joins thought Spark">
+<meta property="og:url" content="https://parisni.github.io/weblog/posts/solr-joins-thought-spark/">
+<meta property="og:description" content="Explore the benefit from bridging solr and spark">
+<meta property="og:type" content="article">
+<meta property="article:published_time" content="2019-01-13T13:48:14+01:00">
+<meta property="article:tag" content="spark">
+</head>
+<body>
+    <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
+    <div id="container">
+             <header id="header"><h1 id="brand"><a href="https://parisni.github.io/weblog/" title="Software Lobotomy" rel="home">
+
+        <span id="blog-title">Software Lobotomy</span>
+    </a></h1>
+
+        
+            <nav id="menu"><ul>
+<li><a href="../../categories/">Tags</a></li>
+                <li><a href="../../archive.html">Archive</a></li>
+                <li><a href="../../stories/about/">About</a></li>
+                <li><a href="../../rss.xml">RSS</a></li>
+
+    
+    
+    
+    </ul></nav></header><main id="content"><article class="post-text h-entry hentry postpage" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title" itemprop="headline name"><a href="." class="u-url">Solr joins thought Spark</a></h1>
+
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                    Parisni
+            </span></p>
+            <p class="dateline">
+            <a href="." rel="bookmark">
+            <time class="published dt-published" datetime="2019-01-13T13:48:14+01:00" itemprop="datePublished" title="2019-01-13">2019-01-13</time></a>
+            </p>
+                <p class="commentline">            <a href="#disqus_thread" data-disqus-identifier="cache/posts/solr-joins-thought-spark.html">Comments</a>
+
+
+            
+        </p>
+</div>
+        
+    </header><div class="e-content entry-content" itemprop="articleBody text">
+    <div>
+<div class="section" id="context">
+<h2>Context</h2>
+<p>SolR is great to search within complexes documents. However it is weak to make
+complexes joins between documents and lack for expressive languages. Combining
+both solr and spark let envisage having best of two worlds.</p>
+<div class="section" id="dataset">
+<h3>Dataset</h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%">
+<col width="45%">
+</colgroup>
+<tbody valign="top">
+<tr>
+<td>patient_id</td>
+<td>visit_id</td>
+</tr>
+<tr>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="r1">
+<h3>R1</h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%">
+<col width="45%">
+</colgroup>
+<tbody valign="top">
+<tr>
+<td>patient_id</td>
+<td>visit_id</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>1</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="r2">
+<h3>R2</h3>
+<table border="1" class="docutils">
+<colgroup>
+<col width="55%">
+<col width="45%">
+</colgroup>
+<tbody valign="top">
+<tr>
+<td>patient_id</td>
+<td>visit_id</td>
+</tr>
+<tr>
+<td>1</td>
+<td>2</td>
+</tr>
+<tr>
+<td>2</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="section" id="use-case-q1-and-q2">
+<h2>Use case: Q1 AND Q2</h2>
+<p>Let's say you have defined two queries Q1 and Q2 which have respectively R1 and
+R2. Now you d'like to know which patients have both kind of visits.</p>
+<pre class="code sql"><a name="rest_code_9b26cdbf607b45e68cce15b144e016d7-1"></a><span class="k">SELECT</span> <span class="n">R1</span><span class="p">.</span><span class="n">patient_id</span><span class="p">,</span> <span class="n">R1</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_9b26cdbf607b45e68cce15b144e016d7-2"></a><span class="k">FROM</span> <span class="n">R1</span>
+<a name="rest_code_9b26cdbf607b45e68cce15b144e016d7-3"></a><span class="k">JOIN</span> <span class="n">R2</span> <span class="k">USING</span> <span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_9b26cdbf607b45e68cce15b144e016d7-4"></a><span class="k">WHERE</span> <span class="k">AND</span>
+<a name="rest_code_9b26cdbf607b45e68cce15b144e016d7-5"></a><span class="n">R2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">R1</span><span class="p">.</span><span class="n">visit_id</span>
+</pre>
+</div>
+<div class="section" id="use-case-q1-or-q2">
+<h2>Use Case: Q1 OR Q2</h2>
+<pre class="code sql"><a name="rest_code_3f011cdee0964a49b3da958bcce0901c-1"></a><span class="p">(</span><span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">visit_id</span> <span class="k">FROM</span> <span class="n">R1</span><span class="p">)</span>
+<a name="rest_code_3f011cdee0964a49b3da958bcce0901c-2"></a><span class="k">UNION</span>
+<a name="rest_code_3f011cdee0964a49b3da958bcce0901c-3"></a><span class="p">(</span><span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">visit_id</span> <span class="k">FROM</span> <span class="n">R2</span><span class="p">)</span>
+</pre>
+</div>
+<div class="section" id="use-case-q1-and-not-q2">
+<h2>Use Case: Q1 AND NOT Q2</h2>
+<pre class="code sql"><a name="rest_code_127379714a1742e3b63cc98ef505d572-1"></a><span class="p">(</span><span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">visit_id</span> <span class="k">FROM</span> <span class="n">R1</span><span class="p">)</span>
+<a name="rest_code_127379714a1742e3b63cc98ef505d572-2"></a><span class="n">MINUS</span>
+<a name="rest_code_127379714a1742e3b63cc98ef505d572-3"></a><span class="p">(</span><span class="k">SELECT</span> <span class="n">patient_id</span><span class="p">,</span> <span class="n">visit_id</span> <span class="k">FROM</span> <span class="n">R2</span><span class="p">)</span>
+</pre>
+</div>
+<div class="section" id="use-case-q1-then-q2">
+<h2>Use Case: Q1 THEN Q2</h2>
+<p>Say we also have date along with data.</p>
+<p>Say you want all Patients who had Q2 &gt;1&gt; Q1. You need to have the dates.</p>
+<pre class="code sql"><a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-1"></a><span class="k">SELECT</span> <span class="n">R1</span><span class="p">.</span><span class="n">patient_id</span><span class="p">,</span> <span class="n">R1</span><span class="p">.</span><span class="n">visit_id</span><span class="p">,</span> <span class="n">R1</span><span class="p">.</span><span class="nb">date</span>
+<a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-2"></a><span class="k">FROM</span> <span class="n">R1</span>
+<a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-3"></a><span class="k">JOIN</span> <span class="n">R2</span> <span class="k">USING</span> <span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-4"></a><span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-5"></a><span class="k">AND</span> <span class="n">R2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">R1</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_2e6d3d56c0764420980ca831ba8929d3-6"></a><span class="k">AND</span> <span class="n">R2</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;</span> <span class="n">R1</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">1</span>
+</pre>
+</div>
+<div class="section" id="operations">
+<h2>Operations</h2>
+<p>Given this formula: <strong>(Q1 AND Q2) &lt;2&lt; Q3</strong></p>
+<pre class="code sql"><a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-1"></a><span class="k">WITH</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-2"></a><span class="n">Q1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-3"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-4"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-5"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-6"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-7"></a><span class="n">Q2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-8"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-9"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-10"></a><span class="n">Q3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">5</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-11"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-12"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-13"></a><span class="n">T1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-14"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-15"></a>        <span class="k">JOIN</span> <span class="n">Q2</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-16"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-17"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-18"></a><span class="n">T2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-19"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-20"></a>        <span class="k">JOIN</span> <span class="n">Q3</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-21"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-22"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-23"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;</span> <span class="n">Q1</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">2</span><span class="p">),</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-24"></a><span class="n">T3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q2</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-25"></a>        <span class="k">FROM</span> <span class="n">Q2</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-26"></a>        <span class="k">JOIN</span> <span class="n">Q3</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-27"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-28"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-29"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;</span> <span class="n">Q2</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-30"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T1</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-31"></a><span class="k">INTERSECT</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-32"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T2</span><span class="p">)</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-33"></a><span class="k">INTERSECT</span>
+<a name="rest_code_023f91d589ea4cb3879f5f3ffcd68f44-34"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T2</span><span class="p">)</span>
+</pre>
+<p>Given this formula: <strong>(Q1 OR Q2) AND Q3</strong></p>
+<pre class="code sql"><a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-1"></a><span class="k">WITH</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-2"></a><span class="n">Q1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-3"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-4"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-5"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-6"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-7"></a><span class="n">Q2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-8"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-9"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">4</span><span class="p">),</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-10"></a><span class="n">Q3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">5</span> <span class="k">as</span> <span class="nb">date</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-11"></a>        <span class="k">UNION</span> <span class="k">ALL</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-12"></a>       <span class="k">SELECT</span> <span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">6</span><span class="p">),</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-13"></a><span class="n">T1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-14"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-15"></a>        <span class="k">UNION</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-16"></a>        <span class="k">SELECT</span> <span class="n">Q2</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-17"></a>        <span class="k">FROM</span> <span class="n">Q2</span><span class="p">),</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-18"></a><span class="n">T2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q3</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-19"></a>        <span class="k">FROM</span> <span class="n">Q3</span><span class="p">)</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-20"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T1</span><span class="p">)</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-21"></a><span class="k">INTERSECT</span>
+<a name="rest_code_c41d88a2d06f4e5c92f3a312e7635c1d-22"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T2</span><span class="p">)</span>
+</pre>
+<p>Given this formula: <strong>Q1 AND Q2 AND Q3</strong></p>
+<pre class="code sql"><a name="rest_code_18cf7d49b9694237949622da3cace2f6-1"></a><span class="k">WITH</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-2"></a><span class="n">Q1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-3"></a><span class="n">Q2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-4"></a><span class="n">Q3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-5"></a><span class="n">T1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-6"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-7"></a>        <span class="k">JOIN</span> <span class="n">Q2</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-8"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-9"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-10"></a><span class="n">T2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q2</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-11"></a>        <span class="k">FROM</span> <span class="n">Q2</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-12"></a>        <span class="k">JOIN</span> <span class="n">Q3</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-13"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-14"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span><span class="p">),</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-15"></a><span class="n">T3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-16"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-17"></a>        <span class="k">JOIN</span> <span class="n">Q3</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-18"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-19"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-20"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T1</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-21"></a><span class="k">INTERSECT</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-22"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T2</span><span class="p">)</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-23"></a><span class="k">INTERSECT</span>
+<a name="rest_code_18cf7d49b9694237949622da3cace2f6-24"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T3</span><span class="p">)</span>
+</pre>
+<p>Given this formula: <strong>Q1 &lt;1&lt; Q2 &lt;1&lt; Q3</strong></p>
+<pre class="code sql"><a name="rest_code_977b66171b2f425480da3dd93aa6cdca-1"></a><span class="k">WITH</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-2"></a><span class="n">Q1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-3"></a><span class="n">Q2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">4</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-4"></a><span class="n">Q3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">5</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-5"></a><span class="n">T1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-6"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-7"></a>        <span class="k">JOIN</span> <span class="n">Q2</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-8"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-9"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-10"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;=</span> <span class="n">Q1</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-11"></a><span class="n">T2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q2</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-12"></a>        <span class="k">FROM</span> <span class="n">Q2</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-13"></a>        <span class="k">JOIN</span> <span class="n">Q3</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-14"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-15"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-16"></a>        <span class="k">AND</span> <span class="n">Q3</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;=</span> <span class="n">Q2</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-17"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T1</span><span class="p">)</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-18"></a><span class="k">INTERSECT</span>
+<a name="rest_code_977b66171b2f425480da3dd93aa6cdca-19"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T2</span><span class="p">)</span>
+</pre>
+<p>Given this formula: <strong>Q1 &lt;1&lt; Q2 AND NOT Q3</strong></p>
+<pre class="code sql"><a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-1"></a><span class="k">WITH</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-2"></a><span class="n">Q1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-3"></a><span class="n">Q2</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">2</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">4</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-4"></a><span class="n">Q3</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="mi">1</span> <span class="k">as</span> <span class="n">patient_id</span><span class="p">,</span> <span class="mi">3</span> <span class="k">as</span> <span class="n">visit_id</span><span class="p">,</span> <span class="mi">5</span> <span class="k">as</span> <span class="nb">date</span><span class="p">),</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-5"></a><span class="n">T1</span> <span class="k">as</span>  <span class="p">(</span><span class="k">SELECT</span> <span class="n">Q1</span><span class="p">.</span><span class="n">patient_id</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-6"></a>        <span class="k">FROM</span> <span class="n">Q1</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-7"></a>        <span class="k">JOIN</span> <span class="n">Q2</span> <span class="k">USING</span><span class="p">(</span><span class="n">patient_id</span><span class="p">)</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-8"></a>        <span class="k">WHERE</span> <span class="k">TRUE</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-9"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="n">visit_id</span> <span class="o">!=</span> <span class="n">Q1</span><span class="p">.</span><span class="n">visit_id</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-10"></a>        <span class="k">AND</span> <span class="n">Q2</span><span class="p">.</span><span class="nb">date</span> <span class="o">&gt;=</span> <span class="n">Q1</span><span class="p">.</span><span class="nb">date</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-11"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">T1</span><span class="p">)</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-12"></a><span class="n">MINUS</span>
+<a name="rest_code_635f0de3fc074e98a1ea0feb861f9eed-13"></a><span class="p">(</span><span class="k">SELECT</span> <span class="o">*</span> <span class="k">FROM</span> <span class="n">Q3</span><span class="p">)</span>
+</pre>
+</div>
+<div class="section" id="isolating-matching-records">
+<h2>Isolating matching records</h2>
+<p>For each Qn it would be interesting to get the matching visit. This allows to
+run the solr queries afterwards.</p>
+</div>
+</div>
+    </div>
+    <aside class="postpromonav"><nav><ul itemprop="keywords" class="tags">
+<li><a class="tag p-category" href="../../categories/spark/" rel="tag">spark</a></li>
+        </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
+                        <div id="disqus_thread"></div>
+        <script>
+        var disqus_shortname ="softwareLobotomy",
+            disqus_url="https://parisni.github.io/weblog/posts/solr-joins-thought-spark/",
+        disqus_title="Solr joins thought Spark",
+        disqus_identifier="cache/posts/solr-joins-thought-spark.html",
+        disqus_config = function () {
+            this.language = "en";
+        };
+        (function() {
+            var dsq = document.createElement('script'); dsq.async = true;
+            dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+            (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+        })();
+    </script><noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a>
+</noscript>
+    <a href="https://disqus.com" class="dsq-brlink" rel="nofollow">Comments powered by <span class="logo-disqus">Disqus</span></a>
+
+
+        </section></article><script>var disqus_shortname="softwareLobotomy";(function(){var a=document.createElement("script");a.async=true;a.src="https://"+disqus_shortname+".disqus.com/count.js";(document.getElementsByTagName("head")[0]||document.getElementsByTagName("body")[0]).appendChild(a)}());</script></main>
+</div>
+                <script src="../../assets/js/all-nocdn.js"></script><script>
+    baguetteBox.run('div#content', {
+        ignoreClass: 'islink',
+        captions: function(element) {
+            return element.getElementsByTagName('img')[0].alt;
+    }});
+    </script>
+</body>
+</html>

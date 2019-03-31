@@ -1,0 +1,11 @@
+q=type_s:encounter AND ccam_txt:"YY1 DP" AND patient_age_i:[10 TO 30] AND _query_:"{!complexphrase}crh.section1_txt:\"*ode vi*\"~3" AND  _query_:"{!complexphrase inOrder=true}ward_txt:\"emergency icu surgery\"~2"
+&hl=true
+&hl.fl=*
+&hl.method=original
+&hl.requireFieldMatch=true
+&hl.highlightMultiTerm=true
+&hl.usePhraseHighlighter=true
+&hl.useFastVectorHighlighter=true
+&fl=id,patient_id_i
+&hl.mergeContiguous=true
+&json.facet={x:"unique(patient_id_i)"}

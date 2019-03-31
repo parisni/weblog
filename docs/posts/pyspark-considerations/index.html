@@ -13,6 +13,7 @@
 <link rel="canonical" href="https://parisni.github.io/weblog/posts/pyspark-considerations/">
 <!--[if lt IE 9]><script src="../../assets/js/html5shiv-printshiv.min.js"></script><![endif]--><meta name="author" content="Parisni">
 <link rel="prev" href="../jupyter-notebooks-and-conda/" title="Jupyter Notebooks and Conda" type="text/html">
+<link rel="next" href="../concatenating-pdf/" title="Concatenating pdf" type="text/html">
 <meta property="og:site_name" content="Software Lobotomy">
 <meta property="og:title" content="PySpark Considerations">
 <meta property="og:url" content="https://parisni.github.io/weblog/posts/pyspark-considerations/">
@@ -70,31 +71,31 @@ sql("select * from my_t'>
 <!-- END_TEASER -->
 <div class="section" id="the-data-fits-in-a-local-node-ram-memory">
 <h3>The data fits in a local node RAM memory:</h3>
-<pre class="code python"><a name="rest_code_c778a3bdf432401f892e649ee4dd7712-1"></a><span class="c1"># will produce a local csv</span>
-<a name="rest_code_c778a3bdf432401f892e649ee4dd7712-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
-<a name="rest_code_c778a3bdf432401f892e649ee4dd7712-3"></a>    <span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
-<a name="rest_code_c778a3bdf432401f892e649ee4dd7712-4"></a>    <span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"myLocalFile.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span><span class="p">)</span>
-<a name="rest_code_c778a3bdf432401f892e649ee4dd7712-5"></a><span class="c1"># otherwise spark shell keeps running</span>
-<a name="rest_code_c778a3bdf432401f892e649ee4dd7712-6"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<pre class="code python"><a name="rest_code_056d86152c944b7f90a6568e823daeb9-1"></a><span class="c1"># will produce a local csv</span>
+<a name="rest_code_056d86152c944b7f90a6568e823daeb9-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
+<a name="rest_code_056d86152c944b7f90a6568e823daeb9-3"></a>    <span class="o">.</span><span class="n">toPandas</span><span class="p">()</span>
+<a name="rest_code_056d86152c944b7f90a6568e823daeb9-4"></a>    <span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="s2">"myLocalFile.csv"</span><span class="p">,</span> <span class="n">encoding</span><span class="o">=</span><span class="s2">"utf8"</span><span class="p">)</span>
+<a name="rest_code_056d86152c944b7f90a6568e823daeb9-5"></a><span class="c1"># otherwise spark shell keeps running</span>
+<a name="rest_code_056d86152c944b7f90a6568e823daeb9-6"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre>
-<pre class="code bash"><a name="rest_code_6adb39021a304a05a552daa678ca919f-1"></a><span class="c1"># run the python script:</span>
-<a name="rest_code_6adb39021a304a05a552daa678ca919f-2"></a><span class="nv">PYTHONSTARTUP</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
+<pre class="code bash"><a name="rest_code_2d23aab2fda741f58397ca7b4a58af6c-1"></a><span class="c1"># run the python script:</span>
+<a name="rest_code_2d23aab2fda741f58397ca7b4a58af6c-2"></a><span class="nv">PYTHONSTARTUP</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
 </pre>
 </div>
 <div class="section" id="the-dataset-does-not-fit-into-ram-memory">
 <h3>The dataset does not fit into RAM memory:</h3>
-<pre class="code python"><a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-1"></a><span class="c1"># will produce some csv on hdfs</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-3"></a>    <span class="o">.</span><span class="n">write</span><span class="p">()</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-4"></a>    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"csv"</span><span class="p">)</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-5"></a>    <span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"/output/dir/on/hdfs/"</span><span class="p">)</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-6"></a><span class="c1"># otherwise spark shell keeps running</span>
-<a name="rest_code_e02a6a127c8c48eeadc3fdad84dbf017-7"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+<pre class="code python"><a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-1"></a><span class="c1"># will produce some csv on hdfs</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-2"></a><span class="n">sql</span><span class="p">(</span><span class="s2">"select * from my_table where true"</span><span class="p">)</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-3"></a>    <span class="o">.</span><span class="n">write</span><span class="p">()</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-4"></a>    <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="s2">"csv"</span><span class="p">)</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-5"></a>    <span class="o">.</span><span class="n">save</span><span class="p">(</span><span class="s2">"/output/dir/on/hdfs/"</span><span class="p">)</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-6"></a><span class="c1"># otherwise spark shell keeps running</span>
+<a name="rest_code_9424f3ad7b0f4c1497927b91d3fdc46a-7"></a><span class="nb">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 </pre>
-<pre class="code bash"><a name="rest_code_84848e03825d43f3b90dc7a8f222b58b-1"></a><span class="c1"># run the python script:</span>
-<a name="rest_code_84848e03825d43f3b90dc7a8f222b58b-2"></a><span class="nv">PYTHONPATH</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
-<a name="rest_code_84848e03825d43f3b90dc7a8f222b58b-3"></a><span class="c1"># merge the files on the local filesystem</span>
-<a name="rest_code_84848e03825d43f3b90dc7a8f222b58b-4"></a>hadoop fs -getmerge /output/dir/on/hdfs/ /desired/local/output/file.csv
+<pre class="code bash"><a name="rest_code_34df01300e154fec83b26c735e0bce0c-1"></a><span class="c1"># run the python script:</span>
+<a name="rest_code_34df01300e154fec83b26c735e0bce0c-2"></a><span class="nv">PYTHONPATH</span><span class="o">=</span>my/python/path/prog.py pyspark --master yarn <span class="o">[</span>...<span class="o">]</span>
+<a name="rest_code_34df01300e154fec83b26c735e0bce0c-3"></a><span class="c1"># merge the files on the local filesystem</span>
+<a name="rest_code_34df01300e154fec83b26c735e0bce0c-4"></a>hadoop fs -getmerge /output/dir/on/hdfs/ /desired/local/output/file.csv
 </pre>
 </div>
 </div>
@@ -106,6 +107,9 @@ sql("select * from my_t'>
 <ul class="pager hidden-print">
 <li class="previous">
                 <a href="../jupyter-notebooks-and-conda/" rel="prev" title="Jupyter Notebooks and Conda">Previous post</a>
+            </li>
+            <li class="next">
+                <a href="../concatenating-pdf/" rel="next" title="Concatenating pdf">Next post</a>
             </li>
         </ul></nav></aside><section class="comments hidden-print"><h2>Comments</h2>
                         <div id="disqus_thread"></div>

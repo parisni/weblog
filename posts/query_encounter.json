@@ -1,0 +1,2 @@
+q=_query_:"{!complexphrase}(example_txt:\"second first\")"
+&sow=false&hl=true&hl.fl=*&hl.method=unified&hl.requireFieldMatch=false&hl.useFastVectorHighlighter=true&hl.mergeContiguous=false&hl.snippets=2&fl=id,patient_id

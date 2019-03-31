@@ -1,0 +1,12 @@
+q=*:*
+&fq={!parent which="type_s:patient"}(id:2 AND order_i:1 ) OR (id:3 AND order_i:2 )
+&hl=true
+&hl.fl=*
+&hl.method=unified
+&hl.requireFieldMatch=true
+&hl.highlightMultiTerm=true
+&hl.usePhraseHighlighter=true
+&hl.useFastVectorHighlighter=true
+&fl=id,patient_id_i
+&hl.mergeContiguous=true
+&json.facet={x:"unique(patient_id_i)"}

@@ -12,7 +12,7 @@
 <link rel="alternate" type="application/rss+xml" title="RSS" hreflang="en" href="rss.xml">
 <link rel="canonical" href="https://parisni.github.io/weblog/">
 <link rel="next" href="index-2.html" type="text/html">
-<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/pyspark-considerations/" type="text/html">
+<!--[if lt IE 9]><script src="assets/js/html5shiv-printshiv.min.js"></script><![endif]--><link rel="prefetch" href="posts/concatenating-pdf/" type="text/html">
 </head>
 <body>
     <a href="#content" class="sr-only sr-only-focusable">Skip to main content</a>
@@ -33,7 +33,34 @@
     
     
     </ul></nav></header><main id="content"><div class="postindex">
-    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/pyspark-considerations/" class="u-url">PySpark Considerations</a></h1>
+    <article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/concatenating-pdf/" class="u-url">Concatenating pdf</a></h1>
+        <div class="metadata">
+            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
+                Parisni
+            </span></p>
+            <p class="dateline">
+            <a href="posts/concatenating-pdf/" rel="bookmark">
+            <time class="published dt-published" datetime="2018-12-17T14:48:34+01:00" itemprop="datePublished" title="2018-12-17">2018-12-17</time></a>
+            </p>
+                <p class="commentline">            <a href="posts/concatenating-pdf/#disqus_thread" data-disqus-identifier="cache/posts/concatenating-pdf.html">Comments</a>
+
+
+        </p>
+</div>
+    </header><div class="p-summary entry-summary">
+    <div>
+<p>The command below is great to concat multiple pdf together. I had some problem with pdftk.</p>
+<pre class="code bash"><a name="rest_code_9b2e765545184e698e46dbef1aa40007-1"></a>gs -dBATCH -dNOPAUSE -q -sDEVICE<span class="o">=</span>pdfwrite -sOutputFile<span class="o">=</span>merged.pdf mine1.pdf mine2.pdf
+</pre>
+<p>Also this command allows to compress a large pdf into something smaller:</p>
+<pre class="code bash"><a name="rest_code_710c765c493a4041ba99e74cdd2b0c91-1"></a>gs -sDEVICE<span class="o">=</span>pdfwrite -dCompatibilityLevel<span class="o">=</span><span class="m">1</span>.4 -dPDFSETTINGS<span class="o">=</span>/default -dNOPAUSE -dQUIET -dBATCH -dDetectDuplicateImages -dCompressFonts<span class="o">=</span><span class="nb">true</span> -r150 -sOutputFile<span class="o">=</span>output.pdf input.pdf
+</pre>
+<p>It is also possible to split pdf with pdfbox:</p>
+<pre class="code bash"><a name="rest_code_0a8710ac6daa46b5985c58e3e322d9de-1"></a>java -jar /app/edsr/script/java/pdfbox-app-2.0.0-SNAPSHOT.jar PDFSplit ./authorisation-inscription.pdf
+</pre>
+</div>
+    </div>
+    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/pyspark-considerations/" class="u-url">PySpark Considerations</a></h1>
         <div class="metadata">
             <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
                 Parisni
@@ -73,9 +100,9 @@
 <p>After creating a environment with conda and installing packages, the jupyter
 notebook environment may not see them. The method below adds a new kernel based
 on the later environment and allow to benefit from conda:</p>
-<pre class="code bash"><a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-1"></a>conda activate my-env
-<a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-2"></a>conda  create -n my-env pip setuptools ipykernel <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5
-<a name="rest_code_467d4b1532e34be4b3f43a0eda560fdb-3"></a>python -m ipykernel install --user --name my-env --display-name <span class="s2">"Python (my-env)"</span>
+<pre class="code bash"><a name="rest_code_b577289613a24759b40fa5f1366ed535-1"></a>conda activate my-env
+<a name="rest_code_b577289613a24759b40fa5f1366ed535-2"></a>conda  create -n my-env pip setuptools ipykernel <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.5
+<a name="rest_code_b577289613a24759b40fa5f1366ed535-3"></a>python -m ipykernel install --user --name my-env --display-name <span class="s2">"Python (my-env)"</span>
 </pre>
 </div>
     </div>
@@ -236,30 +263,6 @@ information can be found <a class="reference external" href="https://www.ietf.or
 <p>Having a correct spelling is important in society. This is true specially when
 come time to write emails.</p>
 <p class="more"><a href="posts/mutt-vim/">Read more…</a></p>
-</div>
-    </div>
-    </article><article class="h-entry post-text" itemscope="itemscope" itemtype="http://schema.org/Article"><header><h1 class="p-name entry-title"><a href="posts/mutt-search/" class="u-url">Mutt Search on Steroids</a></h1>
-        <div class="metadata">
-            <p class="byline author vcard"><span class="byline-name fn" itemprop="author">
-                Parisni
-            </span></p>
-            <p class="dateline">
-            <a href="posts/mutt-search/" rel="bookmark">
-            <time class="published dt-published" datetime="2018-08-30T00:00:00+02:00" itemprop="datePublished" title="2018-08-30">2018-08-30</time></a>
-            </p>
-                <p class="commentline">            <a href="posts/mutt-search/#disqus_thread" data-disqus-identifier="cache/posts/mutt-notmuch.html">Comments</a>
-
-
-        </p>
-</div>
-    </header><div class="p-summary entry-summary">
-    <div>
-<p>Mutt has a powerful feature to dig into the history: the <strong>limit</strong> feature. By
-pressing <cite>l</cite> it is then possible to write a query to filter the mails. It is
-comparable to the <strong>WHERE</strong> part of a SQL statement and allow combining <strong>AND</strong>
-operators. In particular the <strong>~b</strong> predicate allow to search within the email's
-body and the <cite>~X</cite> lets filter attachments.</p>
-<p class="more"><a href="posts/mutt-search/">Read more…</a></p>
 </div>
     </div>
     </article>

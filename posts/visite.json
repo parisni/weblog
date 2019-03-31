@@ -1,0 +1,66 @@
+[
+{
+	"id": 1,
+	"type_s": "patient",
+	"birth_d":"20180101",
+	"age_i":20,
+	"number_encounter_i":2,
+	"_childDocuments_": [
+	{
+		"id": 2,
+		"type_s": "encounter",
+		"patient_id_i":1,
+		"patient_age_i":20,
+		"age_i":20,
+		"begin_d":"20180101",
+		"end_d":"20180101",
+		"delay_day_i":0,
+		"order_i":1,
+		"cim10_txt": ["YY1/DP","XX1/DAS"],
+		"ccam_txt": ["YY1/DP","XX1/DAS"],
+		"lab_txt": ["BK/0000032.8/Celcius","BK/0000032.8/Celcius"],
+		"ward_txt": ["emergency icu general surgery"],
+		"crh.section1_txt": ["mode de vie","mode de vie"],
+		"old.patient_id_i":1,
+		"old.patient_age_i":20,
+		"old.age_i":19,
+		"old.delay_day_i":800,
+		"old.order_i":2,
+		"old.begin_d":"20180101",
+		"old.end_d":["20180101"],
+		"old.ccam_txt": ["YY1/DP","XX1/DAS","YY3/DP","XX4/DAS"],
+		"old.crh.section2_txt": ["mode de mort","mode de mort","mode de foirage","mode de foirage"]
+	},
+	{
+		"id": 3,
+		"type_s": "encounter",
+		"patient_id_i":1,
+		"patient_age_i":20,
+		"age_i":19,
+		"delay_day_i":800,
+		"order_i":2,
+		"begin_d":"20180101",
+		"end_d":"20180101",
+		"cim10_txt": ["YY1/DP","XX1/DAS"],
+		"ccam_txt": ["YY1/DP","XX1/DAS"],
+		"lab_txt": ["BK/0000032.8/Celcius","BK/0000032.8/Celcius"],
+		"crh.section2_txt": ["mode de mort","mode de mort"]
+	},
+	{
+		"id": 4,
+		"type_s": "encounter",
+		"patient_id_i":1,
+		"patient_age_i":20,
+		"age_i":19,
+		"delay_day_i":800,
+		"order_i":2,
+		"begin_d":"20180101",
+		"end_d":"20180101",
+		"cim10_txt": ["YY3/DP","XX4/DAS"],
+		"ccam_txt": ["YY3/DP","XX4/DAS"],
+		"lab_txt": ["BK/0000032.8/Celcius","BK/0000032.8/Celcius"],
+		"crh.section2_txt": ["mode de foirage","mode de foirage"]
+	}
+	]
+}
+]

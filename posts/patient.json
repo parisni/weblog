@@ -1,0 +1,103 @@
+[
+    {
+        "id": "1",
+        "ipp_s": "800001",
+        "age_i": 19,
+        "projects_ss": [
+            "serv1",
+            "gh1",
+            "hop1"
+        ],
+        "content_type_s": "patient",
+        "_childDocuments_": [
+            {
+                "id": "2",
+                "patient_id": "1",
+                "content_type_s": "visite",
+                "nda_s": "224872810",
+                "text_t": "hello world my friend",
+                "_childDocuments_": [
+                    {
+                        "id": "6",
+                        "content_type_s": "doc",
+                        "doc_type_ss": [
+                            "APHP.CRH-S",
+                            "LOINC.XX-X"
+                        ],
+                        "doc_text_t": "babar aime la r\u00e9b\u00e9llion"
+                    },
+                    {
+                        "id": "7",
+                        "content_type_s": "doc",
+                        "doc_type_ss": [
+                            "APHP.CRH-H",
+                            "LOINC.XX-Y"
+                        ],
+                        "doc_text_t": "popeye aime la marche"
+                    },
+                    {
+                        "id": "8",
+                        "content_type_s": "acte",
+                        "ccam_ss": [
+                            "XX1",
+                            "XX2",
+                            "XX3"
+                        ],
+                        "cim10_ss": [
+                            "YY1",
+                            "YY2",
+                            "YY3"
+                        ]
+                    },
+                    {
+                        "id": "9",
+                        "content_type_s": "diag",
+                        "cim10_ss": [
+                            "YY1",
+                            "YY2",
+                            "YY3"
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "3",
+                "patient_id": "1",
+                "content_type_s": "visite",
+                "nda_s": "224872811",
+                "ccam_ss": [
+                    "XX4"
+                ],
+                "cim10_ss": [
+                    "YY4"
+                ]
+            }
+        ]
+    },
+    {
+        "id": "4",
+        "age_i": 31,
+        "content_type_s": "patient",
+        "labo_txt": ["AAX/000018","BBX/000019"],
+        "crh.section1_txt": ["mon patient a ceci et cela"],
+        "crh.section2_txt": ["ma patiente n'a pas cela", "elle a une banane"],
+        "projects_ss": [
+            "serv1",
+            "gh1",
+            "hop1"
+        ],
+        "_childDocuments_": [
+            {
+                "id": "5",
+                "content_type_s": "visite",
+                "nda_s": "224872812",
+                "ccam_ss": [
+                    "XX5"
+                ],
+                "cim10_ss": [
+                    "YY5"
+                ]
+            }
+        ]
+    }
+]

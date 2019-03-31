@@ -1,0 +1,11 @@
+q=type_s:encounter AND lab_txt:"BK" AND delay_day_i:[300 TO 1000] AND _query_:"{!complexphrase}crh.section2_txt:\"*ode mor*\"~3"
+&hl=true
+&hl.fl=*
+&hl.method=unified
+&hl.requireFieldMatch=true
+&hl.highlightMultiTerm=true
+&hl.usePhraseHighlighter=true
+&hl.useFastVectorHighlighter=true
+&fl=id,patient_id_i
+&hl.mergeContiguous=true
+&json.facet={x:"unique(patient_id_i)"}
