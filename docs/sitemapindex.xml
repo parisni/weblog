@@ -70,6 +70,10 @@
   <lastmod>2018-12-02T12:41:00Z</lastmod>
  </sitemap>
  <sitemap>
+  <loc>https://parisni.github.io/weblog/categories/cat_politic.xml</loc>
+  <lastmod>2019-03-31T13:07:00Z</lastmod>
+ </sitemap>
+ <sitemap>
   <loc>https://parisni.github.io/weblog/categories/cat_python.xml</loc>
   <lastmod>2018-12-02T12:41:00Z</lastmod>
  </sitemap>
@@ -104,6 +108,10 @@
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/eclipse.xml</loc>
   <lastmod>2018-12-02T13:14:00Z</lastmod>
+ </sitemap>
+ <sitemap>
+  <loc>https://parisni.github.io/weblog/categories/ecology-sport.xml</loc>
+  <lastmod>2019-03-31T13:07:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/categories/email.xml</loc>
@@ -215,10 +223,10 @@
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/rss.xml</loc>
-  <lastmod>2019-03-31T12:29:00Z</lastmod>
+  <lastmod>2019-03-31T13:07:00Z</lastmod>
  </sitemap>
  <sitemap>
   <loc>https://parisni.github.io/weblog/sitemap.xml</loc>
-  <lastmod>2019-03-31T12:29:00Z</lastmod>
+  <lastmod>2019-03-31T13:07:00Z</lastmod>
  </sitemap>
 </sitemapindex>
