@@ -11,7 +11,6 @@ Society produces more and more Energy
 =====================================
 
 
-
 Human have gradualy been less and less physical: hunter/trapper, farmer,
 workers and novadays digitalized works. In the meantime, it turns out food
 has been more and more easy to get. We saturate of energy.

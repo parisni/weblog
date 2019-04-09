@@ -19,7 +19,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/archive.html</loc>
-  <lastmod>2019-03-31T13:07:00Z</lastmod>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/authors/</loc>
@@ -35,7 +35,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/</loc>
-  <lastmod>2019-03-31T13:07:00Z</lastmod>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/apache-spark/</loc>
@@ -84,6 +84,10 @@
  <url>
   <loc>https://parisni.github.io/weblog/categories/cat_java/</loc>
   <lastmod>2018-12-02T12:41:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/categories/cat_lifestyle/</loc>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/categories/cat_linux-tools/</loc>
@@ -214,6 +218,10 @@
   <lastmod>2018-12-02T12:41:00Z</lastmod>
  </url>
  <url>
+  <loc>https://parisni.github.io/weblog/categories/sport-barefoot-medical/</loc>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
+ </url>
+ <url>
   <loc>https://parisni.github.io/weblog/categories/sqoop/</loc>
   <lastmod>2018-12-02T12:41:00Z</lastmod>
  </url>
@@ -251,7 +259,7 @@
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/index-2.html</loc>
-  <lastmod>2019-03-31T13:07:00Z</lastmod>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/listings/</loc>
@@ -344,6 +352,10 @@
  <url>
   <loc>https://parisni.github.io/weblog/posts/email-best-practice/</loc>
   <lastmod>2018-12-02T12:41:00Z</lastmod>
+ </url>
+ <url>
+  <loc>https://parisni.github.io/weblog/posts/going-barefoot/</loc>
+  <lastmod>2019-04-09T21:07:00Z</lastmod>
  </url>
  <url>
   <loc>https://parisni.github.io/weblog/posts/hbase-reflexion/</loc>
